@@ -23,7 +23,7 @@ nav button.on{color:var(--acc)}nav button.on span{filter:none;opacity:1}
 h2{font-size:22px;margin:6px 0 10px;letter-spacing:-.02em}h3{font-size:16px;margin:22px 0 10px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
 .center{text-align:center}.mut{color:var(--mut)}.small{font-size:13px}
-.btn{font:700 15px Manrope,sans-serif;border:0;border-radius:12px;padding:13px 18px;background:var(--acc);color:#fff;cursor:pointer}
+.btn{font:700 14px Manrope,sans-serif;border:0;border-radius:12px;padding:11px 16px;background:var(--acc);color:#fff;cursor:pointer}
 .btn.ghost{background:var(--acc2);color:var(--acc)}.btn.good{background:var(--ok)}.btn.bad{background:var(--bad)}
 .btn.wide{width:100%;margin-top:10px}.btn:active{transform:scale(.97)}
 .row{display:flex;gap:10px;margin-top:12px}.row .btn{flex:1}
@@ -94,7 +94,7 @@ select{font:600 15px Manrope;width:100%;padding:12px;border-radius:12px;border:1
 .steps .btn{display:block;width:100%;text-align:left;margin-top:9px}
 .scale td:first-child{width:auto}
 .qplay{width:34px;height:34px;border-radius:50%;border:0;background:var(--acc2);color:var(--acc);font-size:15px;font-weight:800;cursor:pointer;flex-shrink:0}
-.lbtn{display:flex;align-items:center;gap:12px;text-align:left;padding:11px 14px}.lbtn .ic{font-size:20px;width:26px;text-align:center;flex-shrink:0}.lbtn .t{display:block;font-size:15px;line-height:1.25}.lbtn .s{display:block;font-size:12px;font-weight:600;opacity:.75;margin-top:2px}.lbtn .ar{margin-left:auto;font-size:22px;opacity:.7}
+.lbtn{display:flex;align-items:center;gap:10px;text-align:left;padding:8px 12px;background:var(--acc2);color:var(--acc);border:1px solid var(--line)}.lbtn.ghost{background:transparent}.lbtn .ic{font-size:15px;width:20px;text-align:center;flex-shrink:0}.lbtn .t{display:block;font-size:14px;line-height:1.2}.lbtn .s{display:block;font-size:11.5px;font-weight:600;opacity:.7;margin-top:1px}.lbtn .ar{margin-left:auto;font-size:18px;opacity:.6}
 .row .btn{font-size:14px;padding:12px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stat b{font-size:20px}.stat span{white-space:nowrap}
 .sdots{display:flex;gap:6px;justify-content:center;margin:-2px 0 14px}.sdots i{width:30px;height:6px;border-radius:4px;background:var(--line)}.sdots i.d{background:var(--ok)}.sdots i.c{background:var(--acc)}
@@ -254,8 +254,94 @@ const strip=h=>{const d=document.createElement('div');d.innerHTML=h;return d.tex
 const lvl=w=>S.m[w.en]||0;
 const pctAll=(list=W)=>Math.round(list.reduce((s,w)=>s+lvl(w),0)/(list.length*5)*100);
 const showEx=w=>esc(w.ex).replace(/\{(.*?)\}/,'<b>$1</b>');
-const gapEx=w=>esc(w.ex).replace(/\{(.*?)\}/,'<span class="gap">&nbsp;?&nbsp;</span>');
-const gapAns=w=>(w.ex.match(/\{(.*?)\}/)||[])[1]||w.en;
+const gapEx=(w,s)=>esc(s||w.ex).replace(/\{(.*?)\}/,'<span class="gap">&nbsp;?&nbsp;</span>');
+const gapAns=(w,s)=>((s||w.ex).match(/\{(.*?)\}/)||[])[1]||w.en;
+/* дополнительные предложения для заданий «вставь слово» — каждый раз берётся другое */
+const EX2={
+"vacancy":["The bank has a {vacancy} for a cashier, so they are interviewing candidates.","We can't hire anyone now — there are no {vacancies} at the moment.","She applied for the {vacancy} as soon as it appeared on the website."],
+"applicant":["Every {applicant} must fill in the form and attach a CV.","The {applicant} with the best qualifications got the job.","We received 50 {applicants} for one trainee position."],
+"apply for":["You should {apply for} the job before the deadline on Friday.","He decided to {apply for} a position in the HR department.","Many students {apply for} part-time jobs in summer."],
+"application form":["Write your name and address at the top of the {application form}.","The {application form} asks about your education and work experience.","Don't forget to sign the {application form} before you send it."],
+"CV (curriculum vitae)":["My {CV} lists my education, skills and work experience.","Keep your {CV} short — two pages are enough.","The recruiter read his {CV} and invited him to an interview."],
+"cover letter":["Attach a {cover letter} to your CV to explain your motivation.","Her {cover letter} explained why she wanted to join the company.","A good {cover letter} is short and addressed to a real person."],
+"job advertisement":["The company placed a {job advertisement} in the newspaper to find a driver.","According to the {job advertisement}, the salary is 80,000 rubles.","Read the {job advertisement} carefully to see the requirements."],
+"recruit":["Our HR team needs to {recruit} ten new sales managers.","It is hard to {recruit} experienced programmers these days.","The university helps companies {recruit} graduates."],
+"recruitment agency":["The company uses a {recruitment agency} to find new staff.","A {recruitment agency} helped him find a job in two weeks.","She works as a recruiter at a {recruitment agency}."],
+"headhunter":["The {headhunter} offered the top manager a better salary at another company.","Big companies pay a {headhunter} to find experienced directors.","A {headhunter} contacted her on LinkedIn about a senior position."],
+"shortlist":["We put the three best candidates on the {shortlist}.","Only people on the {shortlist} will be invited to interviews.","His name was not on the {shortlist}, so nobody called him."],
+"job interview":["Wear a suit and arrive early for your {job interview}.","During the {job interview} they asked about my strengths and weaknesses.","She was nervous before her first {job interview}."],
+"interviewee":["The interviewer asked the {interviewee} about his previous job.","Each {interviewee} had twenty minutes to answer the questions.","The {interviewee} thanked the panel and left the room."],
+"candidate":["We have three strong {candidates} for the position of manager.","The ideal {candidate} speaks English and has HR experience.","Each {candidate} will take a short test after the interview."],
+"reference":["Can your former boss give you a {reference}?","The employer called her teacher to get a {reference}.","A good {reference} from a previous job helps you get hired."],
+"qualifications":["What {qualifications} do you need to become an accountant?","He has a degree and other {qualifications} in finance.","Without the right {qualifications}, you cannot work as a doctor."],
+"work experience":["The job requires two years of {work experience} in sales.","Students often get {work experience} during internships.","She has no {work experience}, but she learns fast."],
+"skills":["Good communication {skills} are important for HR managers.","You can improve your computer {skills} on online courses.","The job requires leadership {skills} and teamwork."],
+"hire":["The restaurant needs to {hire} two more waiters.","They decided to {hire} the youngest candidate.","We usually {hire} extra staff every December."],
+"take on":["The shop will {take on} extra staff before New Year.","Our company plans to {take on} five trainees this summer.","The factory {took on} 40 new workers last month."],
+"job offer":["After the second interview she received a {job offer}.","He turned down the {job offer} because the salary was too low.","Think carefully before you accept a {job offer}."],
+"probation period":["During the {probation period} the company checks whether you are suitable.","My {probation period} lasts three months.","He was dismissed at the end of his {probation period}."],
+"onboarding":["The {onboarding} programme helps new employees learn the company rules.","On the first day of {onboarding}, I met my team and my mentor.","Good {onboarding} helps new staff stay longer."],
+"employer":["Your {employer} must pay you on time.","The state is the largest {employer} in the region.","Ask your {employer} for a written contract."],
+"employee":["Each {employee} gets 28 days of paid leave.","The company gave every {employee} a bonus.","A happy {employee} usually works harder."],
+"employment contract":["The {employment contract} states your salary and working hours.","Both the employer and the employee sign the {employment contract}.","Keep a copy of your {employment contract} at home."],
+"full-time":["A {full-time} job usually means 40 hours a week.","After graduation, she found a {full-time} position in a bank.","He works {full-time}, from nine to six, Monday to Friday."],
+"part-time":["Students often work {part-time} in the evenings.","She has a {part-time} job — only four hours a day.","The café hires {part-time} staff for weekends."],
+"permanent":["She finally got a {permanent} job with no end date.","Temporary workers hope to get {permanent} contracts.","After probation he became a {permanent} employee."],
+"temporary":["It is only a {temporary} job for three months.","The agency finds {temporary} staff for the summer season.","He has a {temporary} contract that ends in June."],
+"freelancer":["A {freelancer} works for different clients and sets his own hours.","As a {freelancer}, she designs websites for several companies.","Many programmers become {freelancers} to work from home."],
+"self-employed":["She is {self-employed} and runs her own beauty salon.","He left the company and became {self-employed}.","Being {self-employed} means you are your own boss."],
+"shift work":["Factory workers often do {shift work}, day and night.","{Shift work} can be tiring because your sleep pattern changes.","Doctors and nurses in hospitals do {shift work}."],
+"flexitime":["With {flexitime}, employees can start work any time between 8 and 11.","Our company offers {flexitime}, so I start at 10.","Parents like {flexitime} because they can take children to school."],
+"remote work":["{Remote work} lets people work from home or a café.","During {remote work}, we have meetings on Zoom.","Many IT companies offer {remote work} to their developers."],
+"overtime":["He works {overtime} every Friday to finish the project.","Employees get extra pay for {overtime}.","I did three hours of {overtime} yesterday evening."],
+"salary":["His {salary} is paid on the 5th of every month.","She asked for a higher {salary} at her appraisal.","The annual {salary} for this position is 1.5 million rubles."],
+"wage":["The minimum {wage} rises every year.","Waiters earn a low hourly {wage} plus tips.","Factory workers are paid a weekly {wage}."],
+"benefits":["The {benefits} include free lunch and medical insurance.","Besides the salary, the company offers good {benefits}.","{Benefits} like a gym membership help attract staff."],
+"bonus":["She got a big {bonus} for excellent sales results.","The company pays a {bonus} at the end of the year.","Workers who meet their targets get a {bonus}."],
+"pension":["After 40 years of work, he gets a good {pension}.","The state pays a {pension} to retired people.","She saves money every month for her {pension}."],
+"sick leave":["He caught a cold and took three days of {sick leave}.","You need a doctor's note to take {sick leave}.","She is on {sick leave} after an operation."],
+"annual leave":["I'm taking my {annual leave} in August to go to the sea.","He hasn't used any of his {annual leave} this year.","Employees plan their {annual leave} at the start of the year."],
+"maternity leave":["She returned to work after a year of {maternity leave}.","While she is on {maternity leave}, a temporary worker does her job.","Mothers can take {maternity leave} when the baby is born."],
+"commission":["Estate agents earn {commission} on every flat they sell.","His salary is low, but he gets 5% {commission} on sales.","The more you sell, the more {commission} you earn."],
+"working hours":["Our {working hours} are from 9 to 6.","The shop changed its {working hours} for the holidays.","Long {working hours} can cause stress."],
+"promotion":["She worked hard and got a {promotion} to head of department.","A {promotion} usually comes with a higher salary.","He is hoping for a {promotion} next year."],
+"be promoted":["She {was promoted} to senior manager after three years.","If you work hard, you will {be promoted}.","He {was promoted} twice in one year."],
+"career ladder":["Climbing the {career ladder} takes years of hard work.","He started at the bottom of the {career ladder} as a trainee.","Education helps you move up the {career ladder}."],
+"training":["New employees get two weeks of {training}.","The company pays for English {training}.","After the {training}, everyone got a certificate."],
+"trainee":["The {trainee} is learning how to use the system.","As a {trainee}, he earns a small salary.","Every {trainee} has a mentor."],
+"performance appraisal":["During the {performance appraisal}, my manager discussed my results.","The annual {performance appraisal} decides who gets a bonus.","Prepare examples of your work before the {performance appraisal}."],
+"job satisfaction":["Good relationships with colleagues increase {job satisfaction}.","Low {job satisfaction} makes people quit.","Money is not the only source of {job satisfaction}."],
+"workload":["My {workload} doubled when my colleague left.","A heavy {workload} causes stress.","The manager reduced my {workload} for this week."],
+"deadline":["We must finish the report before the {deadline}.","The {deadline} for applications is 1 December.","He missed the {deadline} and the client was angry."],
+"colleague":["My {colleague} helped me with the new program.","I went to lunch with a {colleague} from the sales team.","She gets on well with all her {colleagues}."],
+"supervisor":["My {supervisor} checks my work every day.","Report any problems to your {supervisor}.","The {supervisor} is in charge of ten workers."],
+"staff / personnel":["The hotel has a friendly {staff} of 50 people.","All {staff} must attend the safety meeting.","The company is reducing its {staff} this year."],
+"HR department":["The {HR department} deals with hiring and training.","Send your CV to the {HR department}.","She works in the {HR department} as a recruiter."],
+"trade union":["The {trade union} protects workers' rights.","Workers joined the {trade union} to get better pay.","The {trade union} organised a strike."],
+"incentive":["Free lunches are an {incentive} for employees to stay.","The company offers a cash {incentive} for new ideas.","Without any {incentive}, people work less."],
+"job description":["The {job description} lists all your duties.","Read the {job description} before you apply.","Answering phones is not in my {job description}."],
+"responsibilities":["Her {responsibilities} include training new staff.","A manager has many {responsibilities}.","He takes his {responsibilities} seriously."],
+"resign":["She decided to {resign} because she found a better job.","The minister had to {resign} after the scandal.","He {resigned} from his post last week."],
+"resignation letter":["He wrote a short {resignation letter} and gave it to his boss.","Your {resignation letter} should be polite.","She handed in her {resignation letter} on Monday."],
+"quit":["I want to {quit} my job and travel.","Don't {quit} before you find a new job.","He {quit} his job because of the long hours."],
+"give notice":["You must {give notice} two weeks before you leave.","She {gave notice} and left the company a month later.","If you want to leave, {give notice} in writing."],
+"retire":["My grandmother wants to {retire} at 60.","Most people {retire} when they reach pension age.","He {retired} after 40 years at the factory."],
+"retirement":["She is planning her {retirement} in the countryside.","After {retirement}, he started painting.","Saving money is important for {retirement}."],
+"dismiss":["The company had to {dismiss} the manager for breaking the rules.","He was {dismissed} for being drunk at work.","You cannot {dismiss} an employee without a reason."],
+"fire":["The boss threatened to {fire} him if he was late again.","She was {fired} for stealing.","They {fired} the cook because the food was terrible."],
+"get the sack":["If you keep sleeping at work, you'll {get the sack}.","He {got the sack} for being rude to customers.","Nobody wants to {get the sack} before New Year."],
+"make redundant":["When the shop closed, all the staff were {made redundant}.","Machines replaced workers, and many were {made redundant}.","Thousands of miners were {made redundant} when the mines closed."],
+"redundancy":["The factory announced 200 {redundancies}.","He lost his job through {redundancy}, not because of bad work.","Workers received money after their {redundancy}."],
+"lay off":["The car factory had to {lay off} workers during the crisis.","They {laid off} 100 employees because sales fell.","Companies {lay off} staff when there isn't enough work."],
+"severance pay":["Dismissed workers received {severance pay}.","His {severance pay} was equal to three months' salary.","By law, the company must give {severance pay}."],
+"unemployed":["He has been {unemployed} since the factory closed.","Many young people are {unemployed} in this region.","She is {unemployed} but actively looking for a job."],
+"unemployment":["{Unemployment} is falling in big cities.","High {unemployment} is a problem for the economy.","The government is trying to reduce {unemployment}."],
+"unemployment benefit":["He receives {unemployment benefit} while looking for work.","To get {unemployment benefit}, you must register at the job centre.","{Unemployment benefit} is paid by the state."]
+};
+const LASTG={};
+function gapSentence(w){const a=[w.ex,...(EX2[w.en]||[])];let i,n=0;do{i=Math.random()*a.length|0;n++}while(a.length>1&&i===LASTG[w.en]&&n<10);LASTG[w.en]=i;return a[i]}
+const fillS=s=>esc(s).replace(/\{(.*?)\}/,'<b>$1</b>');
+
 const isSyn=(a,b)=>SYNG.some(g=>g.includes(a.en)&&g.includes(b.en));
 const norm=s=>s.toLowerCase().replace(/[’`]/g,"'").replace(/[^a-z' -]/g,'').replace(/\s+/g,' ').trim();
 function variants(en){const o=new Set();en.replace(/\(.*?\)/g,'').split('/').forEach(p=>o.add(norm(p)));const par=(en.match(/\((.*?)\)/)||[])[1];if(par)o.add(norm(par));return[...o].filter(Boolean)}
@@ -286,6 +372,7 @@ const topBar=(back,extra='')=>`<div class="qtop"><button class="ghostx" data-a="
 function sheet(html){const o=document.createElement('div');o.className='overlay';o.innerHTML=`<div class="sheet">${html}</div>`;o.onclick=e=>{if(e.target===o||e.target.closest('[data-close]'))o.remove()};document.body.appendChild(o);return o}
 
 /* ---------- actions ---------- */
+let NXT=0;document.addEventListener('keydown',e=>{if(e.key!=='Enter'||document.querySelector('.overlay'))return;const b=document.querySelector('#nx,#go6,#nx6,#gogo');if(!b||Date.now()-NXT<300)return;const a=document.activeElement;if(a&&a.id==='ti'&&!a.disabled)return;e.preventDefault();b.click();NXT=Date.now()});
 let VIEW='home',learnCat='all',learnQ='';
 const ACT={
  go:v=>go(v),
@@ -468,6 +555,7 @@ function today(){
 function wordSheet(w){autoSay(w.en);sheet(`<div class="mut small">${CATS[w.cat]}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="big">${esc(w.en)}</div><button class="say" style="position:static" data-a="say" data-v="${esc(w.en)}">🔊</button></div><div style="font-size:19px;font-weight:700;color:var(--acc);margin:4px 0 12px">${esc(w.ru)}</div><div class="mut">${esc(w.def)}</div><p data-say="${esc(sayClean(w.ex))}" style="cursor:pointer"><i>🔊 ${showEx(w)}</i></p>${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px"><span class="small mut">Уровень: ${lvl(w)}/5</span>${dots(w)}</div><button class="btn wide ghost" data-close>Закрыть</button>`)}
 
 /* ---------- questions ---------- */
+const gexp=(w,s)=>`<b>${esc(w.en)}</b> — ${esc(w.ru)}<br><i>${fillS(s)}</i>${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}`;
 const expW=w=>`<b>${esc(w.en)}</b> — ${esc(w.ru)}<br><i>${showEx(w)}</i>${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}`;
 let LV='m';const LVN={e:'Лёгкий',m:'Средний',h:'Сложный'};
 const pat=(s,first)=>'<span class="pat">'+s.split('').map((c,i)=>c===' '?'&nbsp;&nbsp;':(first&&(i===0||s[i-1]===' ')?esc(c):'_')).join('')+'</span>';
@@ -477,10 +565,10 @@ const Q={
  enru:w=>({kind:'mc',hint:'Выбери перевод',q:`<span class="big">${esc(w.en)}</span>`,say:w.en,opts:shuffle([w.ru,...distract(w,'ru',nOpt(),LV!=='e')]),ans:w.ru,w,exp:expW(w)}),
  ruen:w=>({kind:'mc',hint:'Выбери английское слово',q:`<span class="big">${esc(w.ru)}</span>`,opts:shuffle([w.en,...distract(w,'en',nOpt(),LV!=='e')]),ans:w.en,w,exp:expW(w)}),
  def:w=>({kind:'mc',hint:'Какое слово подходит под определение?',q:esc(w.def),opts:shuffle([w.en,...distract(w,'en',nOpt(),LV!=='e')]),ans:w.en,w,exp:expW(w)}),
- gap:w=>({kind:'mc',hint:'Вставь пропущенное слово',q:gapEx(w)+(LV==='e'?`<div class="sub">подсказка: ${esc(w.ru)}</div>`:''),opts:shuffle([w.en,...distract(w,'en',nOpt(),false)]),ans:w.en,w,exp:expW(w)}),
+ gap:w=>{const s=gapSentence(w);return{kind:'mc',hint:'Вставь пропущенное слово',q:gapEx(w,s)+(LV==='e'?`<div class="sub">подсказка: ${esc(w.ru)}</div>`:''),opts:shuffle([w.en,...distract(w,'en',nOpt(),false)]),ans:w.en,w,exp:gexp(w,s)}},
  type:w=>{const v=variants(w.en);return{kind:'type',hint:LV==='h'?'Вспомни и напиши — без подсказок':'Напиши по-английски',q:`<span class="big">${esc(w.ru)}</span>${LV!=='h'?`<div class="sub">${esc(w.def)}</div>`:''}${LV==='e'?`<div class="sub">${pat(v[0],true)}</div>`:''}`,acc:v,show:w.en,w,exp:expW(w)}},
  deftype:w=>{const v=variants(w.en);return{kind:'type',hint:'Угадай слово по определению и напиши',q:`<div class="qtext">${esc(w.def)}</div><div class="sub">${pat(v[0],LV!=='h')}</div>`,acc:v,alt:synAlt(w),altNote:'Засчитано — это синоним. Ожидалось: ',show:w.en,w,exp:expW(w)}},
- gaptype:w=>{const a=gapAns(w);return{kind:'type',hint:LV==='h'?'Догадайся по контексту и впиши слово':'Впиши слово в нужной форме',q:gapEx(w)+(LV==='h'?`<div class="sub">${pat(a,false)}</div>`:`<div class="sub">подсказка: ${esc(w.ru)}</div>`+(LV==='e'?`<div class="sub">${pat(a,true)}</div>`:'')),acc:[norm(a)],alt:variants(w.en),show:a,w,exp:expW(w)}},
+ gaptype:w=>{const s=gapSentence(w),a=gapAns(w,s);return{kind:'type',hint:LV==='h'?'Догадайся по контексту и впиши слово':'Впиши слово в нужной форме',q:gapEx(w,s)+(LV==='h'?`<div class="sub">${pat(a,false)}</div>`:`<div class="sub">подсказка: ${esc(w.ru)}</div>`+(LV==='e'?`<div class="sub">${pat(a,true)}</div>`:'')),acc:[norm(a)],alt:variants(w.en),show:a,w,exp:gexp(w,s)}},
  tf:w=>{const t=Math.random()<.5;const sh=t?w.ru:distract(w,'ru',1)[0];return{kind:'mc',hint:'Верно ли переведено?',q:`<span class="big">${esc(w.en)}</span><div style="font-size:19px;color:var(--acc);font-weight:700;margin-top:8px">= ${esc(sh)}</div>`,say:w.en,opts:['✓ Верно','✗ Неверно'],ans:t?'✓ Верно':'✗ Неверно',w,exp:expW(w)}},
  spell:w=>({kind:'spell',hint:'Собери слово из букв',q:`<span class="big">${esc(w.ru)}</span><div class="sub">${esc(w.def)}</div>`,show:w.en,w,exp:expW(w)}),
  phrase:p=>({kind:'mc',hint:'Фраза с собеседования — перевод?',q:esc(p[0]),say:p[0],opts:shuffle([p[1],...shuffle(PHR.filter(x=>x!==p)).slice(0,3).map(x=>x[1])]),ans:p[1],exp:''})
@@ -515,7 +603,7 @@ function runQuiz(title,qs,opt={}){
   const q=qs[i];if(!q.retry){if(ok)score++;else wrong.push({q,given})}const rq=!ok&&opt.requeue&&!q.retry&&q.re;if(rq){const r=q.re();r.retry=true;r.hint='🔁 Ещё раз · '+r.hint;qs.push(r)}if(q.w)mark(q.w.en,ok);if(q.kind!=='mc'&&q.show&&!opt.exam)speak(q.show);
   if(opt.exam){setTimeout(()=>{i++;step()},300);return}
   $('#fb').innerHTML=`<div class="fb ${ok?'okb':'badb'}"><b>${ok?pick(PRAISE):'Неверно. Правильно: '+esc(q.kind==='mc'?q.ans:q.show)}</b>${note?`<div>${esc(note)}</div>`:''}${q.exp?`<div class="exp">${q.exp}</div>`:''}${rq?'<div class="small mut" style="margin-top:8px">🔁 Это слово ещё раз попадётся в конце этапа.</div>':''}</div><button class="btn wide" id="nx">Дальше →</button>`;
-  $('#nx').onclick=()=>{i++;step()};$('#nx').scrollIntoView({behavior:'smooth',block:'nearest'});
+  $('#nx').onclick=()=>{i++;step()};NXT=Date.now();$('#nx').scrollIntoView({behavior:'smooth',block:'nearest'});
  }
  function end(){
   const p=Math.round(score/n0*100);if(opt.onFinish)return opt.onFinish(p,wrong);
