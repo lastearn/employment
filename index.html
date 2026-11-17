@@ -93,6 +93,7 @@ select{font:600 15px Manrope;width:100%;padding:12px;border-radius:12px;border:1
 .btn:disabled{opacity:.4;pointer-events:none}
 .steps .btn{display:block;width:100%;text-align:left;margin-top:9px}
 .scale td:first-child{width:auto}
+.sdots{display:flex;gap:6px;justify-content:center;margin:-2px 0 14px}.sdots i{width:30px;height:6px;border-radius:4px;background:var(--line)}.sdots i.d{background:var(--ok)}.sdots i.c{background:var(--acc)}
 .pat{font-family:ui-monospace,Menlo,monospace;letter-spacing:.28em;font-size:18px;color:var(--ink)}
 .mt.df{font-size:12px;font-weight:500;line-height:1.3}
 .lvd{font-size:13px;color:var(--mut);margin-top:6px}.gr5{color:var(--ok)}.gr2{color:var(--bad)}
@@ -295,6 +296,7 @@ const ACT={
  vrate:v=>{S.voice=Object.assign({auto:true,rate:1},S.voice||{});S.voice.rate=+v;save();go('home');speak('employment')},
  lcards:()=>cards(CUR.ws,{all:true,back:'lesson:'+CUR.id,title:'Карточки · Урок '+CUR.n,next:{label:'🎯 Перейти к заданиям →',fn:ltasks}}),
  ltasks:()=>ltasks(),
+ lstart:v=>lessonFlow(LESSONS.find(x=>x.id===v)),
  ld:v=>{S.ld=v;save();lesson(CUR.id)},
  lgame:v=>{LV=S.ld||'m';G={ws:CUR.ws,n:CUR.ws.length,back:'lesson:'+CUR.id};GAMES[v]()},
  word:v=>wordSheet(W[+v]),
@@ -311,8 +313,8 @@ function lstat(L){const r=S.les&&S.les[L.id];if(!r)return{s:'new',t:'Новый'
 function lessonDone(L,p){S.les=S.les||{};if(LV==='e')return{html:`<div class="card fb okb"><b>Разминка завершена 💪</b><div class="small">Лёгкий уровень не влияет на зачёт и расписание. Зачёт ставится на среднем или сложном уровне.</div></div>`,btn:{label:'🎯 Задания на среднем уровне',fn:()=>{S.ld='m';save();ltasks()}}};const r=S.les[L.id]||{best:0,stage:0,runs:0};if(p>=80&&LV==='h')r.hard=true;r.runs++;r.best=Math.max(r.best,p);let html,btn=null;
  if(p>=80){r.stage=Math.min(r.stage+1,INT.length);const d=INT[r.stage-1];r.due=Date.now()+d*864e5-36e5;
   html=`<div class="card fb okb"><b>✅ Урок зачтён!</b><div class="small">Следующее повторение — ${fmtDays(d)}. ${r.stage>=2?'Интервал растёт: 1 → 3 → 7 → 14 → 30 дней. Так слова уходят в долгую память.':'Вернись к уроку в срок — на главной он появится в блоке «Сегодня».'}</div></div>`;
-  const nx=LESSONS[LESSONS.indexOf(L)+1];if(nx&&lstat(nx).s==='new')btn={label:'▶ Следующий урок',fn:()=>lesson(nx.id)}}
- else{r.stage=Math.max(0,r.stage-1);r.due=Date.now();html=`<div class="card fb badb"><b>Для зачёта нужно 80%+</b><div class="small">Пройди ещё раз — задания, их типы и порядок будут другими. Можно сначала повторить карточки.</div></div>`;btn={label:'🃏 Повторить карточки',fn:ACT.lcards}}
+  const nx=LESSONS[LESSONS.indexOf(L)+1];if(nx&&lstat(nx).s==='new')btn={label:'▶ Следующий урок',fn:()=>lessonFlow(nx)}}
+ else{r.stage=Math.max(0,r.stage-1);r.due=Date.now();html=`<div class="card fb badb"><b>Для зачёта нужно 80%+</b><div class="small">Пройди ещё раз — всё начнётся с карточек, а порядок и задания будут другими.</div></div>`;btn=null}
  S.les[L.id]=r;save();return{html,btn}}
 const PROD=['type','gaptype','spell'];
 const decoys=()=>LV==='h'?shuffle('abcdeilmnoprstuy'.split('')).slice(0,3):[];
@@ -327,13 +329,50 @@ function mixTasks(ws,key,stage=0){
  qs=shuffle(qs);for(let i=1;i<qs.length;i++)if(qs[i].w&&qs[i].w===qs[i-1].w){const j=qs.findIndex((q,k)=>k>i&&q.w!==qs[i].w&&q.w!==qs[i-1].w);if(j>0)[qs[i],qs[j]]=[qs[j],qs[i]]}
  S.seen=S.seen||{};S.seen[key]=used;save();return qs}
 function ltasks(){LV=S.ld||'m';const L=CUR,r=S.les&&S.les[L.id];runQuiz('Урок '+L.n,mixTasks(L.ws,L.id,r?r.stage:0),{back:'lesson:'+L.id,restart:ltasks,after:p=>lessonDone(L,p)})}
+/* ---------- урок в 6 этапов: от узнавания к свободному воспроизведению ---------- */
+const STAGES6=[
+ {e:'🃏',t:'Знакомство',d:'Карточки по очереди: смотри, слушай, читай пример. Без оценок — просто запоминай.'},
+ {e:'👀',t:'Узнавание',d:'Видишь английское слово — выбираешь перевод из трёх вариантов.'},
+ {e:'🎧',t:'На слух',d:'Слово не показывается: слушаешь и выбираешь перевод.'},
+ {e:'🔄',t:'Обратно и в контексте',d:'Русское слово или пропуск в предложении — выбираешь английское среди похожих.'},
+ {e:'🧩',t:'Сборка',d:'Собираешь слово из букв или пишешь по первой букве.'},
+ {e:'✍️',t:'Свободный ответ',d:'Пишешь слово сам: по переводу или по смыслу предложения. Без вариантов и подсказок.'}];
+const SGEN=[null,
+ w=>{LV='e';return Q.enru(w)},
+ w=>{LV='m';return Object.assign(Q.enru(w),{hint:'🎧 Послушай и выбери перевод',q:`<button class="btn ghost" data-say="${esc(w.en)}" style="font-size:30px;padding:16px 30px">🔊</button><div class="sub">нажми, чтобы послушать ещё раз</div>`,force:true})},
+ (w,i)=>{LV='m';return (i%2?Q.gap:Q.ruen)(w)},
+ w=>{const one=/^[a-z]+$/.test(w.en)&&w.en.length<=12;LV=one?'m':'e';return one?Q.spell(w):Q.type(w)},
+ (w,i)=>{LV='h';return (i%2?Q.gaptype:Q.type)(w)}];
+const sdots=k=>`<div class="sdots">${STAGES6.map((_,j)=>`<i class="${j<k?'d':j===k?'c':''}"></i>`).join('')}</div>`;
+function lessonFlow(L){
+ if(!L)return;CUR=L;VIEW='flow';const ws=L.ws,res=[],missed=new Set(),back='lesson:'+L.id;
+ const head=()=>topBar(back,`<b style="flex:1">${CATS[L.cat]} · урок ${L.n}</b>`);
+ function intro(k){const s=STAGES6[k];
+  main.innerHTML=head()+sdots(k)+`<div class="card center" style="padding:28px 18px"><div style="font-size:48px">${s.e}</div><div class="hint" style="margin-top:6px">Этап ${k+1} из 6</div><h2 style="margin:4px 0 6px">${s.t}</h2><p class="mut">${s.d}</p>${k>1?`<p class="small">Прошлый этап: <b>${res[k-1]}%</b></p>`:''}<p class="small mut">Ошибся — слово вернётся в конце этапа.</p><button class="btn wide" id="go6">Поехали →</button></div>`;
+  $('#go6').onclick=()=>k===0?cardsStage():quizStage(k);window.scrollTo(0,0)}
+ function cardsStage(){const list=shuffle(ws);let i=0;
+  function show(){const w=list[i];
+   main.innerHTML=head()+sdots(0)+`<div class="small mut center" style="margin-bottom:8px">Карточка ${i+1} из ${list.length}</div><div class="flip" id="fc"><button class="say" data-a="say" data-v="${esc(w.en)}">🔊</button><div class="front"><div class="big" style="margin:18px 0">${esc(w.en)}</div><div class="mut small">нажми, чтобы увидеть перевод</div></div><div class="back"><div class="big">${esc(w.en)}</div><div class="ru">${esc(w.ru)}</div><div class="def">${esc(w.def)}</div><div class="ex" data-say="${esc(sayClean(w.ex))}" style="cursor:pointer">🔊 ${showEx(w)}</div>${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}</div></div><div class="row"><button class="btn ghost" id="pv" ${i?'':'disabled'}>← Назад</button><button class="btn" id="nx6">${i<list.length-1?'Дальше →':'К заданиям →'}</button></div>`;
+   autoSay(w.en);
+   $('#fc').onclick=e=>{if(e.target.closest('.say')||e.target.closest('[data-say]'))return;$('#fc').classList.toggle('on')};
+   $('#pv').onclick=()=>{if(i){i--;show()}};$('#nx6').onclick=()=>{if(i<list.length-1){i++;show()}else intro(1)}}
+  show()}
+ function quizStage(k){const qs=shuffle(ws).map((w,i)=>{const q=SGEN[k](w,i);q.re=()=>SGEN[k](w,i);return q});
+  runQuiz(STAGES6[k].t,qs,{back,label:`${STAGES6[k].e} ${k+1}/6`,requeue:true,onFinish:(p,wrong)=>{res[k]=p;wrong.forEach(x=>x.q.w&&missed.add(x.q.w));k<5?intro(k+1):finish()}})}
+ function finish(){
+  const sc=res.slice(1),p=Math.round(sc.reduce((a,b)=>a+b,0)/sc.length),g=grade(p);LV='m';const ex=lessonDone(L,p);
+  main.innerHTML=`<div class="card center" style="padding:24px">${ring(p,130)}<h2 class="${g[2]}" style="margin-top:12px">${g[0]}</h2><div class="mut">${CATS[L.cat]} · урок ${L.n} · итог по 5 этапам</div></div>${ex.html||''}
+  <div class="card"><b>По этапам</b>${STAGES6.slice(1).map((s,j)=>`<div class="catbar" style="margin:10px 0 0"><div class="top"><span>${s.e} ${s.t}</span><span>${res[j+1]}%</span></div><div class="bar"><i style="width:${res[j+1]}%"></i></div></div>`).join('')}</div>
+  ${missed.size?`<h3>Слова с ошибками — повтори их</h3>${[...missed].map(w=>`<div class="card mist" data-say="${esc(w.en)}" style="cursor:pointer">🔊 <b>${esc(w.en)}</b> — ${esc(w.ru)}${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}</div>`).join('')}`:'<p class="center">Ни одной ошибки за весь урок! 🎉</p>'}
+  <button class="btn wide" id="again6">🔁 Ещё раз — всё заново, в новом порядке</button>${ex.btn?`<button class="btn ghost wide" id="exb6">${ex.btn.label}</button>`:''}<button class="btn ghost wide" data-a="go" data-v="path">К урокам</button>`;
+  $('#again6').onclick=()=>lessonFlow(L);if(ex.btn)$('#exb6').onclick=ex.btn.fn;window.scrollTo(0,0)}
+ intro(0)}
 function lesson(id){
  const L=LESSONS.find(x=>x.id===id);if(!L)return go('path');CUR=L;VIEW='lesson';const st=lstat(L),r=S.les&&S.les[L.id];
  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v==='path'));
  main.innerHTML=topBar('path',`<b style="flex:1">${CATS[L.cat]}</b>`)+`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2 style="margin:0">Урок ${L.n}</h2><span class="badge ${st.c}">${st.t}</span></div>${r?`<div class="small mut" style="margin-top:6px">Лучший результат: ${r.best}% · пройдено раз: ${r.runs}</div>`:''}
- ${r&&r.hard?'<div class="small" style="margin-top:6px">🏆 Пройден на сложном уровне</div>':''}
- <div style="margin-top:14px"><b class="small">Сложность заданий:</b><div class="chips" style="margin:7px 0 0">${['e','m','h'].map(k=>`<button class="chip ${(S.ld||'m')===k?'on':''}" data-a="ld" data-v="${k}">${LVN[k]}</button>`).join('')}</div><div class="lvd">${{e:'Разминка: выбор из 3 вариантов, подсказки, часть букв уже стоит. Зачёт не ставится.',m:'Смешанные задания: выбор, пропуски, ввод с подсказкой. Зачёт — от 80%.',h:'Только ввод: вспомнить слово без подсказок, угадать по определению и по контексту, лишние буквы. Зачёт от 80% + 🏆.'}[S.ld||'m']}</div></div>
- <div class="steps"><button class="btn ${st.s==='new'?'':'ghost'}" data-a="lcards">1. 🃏 Карточки — познакомиться со словами</button><button class="btn ${st.s==='new'?'ghost':''}" data-a="ltasks">2. 🎯 Задания — ${L.ws.length*2}+ вопросов, каждый раз в новом порядке</button></div>
+ <div class="small" style="margin:12px 0 4px">Урок проходит в 6 этапов, от простого к сложному, каждый раз в новом порядке:</div>${STAGES6.map((x,j)=>`<div class="small" style="margin:3px 0">${x.e} <b>${j+1}. ${x.t}</b></div>`).join('')}
+ <button class="btn wide" data-a="lstart" data-v="${L.id}" style="margin-top:12px">▶ ${r?'Пройти ещё раз':'Начать урок'} · ${L.ws.length} слов</button>
  <p class="small mut" style="margin-bottom:0">Зачёт — от 80%. После зачёта урок вернётся на повторение через 1, 3, 7, 14 и 30 дней.</p></div>
  <h3>Закрепить играми (только слова урока)</h3><div class="ggrid"><button class="gc" data-a="lgame" data-v="match"><div class="e">🧩</div><b>Найди пару</b></button><button class="gc" data-a="lgame" data-v="spell"><div class="e">🔤</div><b>Собери слово</b></button><button class="gc" data-a="lgame" data-v="sprint"><div class="e">⚡</div><b>Спринт</b></button><button class="gc" data-a="lgame" data-v="write"><div class="e">⌨️</div><b>Диктант</b></button></div>
  <h3>Слова урока</h3><div class="wl">${L.ws.map(w=>`<div class="wi" data-a="word" data-v="${w.id}"><div><b>${esc(w.en)}</b><span>${esc(w.ru)}</span></div>${dots(w)}</div>`).join('')}</div>`;
@@ -351,7 +390,7 @@ home(){
  ${today()}
  <div class="row"><button class="btn ghost" data-a="weak">🃏 Слабые слова</button><button class="btn ghost" data-a="exam">📝 Итоговый тест</button></div>
  <h3>Разделы</h3>${Object.entries(CATS).map(([k,n])=>{const l=W.filter(w=>w.cat===k);const cp=pctAll(l);return`<div class="card catbar" data-a="cat" data-v="${k}"><div class="top"><span>${n}</span><span>${cp}%</span></div><div class="bar"><i style="width:${cp}%"></i></div><span class="mut small">${l.length} слов · ${l.filter(w=>lvl(w)>=4).length} выучено</span></div>`}).join('')}
- <h3>Как учить</h3><div class="card small"><b>1.</b> Каждая тема разбита на уроки по 5–8 слов (вкладка «Уроки»). Иди по порядку, 1–2 новых урока в день.<br><b>2.</b> В уроке: карточки → задания только по словам этого урока. Типы заданий и порядок каждый раз новые: что было переводом, станет диктантом или пропуском.<br><b>3.</b> Зачёт — 80%+. Потом урок сам вернётся на повторение через 1, 3, 7, 14 и 30 дней — смотри блок «Сегодня».<br><b>4.</b> В «Играх» можно выбрать урок или тему и закрепить только эти слова.<br><b>5.</b> Когда пройдёшь все уроки — итоговый тест, цель 86%+.</div>
+ <h3>Как учить</h3><div class="card small"><b>1.</b> Каждая тема разбита на уроки по 5–8 слов (вкладка «Уроки»). Иди по порядку, 1–2 новых урока в день.<br><b>2.</b> Урок — 6 этапов на одних и тех же словах, от простого к сложному: карточки → узнавание → на слух → обратный перевод и контекст → сборка → свободный ответ. Ошибся — слово вернётся в конце этапа.<br><b>3.</b> Зачёт — 80%+. Потом урок сам вернётся на повторение через 1, 3, 7, 14 и 30 дней — смотри блок «Сегодня».<br><b>4.</b> В «Играх» можно выбрать урок или тему и закрепить только эти слова.<br><b>5.</b> Когда пройдёшь все уроки — итоговый тест, цель 86%+.</div>
  <div class="card" style="margin-top:14px"><b>🔊 Озвучка</b><div class="small mut" style="margin:4px 0 10px">Нажми на любое английское слово или пример — оно прозвучит. Британский нейроголос.</div><div class="chips" style="flex-wrap:wrap"><button class="chip ${(S.voice&&S.voice.auto===false)?'':'on'}" data-a="vauto">Авто-озвучка: ${(S.voice&&S.voice.auto===false)?'выкл':'вкл'}</button>${[[0.8,'Медленно'],[1,'Обычно'],[1.2,'Быстрее']].map(([r,n])=>`<button class="chip ${((S.voice&&S.voice.rate)||1)===r?'on':''}" data-a="vrate" data-v="${r}">${n}</button>`).join('')}<button class="chip" data-a="say" data-v="cover letter">▶ Проверить</button></div></div>
  <button class="link" data-a="reset">Сбросить прогресс</button>`;
 },
@@ -416,7 +455,7 @@ function setup(g){
 function today(){
  const due=LESSONS.filter(L=>lstat(L).s==='due'),nx=LESSONS.find(L=>['new','learn'].includes(lstat(L).s));
  return`<div class="card"><b>📅 Сегодня</b><div class="small mut" style="margin:4px 0 4px">${due.length?`Пора повторить уроков: <b style="color:var(--bad)">${due.length}</b> — начни с них. `:'Повторений на сегодня нет. '}${nx?`Следующий новый: ${CATS[nx.cat]}, урок ${nx.n}.`:'Все уроки зачтены — время для итогового теста!'}</div>
- ${due.slice(0,3).map(L=>`<button class="btn wide" data-a="lesson" data-v="${L.id}">🔁 Повторить: ${CATS[L.cat]} · урок ${L.n}</button>`).join('')}${nx?`<button class="btn ${due.length?'ghost':''} wide" data-a="lesson" data-v="${nx.id}">▶ ${lstat(nx).s==='learn'?'Продолжить':'Начать'}: ${CATS[nx.cat]} · урок ${nx.n}</button>`:''}</div>`}
+ ${due.slice(0,3).map(L=>`<button class="btn wide" data-a="lstart" data-v="${L.id}">🔁 Повторить: ${CATS[L.cat]} · урок ${L.n}</button>`).join('')}${nx?`<button class="btn ${due.length?'ghost':''} wide" data-a="lstart" data-v="${nx.id}">▶ ${lstat(nx).s==='learn'?'Продолжить':'Начать'}: ${CATS[nx.cat]} · урок ${nx.n}</button>`:''}</div>`}
 function wordSheet(w){autoSay(w.en);sheet(`<div class="mut small">${CATS[w.cat]}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="big">${esc(w.en)}</div><button class="say" style="position:static" data-a="say" data-v="${esc(w.en)}">🔊</button></div><div style="font-size:19px;font-weight:700;color:var(--acc);margin:4px 0 12px">${esc(w.ru)}</div><div class="mut">${esc(w.def)}</div><p data-say="${esc(sayClean(w.ex))}" style="cursor:pointer"><i>🔊 ${showEx(w)}</i></p>${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px"><span class="small mut">Уровень: ${lvl(w)}/5</span>${dots(w)}</div><button class="btn wide ghost" data-close>Закрыть</button>`)}
 
 /* ---------- questions ---------- */
@@ -441,11 +480,11 @@ function checkType(q,val){const v=norm(val);if(!v)return null;if(q.acc.includes(
 
 /* ---------- quiz engine ---------- */
 function runQuiz(title,qs,opt={}){
- const back=opt.back||'games';let i=0,score=0,wrong=[];
+ const back=opt.back||'games';let i=0,score=0,wrong=[];const n0=qs.length;
  function step(){
   if(i>=qs.length)return end();const q=qs[i];
-  main.innerHTML=topBar(back,`<div class="bar"><i style="width:${i/qs.length*100}%"></i></div><b class="small">${i+1}/${qs.length}</b>`)+`<div class="card qcard"><div class="hint">${q.hint}</div><div class="qtext">${q.q}</div>${q.say?`<button class="say" data-a="say" data-v="${esc(q.say)}">🔊</button>`:''}</div><div id="ans"></div><div id="fb"></div>`;
-  const ans=$('#ans');if(q.say)autoSay(q.say);
+  main.innerHTML=topBar(back,`${opt.label?`<b class="small" style="white-space:nowrap">${opt.label}</b>`:''}<div class="bar"><i style="width:${i/qs.length*100}%"></i></div><b class="small">${i+1}/${qs.length}</b>`)+`<div class="card qcard"><div class="hint">${q.hint}</div><div class="qtext">${q.q}</div>${q.say?`<button class="say" data-a="say" data-v="${esc(q.say)}">🔊</button>`:''}</div><div id="ans"></div><div id="fb"></div>`;
+  const ans=$('#ans');if(q.say)(q.force?speak:autoSay)(q.say);
   if(q.kind==='mc'){
    ans.innerHTML=q.opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join('');
    ans.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(ans.dataset.done)return;ans.dataset.done=1;const o=q.opts[+b.dataset.k],ok=o===q.ans;if(/[a-z]/i.test(o)&&!/[а-яё]/i.test(o)&&!/^(True|False|Appropriate|Inappropriate)/.test(o))speak(o);
@@ -464,17 +503,17 @@ function runQuiz(title,qs,opt={}){
   }
  }
  function done(ok,given,note){
-  const q=qs[i];if(ok)score++;else wrong.push({q,given});if(q.w)mark(q.w.en,ok);if(q.kind!=='mc'&&q.show&&!opt.exam)speak(q.show);
+  const q=qs[i];if(!q.retry){if(ok)score++;else wrong.push({q,given})}const rq=!ok&&opt.requeue&&!q.retry&&q.re;if(rq){const r=q.re();r.retry=true;r.hint='🔁 Ещё раз · '+r.hint;qs.push(r)}if(q.w)mark(q.w.en,ok);if(q.kind!=='mc'&&q.show&&!opt.exam)speak(q.show);
   if(opt.exam){setTimeout(()=>{i++;step()},300);return}
-  $('#fb').innerHTML=`<div class="fb ${ok?'okb':'badb'}"><b>${ok?pick(PRAISE):'Неверно. Правильно: '+esc(q.kind==='mc'?q.ans:q.show)}</b>${note?`<div>${esc(note)}</div>`:''}${q.exp?`<div class="exp">${q.exp}</div>`:''}</div><button class="btn wide" id="nx">Дальше →</button>`;
+  $('#fb').innerHTML=`<div class="fb ${ok?'okb':'badb'}"><b>${ok?pick(PRAISE):'Неверно. Правильно: '+esc(q.kind==='mc'?q.ans:q.show)}</b>${note?`<div>${esc(note)}</div>`:''}${q.exp?`<div class="exp">${q.exp}</div>`:''}${rq?'<div class="small mut" style="margin-top:8px">🔁 Это слово ещё раз попадётся в конце этапа.</div>':''}</div><button class="btn wide" id="nx">Дальше →</button>`;
   $('#nx').onclick=()=>{i++;step()};$('#nx').scrollIntoView({behavior:'smooth',block:'nearest'});
  }
  function end(){
-  const p=Math.round(score/qs.length*100);
+  const p=Math.round(score/n0*100);if(opt.onFinish)return opt.onFinish(p,wrong);
   if(opt.exam){S.exams.unshift({d:Date.now(),p});S.exams=S.exams.slice(0,30)}
   if(opt.key)S.best[opt.key]=Math.max(S.best[opt.key]||0,p);save();
   const ex=opt.after?opt.after(p):null;
-  result(title,p,`${score} из ${qs.length} верно`,wrong.map(x=>`<div class="card mist"><div class="mut small">${esc(strip(x.q.q))}</div><div>Твой ответ: <s>${esc(x.given)}</s></div><div>Правильно: <b>${esc(x.q.kind==='mc'?x.q.ans:x.q.show)}</b></div>${x.q.w&&x.q.w.tip?`<div class="tip">💡 ${esc(x.q.w.tip)}</div>`:''}</div>`).join(''),opt.restart,back,opt.exam,ex);
+  result(title,p,`${score} из ${n0} верно`,wrong.map(x=>`<div class="card mist"><div class="mut small">${esc(strip(x.q.q))}</div><div>Твой ответ: <s>${esc(x.given)}</s></div><div>Правильно: <b>${esc(x.q.kind==='mc'?x.q.ans:x.q.show)}</b></div>${x.q.w&&x.q.w.tip?`<div class="tip">💡 ${esc(x.q.w.tip)}</div>`:''}</div>`).join(''),opt.restart,back,opt.exam,ex);
  }
  step();
 }
