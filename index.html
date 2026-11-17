@@ -297,6 +297,7 @@ const ACT={
  lcards:()=>cards(CUR.ws,{all:true,back:'lesson:'+CUR.id,title:'Карточки · Урок '+CUR.n,next:{label:'🎯 Перейти к заданиям →',fn:ltasks}}),
  ltasks:()=>ltasks(),
  lstart:v=>lessonFlow(LESSONS.find(x=>x.id===v)),
+ lweak:v=>{const L=LESSONS.find(x=>x.id===v);lessonFlow(L,weakStages(L))},
  ld:v=>{S.ld=v;save();lesson(CUR.id)},
  lgame:v=>{LV=S.ld||'m';G={ws:CUR.ws,n:CUR.ws.length,back:'lesson:'+CUR.id};GAMES[v]()},
  word:v=>wordSheet(W[+v]),
@@ -314,7 +315,7 @@ function lessonDone(L,p){S.les=S.les||{};if(LV==='e')return{html:`<div class="ca
  if(p>=80){r.stage=Math.min(r.stage+1,INT.length);const d=INT[r.stage-1];r.due=Date.now()+d*864e5-36e5;
   html=`<div class="card fb okb"><b>✅ Урок зачтён!</b><div class="small">Следующее повторение — ${fmtDays(d)}. ${r.stage>=2?'Интервал растёт: 1 → 3 → 7 → 14 → 30 дней. Так слова уходят в долгую память.':'Вернись к уроку в срок — на главной он появится в блоке «Сегодня».'}</div></div>`;
   const nx=LESSONS[LESSONS.indexOf(L)+1];if(nx&&lstat(nx).s==='new')btn={label:'▶ Следующий урок',fn:()=>lessonFlow(nx)}}
- else{r.stage=Math.max(0,r.stage-1);r.due=Date.now();html=`<div class="card fb badb"><b>Для зачёта нужно 80%+</b><div class="small">Пройди ещё раз — всё начнётся с карточек, а порядок и задания будут другими.</div></div>`;btn=null}
+ else{r.stage=Math.max(0,r.stage-1);r.due=Date.now();html=`<div class="card fb badb"><b>Для зачёта нужно 80%+</b><div class="small">Доработай этапы, где меньше 95%, — повторять всё заново не нужно.</div></div>`;btn=null}
  S.les[L.id]=r;save();return{html,btn}}
 const PROD=['type','gaptype','spell'];
 const decoys=()=>LV==='h'?shuffle('abcdeilmnoprstuy'.split('')).slice(0,3):[];
@@ -344,35 +345,37 @@ const SGEN=[null,
  w=>{const one=/^[a-z]+$/.test(w.en)&&w.en.length<=12;LV=one?'m':'e';return one?Q.spell(w):Q.type(w)},
  (w,i)=>{LV='h';return (i%2?Q.gaptype:Q.type)(w)}];
 const sdots=k=>`<div class="sdots">${STAGES6.map((_,j)=>`<i class="${j<k?'d':j===k?'c':''}"></i>`).join('')}</div>`;
-function lessonFlow(L){
- if(!L)return;CUR=L;VIEW='flow';const ws=L.ws,res=[],missed=new Set(),back='lesson:'+L.id;
+const WEAK=95;
+const weakStages=L=>{const r=S.les&&S.les[L.id];return r&&r.stg?[1,2,3,4,5].filter(k=>r.stg[k]==null||r.stg[k]<WEAK):[]};
+function lessonFlow(L,only){
+ if(!L)return;CUR=L;VIEW='flow';const ws=L.ws,missed=new Set(),back='lesson:'+L.id;const prev=(S.les&&S.les[L.id]&&S.les[L.id].stg)||[];const res=only?prev.slice():[];const order=only&&only.length?only:[0,1,2,3,4,5];const nextOf=k=>order[order.indexOf(k)+1];
  const head=()=>topBar(back,`<b style="flex:1">${CATS[L.cat]} · урок ${L.n}</b>`);
  function intro(k){const s=STAGES6[k];
-  main.innerHTML=head()+sdots(k)+`<div class="card center" style="padding:28px 18px"><div style="font-size:48px">${s.e}</div><div class="hint" style="margin-top:6px">Этап ${k+1} из 6</div><h2 style="margin:4px 0 6px">${s.t}</h2><p class="mut">${s.d}</p>${k>1?`<p class="small">Прошлый этап: <b>${res[k-1]}%</b></p>`:''}<p class="small mut">Ошибся — слово вернётся в конце этапа.</p><button class="btn wide" id="go6">Поехали →</button></div>`;
+  main.innerHTML=head()+sdots(k)+`<div class="card center" style="padding:28px 18px"><div style="font-size:48px">${s.e}</div><div class="hint" style="margin-top:6px">Этап ${k+1} из 6${only?' · доработка':''}</div><h2 style="margin:4px 0 6px">${s.t}</h2><p class="mut">${s.d}</p>${only&&prev[k]!=null?`<p class="small">В прошлый раз: <b>${prev[k]}%</b> — цель 95%+</p>`:''}${k>0?'<p class="small mut">Ошибся — слово вернётся в конце этапа.</p>':''}<button class="btn wide" id="go6">Поехали →</button></div>`;
   $('#go6').onclick=()=>k===0?cardsStage():quizStage(k);window.scrollTo(0,0)}
  function cardsStage(){const list=shuffle(ws);let i=0;
   function show(){const w=list[i];
    main.innerHTML=head()+sdots(0)+`<div class="small mut center" style="margin-bottom:8px">Карточка ${i+1} из ${list.length}</div><div class="flip" id="fc"><button class="say" data-a="say" data-v="${esc(w.en)}">🔊</button><div class="front"><div class="big" style="margin:18px 0">${esc(w.en)}</div><div class="mut small">нажми, чтобы увидеть перевод</div></div><div class="back"><div class="big">${esc(w.en)}</div><div class="ru">${esc(w.ru)}</div><div class="def">${esc(w.def)}</div><div class="ex" data-say="${esc(sayClean(w.ex))}" style="cursor:pointer">🔊 ${showEx(w)}</div>${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}</div></div><div class="row"><button class="btn ghost" id="pv" ${i?'':'disabled'}>← Назад</button><button class="btn" id="nx6">${i<list.length-1?'Дальше →':'К заданиям →'}</button></div>`;
    autoSay(w.en);
    $('#fc').onclick=e=>{if(e.target.closest('.say')||e.target.closest('[data-say]'))return;$('#fc').classList.toggle('on')};
-   $('#pv').onclick=()=>{if(i){i--;show()}};$('#nx6').onclick=()=>{if(i<list.length-1){i++;show()}else intro(1)}}
+   $('#pv').onclick=()=>{if(i){i--;show()}};$('#nx6').onclick=()=>{if(i<list.length-1){i++;show()}else intro(nextOf(0))}}
   show()}
  function quizStage(k){const qs=shuffle(ws).map((w,i)=>{const q=SGEN[k](w,i);q.re=()=>SGEN[k](w,i);return q});
-  runQuiz(STAGES6[k].t,qs,{back,label:`${STAGES6[k].e} ${k+1}/6`,requeue:true,onFinish:(p,wrong)=>{res[k]=p;wrong.forEach(x=>x.q.w&&missed.add(x.q.w));k<5?intro(k+1):finish()}})}
+  runQuiz(STAGES6[k].t,qs,{back,label:`${STAGES6[k].e} ${k+1}/6`,requeue:true,onFinish:(p,wrong)=>{res[k]=p;wrong.forEach(x=>x.q.w&&missed.add(x.q.w));nextOf(k)!=null?intro(nextOf(k)):finish()}})}
  function finish(){
-  const sc=res.slice(1),p=Math.round(sc.reduce((a,b)=>a+b,0)/sc.length),g=grade(p);LV='m';const ex=lessonDone(L,p);
+  const sc=[1,2,3,4,5].map(k=>res[k]||0),p=Math.round(sc.reduce((a,b)=>a+b,0)/5),g=grade(p);LV='m';const ex=lessonDone(L,p);S.les[L.id].stg=res.slice();save();const wk=weakStages(L);
   main.innerHTML=`<div class="card center" style="padding:24px">${ring(p,130)}<h2 class="${g[2]}" style="margin-top:12px">${g[0]}</h2><div class="mut">${CATS[L.cat]} · урок ${L.n} · итог по 5 этапам</div></div>${ex.html||''}
-  <div class="card"><b>По этапам</b>${STAGES6.slice(1).map((s,j)=>`<div class="catbar" style="margin:10px 0 0"><div class="top"><span>${s.e} ${s.t}</span><span>${res[j+1]}%</span></div><div class="bar"><i style="width:${res[j+1]}%"></i></div></div>`).join('')}</div>
+  <div class="card"><b>По этапам</b>${STAGES6.slice(1).map((s,j)=>`<div class="catbar" style="margin:10px 0 0"><div class="top"><span>${s.e} ${s.t}</span><span style="color:${res[j+1]>=WEAK?'var(--ok)':'var(--bad)'}">${res[j+1]>=WEAK?'✓ ':''}${res[j+1]}%</span></div><div class="bar"><i style="width:${res[j+1]}%"></i></div></div>`).join('')}</div>
   ${missed.size?`<h3>Слова с ошибками — повтори их</h3>${[...missed].map(w=>`<div class="card mist" data-say="${esc(w.en)}" style="cursor:pointer">🔊 <b>${esc(w.en)}</b> — ${esc(w.ru)}${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}</div>`).join('')}`:'<p class="center">Ни одной ошибки за весь урок! 🎉</p>'}
-  <button class="btn wide" id="again6">🔁 Ещё раз — всё заново, в новом порядке</button>${ex.btn?`<button class="btn ghost wide" id="exb6">${ex.btn.label}</button>`:''}<button class="btn ghost wide" data-a="go" data-v="path">К урокам</button>`;
-  $('#again6').onclick=()=>lessonFlow(L);if(ex.btn)$('#exb6').onclick=ex.btn.fn;window.scrollTo(0,0)}
- intro(0)}
+  ${wk.length?`<button class="btn wide" id="weak6">🎯 Доработать слабые этапы (${wk.map(k=>STAGES6[k].e).join(' ')}) — меньше 95%</button>`:''}<button class="btn ${wk.length?'ghost':''} wide" id="again6">🔁 Всё заново — с карточек, в новом порядке</button>${ex.btn?`<button class="btn ghost wide" id="exb6">${ex.btn.label}</button>`:''}<button class="btn ghost wide" data-a="go" data-v="path">К урокам</button>`;
+  $('#again6').onclick=()=>lessonFlow(L);if(wk.length)$('#weak6').onclick=()=>lessonFlow(L,wk);if(ex.btn)$('#exb6').onclick=ex.btn.fn;window.scrollTo(0,0)}
+ intro(order[0])}
 function lesson(id){
  const L=LESSONS.find(x=>x.id===id);if(!L)return go('path');CUR=L;VIEW='lesson';const st=lstat(L),r=S.les&&S.les[L.id];
  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v==='path'));
  main.innerHTML=topBar('path',`<b style="flex:1">${CATS[L.cat]}</b>`)+`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2 style="margin:0">Урок ${L.n}</h2><span class="badge ${st.c}">${st.t}</span></div>${r?`<div class="small mut" style="margin-top:6px">Лучший результат: ${r.best}% · пройдено раз: ${r.runs}</div>`:''}
  <div class="small" style="margin:12px 0 4px">Урок проходит в 6 этапов, от простого к сложному, каждый раз в новом порядке:</div>${STAGES6.map((x,j)=>`<div class="small" style="margin:3px 0">${x.e} <b>${j+1}. ${x.t}</b></div>`).join('')}
- <button class="btn wide" data-a="lstart" data-v="${L.id}" style="margin-top:12px">▶ ${r?'Пройти ещё раз':'Начать урок'} · ${L.ws.length} слов</button>
+ ${weakStages(L).length?`<button class="btn wide" data-a="lweak" data-v="${L.id}" style="margin-top:12px">🎯 Доработать слабые этапы: ${weakStages(L).map(k=>STAGES6[k].e+' '+r.stg[k]+'%').join(', ')}</button>`:''}<button class="btn ${weakStages(L).length?'ghost':''} wide" data-a="lstart" data-v="${L.id}" style="margin-top:${weakStages(L).length?8:12}px">▶ ${r?'Пройти всё заново':'Начать урок'} · ${L.ws.length} слов</button>
  <p class="small mut" style="margin-bottom:0">Зачёт — от 80%. После зачёта урок вернётся на повторение через 1, 3, 7, 14 и 30 дней.</p></div>
  <h3>Закрепить играми (только слова урока)</h3><div class="ggrid"><button class="gc" data-a="lgame" data-v="match"><div class="e">🧩</div><b>Найди пару</b></button><button class="gc" data-a="lgame" data-v="spell"><div class="e">🔤</div><b>Собери слово</b></button><button class="gc" data-a="lgame" data-v="sprint"><div class="e">⚡</div><b>Спринт</b></button><button class="gc" data-a="lgame" data-v="write"><div class="e">⌨️</div><b>Диктант</b></button></div>
  <h3>Слова урока</h3><div class="wl">${L.ws.map(w=>`<div class="wi" data-a="word" data-v="${w.id}"><div><b>${esc(w.en)}</b><span>${esc(w.ru)}</span></div>${dots(w)}</div>`).join('')}</div>`;
@@ -455,7 +458,7 @@ function setup(g){
 function today(){
  const due=LESSONS.filter(L=>lstat(L).s==='due'),nx=LESSONS.find(L=>['new','learn'].includes(lstat(L).s));
  return`<div class="card"><b>📅 Сегодня</b><div class="small mut" style="margin:4px 0 4px">${due.length?`Пора повторить уроков: <b style="color:var(--bad)">${due.length}</b> — начни с них. `:'Повторений на сегодня нет. '}${nx?`Следующий новый: ${CATS[nx.cat]}, урок ${nx.n}.`:'Все уроки зачтены — время для итогового теста!'}</div>
- ${due.slice(0,3).map(L=>`<button class="btn wide" data-a="lstart" data-v="${L.id}">🔁 Повторить: ${CATS[L.cat]} · урок ${L.n}</button>`).join('')}${nx?`<button class="btn ${due.length?'ghost':''} wide" data-a="lstart" data-v="${nx.id}">▶ ${lstat(nx).s==='learn'?'Продолжить':'Начать'}: ${CATS[nx.cat]} · урок ${nx.n}</button>`:''}</div>`}
+ ${due.slice(0,3).map(L=>`<button class="btn wide" data-a="lstart" data-v="${L.id}">🔁 Повторить: ${CATS[L.cat]} · урок ${L.n}</button>`).join('')}${nx?`<button class="btn ${due.length?'ghost':''} wide" data-a="${weakStages(nx).length?'lweak':'lstart'}" data-v="${nx.id}">▶ ${lstat(nx).s==='learn'?'Продолжить':'Начать'}: ${CATS[nx.cat]} · урок ${nx.n}</button>`:''}</div>`}
 function wordSheet(w){autoSay(w.en);sheet(`<div class="mut small">${CATS[w.cat]}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="big">${esc(w.en)}</div><button class="say" style="position:static" data-a="say" data-v="${esc(w.en)}">🔊</button></div><div style="font-size:19px;font-weight:700;color:var(--acc);margin:4px 0 12px">${esc(w.ru)}</div><div class="mut">${esc(w.def)}</div><p data-say="${esc(sayClean(w.ex))}" style="cursor:pointer"><i>🔊 ${showEx(w)}</i></p>${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px"><span class="small mut">Уровень: ${lvl(w)}/5</span>${dots(w)}</div><button class="btn wide ghost" data-close>Закрыть</button>`)}
 
 /* ---------- questions ---------- */
