@@ -93,6 +93,9 @@ select{font:600 15px Manrope;width:100%;padding:12px;border-radius:12px;border:1
 .btn:disabled{opacity:.4;pointer-events:none}
 .steps .btn{display:block;width:100%;text-align:left;margin-top:9px}
 .scale td:first-child{width:auto}
+.lbtn{display:flex;align-items:center;gap:12px;text-align:left;padding:11px 14px}.lbtn .ic{font-size:20px;width:26px;text-align:center;flex-shrink:0}.lbtn .t{display:block;font-size:15px;line-height:1.25}.lbtn .s{display:block;font-size:12px;font-weight:600;opacity:.75;margin-top:2px}.lbtn .ar{margin-left:auto;font-size:22px;opacity:.7}
+.row .btn{font-size:14px;padding:12px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat b{font-size:20px}.stat span{white-space:nowrap}
 .sdots{display:flex;gap:6px;justify-content:center;margin:-2px 0 14px}.sdots i{width:30px;height:6px;border-radius:4px;background:var(--line)}.sdots i.d{background:var(--ok)}.sdots i.c{background:var(--acc)}
 .pat{font-family:ui-monospace,Menlo,monospace;letter-spacing:.28em;font-size:18px;color:var(--ink)}
 .mt.df{font-size:12px;font-weight:500;line-height:1.3}
@@ -389,7 +392,7 @@ home(){
  const acc=S.answers?Math.round(S.correct/S.answers*100):0;const p=pctAll();
  const last=S.exams[0];
  main.innerHTML=`<div class="card hero">${ring(p,118)}<div><h2 style="margin:0 0 4px">${p<5?'Начнём! 🚀':p<50?'Хороший старт 💪':p<86?'Уже уверенно 🔥':'Почти мастер 🏆'}</h2><div class="mut small">Общий прогресс по теме Employment: ${W.length} слов и выражений. Слово выучено, когда набирает 4–5 баллов.</div></div></div>
- <div class="stats"><div class="stat"><b>${learned}</b><span>выучено</span></div><div class="stat"><b>${prog}</b><span>в процессе</span></div><div class="stat"><b>${W.length-learned-prog}</b><span>новых</span></div><div class="stat"><b>🔥 ${S.streak.d===day(Date.now())||S.streak.d===day(Date.now()-864e5)?S.streak.n:0}</b><span>дней подряд</span></div><div class="stat"><b>${acc}%</b><span>точность</span></div><div class="stat"><b>${last?last.p+'%':'—'}</b><span>последний тест</span></div></div>
+ <div class="stats"><div class="stat"><b>${learned}</b><span>выучено</span></div><div class="stat"><b>${prog}</b><span>в процессе</span></div><div class="stat"><b>${W.length-learned-prog}</b><span>новых</span></div><div class="stat"><b>🔥 ${S.streak.d===day(Date.now())||S.streak.d===day(Date.now()-864e5)?S.streak.n:0}</b><span>дней подряд</span></div><div class="stat"><b>${acc}%</b><span>точность</span></div><div class="stat"><b>${last?last.p+'%':'—'}</b><span>тест</span></div></div>
  ${today()}
  <div class="row"><button class="btn ghost" data-a="weak">🃏 Слабые слова</button><button class="btn ghost" data-a="exam">📝 Итоговый тест</button></div>
  <h3>Разделы</h3>${Object.entries(CATS).map(([k,n])=>{const l=W.filter(w=>w.cat===k);const cp=pctAll(l);return`<div class="card catbar" data-a="cat" data-v="${k}"><div class="top"><span>${n}</span><span>${cp}%</span></div><div class="bar"><i style="width:${cp}%"></i></div><span class="mut small">${l.length} слов · ${l.filter(w=>lvl(w)>=4).length} выучено</span></div>`}).join('')}
@@ -455,10 +458,11 @@ function setup(g){
   if(nb){n=+nb.dataset.n;draw()}
   if(ev.target.closest('#gogo')){const a=avail();S.gsel={ls:[...sel],n,d};LV=diff?d:'m';save();G={ws:scope?W.filter(w=>LESSONS.some(L=>sel.has(L.id)&&L.ws.includes(w))):W,n:n&&n<a?n:a,back:'games'};o.remove();GAMES[g]()}};
  draw()}
+const lbtn=(cls,a,v,ic,t,s)=>`<button class="btn wide lbtn ${cls}" data-a="${a}" data-v="${v}"><span class="ic">${ic}</span><span><span class="t">${t}</span><span class="s">${s}</span></span><span class="ar">›</span></button>`;
 function today(){
  const due=LESSONS.filter(L=>lstat(L).s==='due'),nx=LESSONS.find(L=>['new','learn'].includes(lstat(L).s));
  return`<div class="card"><b>📅 Сегодня</b><div class="small mut" style="margin:4px 0 4px">${due.length?`Пора повторить уроков: <b style="color:var(--bad)">${due.length}</b> — начни с них. `:'Повторений на сегодня нет. '}${nx?`Следующий новый: ${CATS[nx.cat]}, урок ${nx.n}.`:'Все уроки зачтены — время для итогового теста!'}</div>
- ${due.slice(0,3).map(L=>`<button class="btn wide" data-a="lstart" data-v="${L.id}">🔁 Повторить: ${CATS[L.cat]} · урок ${L.n}</button>`).join('')}${nx?`<button class="btn ${due.length?'ghost':''} wide" data-a="${weakStages(nx).length?'lweak':'lstart'}" data-v="${nx.id}">▶ ${lstat(nx).s==='learn'?'Продолжить':'Начать'}: ${CATS[nx.cat]} · урок ${nx.n}</button>`:''}</div>`}
+ ${due.slice(0,3).map(L=>lbtn('','lstart',L.id,'🔁','Повторить урок '+L.n,CATS[L.cat])).join('')}${nx?lbtn(due.length?'ghost':'',weakStages(nx).length?'lweak':'lstart',nx.id,lstat(nx).s==='learn'?'🎯':'▶',(lstat(nx).s==='learn'?'Продолжить урок ':'Начать урок ')+nx.n,CATS[nx.cat]+' · '+nx.ws.length+' слов'):''}</div>`}
 function wordSheet(w){autoSay(w.en);sheet(`<div class="mut small">${CATS[w.cat]}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="big">${esc(w.en)}</div><button class="say" style="position:static" data-a="say" data-v="${esc(w.en)}">🔊</button></div><div style="font-size:19px;font-weight:700;color:var(--acc);margin:4px 0 12px">${esc(w.ru)}</div><div class="mut">${esc(w.def)}</div><p data-say="${esc(sayClean(w.ex))}" style="cursor:pointer"><i>🔊 ${showEx(w)}</i></p>${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px"><span class="small mut">Уровень: ${lvl(w)}/5</span>${dots(w)}</div><button class="btn wide ghost" data-close>Закрыть</button>`)}
 
 /* ---------- questions ---------- */
