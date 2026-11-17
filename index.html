@@ -128,7 +128,7 @@ const firebaseConfig = {
   appId: "1:495467669562:web:1c8cd29835034575eeed03"
 };
 /* ================================================================================================================ */
-const CATS={search:'Поиск работы и найм',contract:'Условия и договор',career:'Карьера в компании',leaving:'Увольнение и безработица'};
+const CATS={search:'Поиск работы и найм',contract:'Условия и договор',career:'Карьера в компании',leaving:'Увольнение и безработица',market:'Рынок труда и занятость',colloc:'Словосочетания'};
 const RAW=`search|vacancy|вакансия|a job in a company that is available for someone to do|There is a {vacancy} for a sales manager — the last one left in May.|«Вакантный» = свободный: vacancy — свободное место в штате.
 search|applicant|соискатель|a person who formally asks for a job|Over 200 {applicants} sent their CVs for one position.|apply → applicant: «тот, кто подаёт» заявку.
 search|apply for|подавать заявку (на работу)|to formally ask for a job, usually by sending a CV|I'm going to {apply for} the manager position at Sber.|apply FOR a job (на что), apply TO a company (куда).
@@ -207,9 +207,61 @@ leaving|lay off|сократить (массово, из-за нехватки �
 leaving|severance pay|выходное пособие|money paid to an employee who loses their job|Redundant workers received three months' {severance pay}.|sever — разрывать (отношения).
 leaving|unemployed|безработный|without a paid job|He has been {unemployed} for six months and is looking for work.|un- (не) + employed (нанятый).
 leaving|unemployment|безработица|the situation of people having no jobs; the number of people without work|{Unemployment} in the country fell to 2.5%.|-ment → существительное: явление.
-leaving|unemployment benefit|пособие по безработице|money the state pays to people who have no job|She gets {unemployment benefit} while she looks for work.|benefit — выплата, пособие.`;
+leaving|unemployment benefit|пособие по безработице|money the state pays to people who have no job|She gets {unemployment benefit} while she looks for work.|benefit — выплата, пособие.
+market|labour market|рынок труда|the system in which employers look for workers and people look for jobs|The {labour market} for IT specialists in Moscow is very competitive.|labour (BrE) = labor (AmE). Рынок труда = спрос на работников + предложение рабочей силы.
+market|job seeker|ищущий работу|a person who is trying to find a job|Every {job seeker} should prepare a good CV.|seek — искать (формально). Job seeker шире, чем applicant: ещё никуда не подал.
+market|job centre|центр занятости|a government office that helps unemployed people find work and pays benefits|He registered at the {job centre} after he lost his job.|Государственная служба; частная — employment agency.
+market|employment agency|агентство по трудоустройству|a private company that finds jobs for people and workers for companies|She found a temporary job through an {employment agency}.|Близко к recruitment agency; job centre — государственный.
+market|job placement|трудоустройство|the process of finding a suitable job for a person|The university offers {job placement} services for graduates.|place — устраивать, помещать: place a person in a job.
+market|employment status|статус занятости|whether a person is employed, self-employed or unemployed|Please state your {employment status} on the form.|status — положение: employed / self-employed / unemployed / retired.
+market|underemployed|частично занятый|working fewer hours than you want, or in a job below your skills|Many graduates are {underemployed} and work as couriers.|under- = «недо-»: недозанятый. Не путай с unemployed (совсем без работы).
+market|frictional unemployment|фрикционная безработица|short-term unemployment when people are between jobs|{Frictional unemployment} happens when people leave one job and look for a better one.|friction — трение: временная «пробуксовка» при смене работы.
+market|structural unemployment|структурная безработица|unemployment caused by changes in the economy, when workers' skills no longer match the jobs|Automation causes {structural unemployment} among factory workers.|structure — структура экономики изменилась, навыки устарели.
+market|cyclical unemployment|циклическая безработица|unemployment that rises when the economy is in recession|During the crisis {cyclical unemployment} went up sharply.|cycle — экономический цикл: спад → безработица растёт.
+market|unemployment rate|уровень безработицы|the percentage of people in the workforce who do not have a job|The {unemployment rate} in Russia fell to a record low.|rate — уровень, показатель (в %).
+market|minimum wage|минимальная зарплата (МРОТ)|the lowest amount of pay that employers are allowed by law to pay|The government raised the {minimum wage} in January.|МРОТ = minimum wage. Wage — оплата труда.
+market|labour shortage|нехватка рабочей силы|a situation when there are not enough workers for the available jobs|There is a {labour shortage} in construction and transport.|shortage — нехватка (short — короткий, не хватает).
+market|workforce|рабочая сила|all the people who work in a country or a company|Women make up half of the company's {workforce}.|work + force (сила): все, кто работает.
+market|staff turnover|текучесть кадров|the rate at which employees leave a company and are replaced|High {staff turnover} is expensive for any company.|turn over — переворачивать: состав постоянно «оборачивается».
+market|job security|гарантия занятости|the feeling that your job is safe and you will not lose it|Civil servants usually have good {job security}.|security — безопасность, надёжность.
+market|fixed-term contract|срочный трудовой договор|a contract that ends on a particular date|She signed a {fixed-term contract} for one year.|fixed term — установленный срок. Противоположность — permanent contract.
+market|internship|стажировка|a period of work, often unpaid, for students to get experience|He did a summer {internship} at a big bank.|intern — стажёр. Trainee — тоже стажёр, но обычно уже нанятый.
+market|apprenticeship|ученичество (обучение на рабочем месте)|a job in which you learn a trade from a skilled worker|After school he started an {apprenticeship} as an electrician.|apprentice — ученик мастера, подмастерье.
+market|vocational training|профессиональное обучение|training in the skills needed for a particular job|The college offers {vocational training} for future cooks.|vocation — призвание, профессия.
+market|labour law|трудовое право / трудовое законодательство|the laws about the rights of workers and employers|According to {labour law}, overtime must be paid extra.|В РФ — Трудовой кодекс (Labour Code).
+market|collective agreement|коллективный договор|a written agreement between a trade union and an employer about pay and conditions|The union and the management signed a new {collective agreement}.|collective — коллективный: договор за всех работников сразу.
+market|strike|забастовка|a period when workers refuse to work to protest about pay or conditions|The railway workers are on {strike} for higher pay.|be on strike — бастовать; go on strike — начать забастовку.
+market|discrimination|дискриминация|treating a person unfairly because of their age, sex, race etc.|Age {discrimination} in hiring is against the law.|discriminate against sb — дискриминировать кого-то.
+market|equal opportunities|равные возможности|the principle that everyone should have the same chances at work|We are an {equal opportunities} employer.|Фраза часто в объявлениях о вакансиях.
+market|paternity leave|отпуск по уходу за ребёнком для отца|time off work that a father can take after his baby is born|He took two weeks of {paternity leave} when his son was born.|pater — отец (лат.); maternity — мать.
+market|absenteeism|прогулы, частое отсутствие на работе|regularly staying away from work without a good reason|{Absenteeism} costs companies millions every year.|absent — отсутствующий + -ism.
+market|headcount|численность персонала|the number of people employed by a company|The company plans to cut its {headcount} by 10%.|head + count: «посчитать по головам».
+colloc|look for a job|искать работу|to try to find a job|I'm {looking for a job} in marketing.|look FOR — искать. Find — найти (результат).
+colloc|get a job|устроиться на работу|to be given a job|She {got a job} at a bank after graduation.|get — получить: get a job = найти и получить работу.
+colloc|lose one's job|потерять работу|to stop having a job, often not by your choice|Many people {lost their jobs} during the crisis.|one's меняется: lose my / his / their job.
+colloc|fill a vacancy|заполнить вакансию|to find a person for a job that is free|We need to {fill the vacancy} before the end of the month.|fill — заполнить: найти человека на свободное место.
+colloc|hold a position|занимать должность|to have a particular job|She {holds the position} of HR director.|hold — держать: «держать должность».
+colloc|earn a living|зарабатывать на жизнь|to get the money you need to live|He {earns a living} as a freelance designer.|living — средства к существованию.
+colloc|be out of work|быть без работы|to have no job|My uncle has {been out of work} for six months.|out of — вне: вне работы = безработный.
+colloc|hand in one's notice|подать заявление об уходе|to tell your employer formally that you are going to leave|She {handed in her notice} and left a month later.|hand in — сдать (бумагу). Notice — уведомление.
+colloc|go on strike|начать забастовку|to stop working as a protest|The teachers {went on strike} for higher salaries.|go on strike — начать; be on strike — бастовать.
+colloc|take time off|взять отгул|to stop working for a period of time|I need to {take some time off} to visit my parents.|time off — свободное от работы время.
+colloc|work long hours|работать допоздна, много часов|to work for more hours than usual|Lawyers often {work long hours}.|long hours — долгий рабочий день.
+colloc|meet a deadline|уложиться в срок|to finish work by the time you were told|We worked all night to {meet the deadline}.|meet — встретить, выполнить. Miss a deadline — не успеть.
+colloc|run a business|вести бизнес|to own and manage a company|Her parents {run a small business} selling furniture.|run — управлять (run a company, a shop).
+colloc|turn down an offer|отклонить предложение|to refuse an offer|He {turned down the offer} because the salary was too low.|turn down — отказать. Accept an offer — принять.
+colloc|sign a contract|подписать договор|to write your name on a contract to make it official|You will {sign the contract} on your first day.|sign — подписывать; signature — подпись.
+colloc|be in charge of|отвечать за, руководить|to be responsible for a group of people or an activity|She {is in charge of} recruitment in our company.|charge — ответственность: in charge OF smth.
+colloc|report to|подчиняться (кому-то)|to have someone as your manager|The HR manager {reports to} the general director.|report to sb — отчитываться перед кем-то = быть в подчинении.
+colloc|career prospects|перспективы карьерного роста|the chances of being successful and promoted in a job|The job is not well paid, but the {career prospects} are good.|prospect — перспектива.
+colloc|job hunting|поиск работы|the activity of looking for a job|{Job hunting} can take several months.|hunt — охотиться: «охота» за вакансией.
+colloc|a steady job|постоянная, стабильная работа|a job that is regular and likely to continue for a long time|After years of freelancing, he wanted {a steady job}.|steady — устойчивый, стабильный.
+colloc|gain experience|набираться опыта|to get knowledge and skills by doing something|Students do internships to {gain experience}.|gain — получать, приобретать. Опыт неисчисляемый: без -s.
+colloc|make a career|сделать карьеру|to become successful in your job over time|She {made a career} in banking.|Также: build a career, pursue a career.
+colloc|apply in writing|подать заявку в письменной форме|to send a written application|Candidates should {apply in writing} to the HR manager.|in writing — письменно.
+colloc|under pressure|под давлением, в стрессе|in a situation where you have to work hard and fast|A good manager can work {under pressure}.|pressure — давление. Классическая фраза для собеседования.`;
 const W=RAW.trim().split('\n').map((l,i)=>{const[cat,en,ru,def,ex,tip]=l.split('|');return{id:i,cat,en,ru,def,ex,tip}});
-const SYNG=[['fire','dismiss','get the sack','lay off','make redundant'],['hire','take on','recruit'],['resign','quit'],['applicant','candidate','interviewee'],['salary','wage'],['staff / personnel','employee'],['vacancy','job advertisement'],['redundancy','unemployment','unemployed'],['promotion','be promoted'],['training','onboarding'],['benefits','bonus','incentive','commission'],['resignation letter','give notice'],['retirement','pension'],['job description','responsibilities'],['qualifications','skills','work experience']];
+const SYNG=[['fire','dismiss','get the sack','lay off','make redundant'],['hire','take on','recruit'],['resign','quit'],['applicant','candidate','interviewee'],['salary','wage'],['staff / personnel','employee'],['vacancy','job advertisement'],['redundancy','unemployment','unemployed'],['promotion','be promoted'],['training','onboarding'],['benefits','bonus','incentive','commission'],['resignation letter','give notice'],['retirement','pension'],['job description','responsibilities'],['qualifications','skills','work experience','gain experience'],['employment agency','recruitment agency','job centre'],['workforce','headcount','staff / personnel'],['fixed-term contract','temporary'],['look for a job','job hunting','job seeker'],['lose one\'s job','be out of work','unemployed','fire','make redundant'],['hand in one\'s notice','give notice','resign','quit','resignation letter'],['go on strike','strike'],['take time off','annual leave'],['work long hours','overtime'],['meet a deadline','deadline'],['a steady job','permanent','job security'],['vocational training','training','apprenticeship'],['get a job','hire','fill a vacancy'],['hold a position','be in charge of'],['make a career','career ladder','promotion'],['internship','trainee']];
 const CONF=[
 ["Office workers usually receive a monthly ___.",["salary","wage"],"salary","Salary — фиксированный оклад за месяц/год; wage — оплата за час или неделю."],
 ["Builders are often paid an hourly ___.",["wage","salary"],"wage","Wage — почасовая/понедельная оплата, чаще за физический труд."],
@@ -258,6 +310,58 @@ const gapEx=(w,s)=>esc(s||w.ex).replace(/\{(.*?)\}/,'<span class="gap">&nbsp;?&n
 const gapAns=(w,s)=>((s||w.ex).match(/\{(.*?)\}/)||[])[1]||w.en;
 /* дополнительные предложения для заданий «вставь слово» — каждый раз берётся другое */
 const EX2={
+"labour market":["Young graduates often find the {labour market} difficult to enter.","The {labour market} changes quickly because of new technologies.","Experts say the {labour market} needs more engineers and doctors."],
+"job seeker":["The website helps every {job seeker} find suitable vacancies.","A {job seeker} should check job sites every day.","The job centre gave the {job seeker} a list of vacancies."],
+"job centre":["Unemployed people can get advice at the local {job centre}.","The {job centre} offers free courses for people without work.","You must visit the {job centre} every two weeks to get your benefit."],
+"employment agency":["The {employment agency} sent three candidates for the interview.","Many students find summer work through an {employment agency}.","An {employment agency} usually charges the employer a fee."],
+"job placement":["The programme helps disabled people with {job placement}.","After the course, 80% of students found a job through {job placement}.","The college has a special office for {job placement}."],
+"employment status":["Your {employment status} affects how much tax you pay.","The bank asked about my {employment status} before giving me a loan.","His {employment status} changed from employed to self-employed."],
+"underemployed":["She has a degree in law but works in a café, so she is {underemployed}.","Part-time workers who want full-time jobs are {underemployed}.","Millions of young people are {underemployed} in this region."],
+"frictional unemployment":["Students who are looking for their first job create {frictional unemployment}.","{Frictional unemployment} is normal even in a healthy economy.","Good job websites can reduce {frictional unemployment}."],
+"structural unemployment":["When coal mines closed, there was high {structural unemployment} in the region.","Retraining programmes help to fight {structural unemployment}.","{Structural unemployment} appears when workers' skills become out of date."],
+"cyclical unemployment":["{Cyclical unemployment} falls when the economy starts to grow again.","Economists expect {cyclical unemployment} to rise next year because of the recession.","Government spending can help reduce {cyclical unemployment}."],
+"unemployment rate":["A low {unemployment rate} means that most people have jobs.","The {unemployment rate} among young people is higher than average.","Economists watch the {unemployment rate} every month."],
+"minimum wage":["Nobody in the company earns less than the {minimum wage}.","Many students work in cafés for the {minimum wage}.","Trade unions want a higher {minimum wage}."],
+"labour shortage":["Because of the {labour shortage}, companies are raising salaries.","Farms face a {labour shortage} every summer.","The {labour shortage} in IT makes programmers very expensive."],
+"workforce":["The company is training its {workforce} to use the new software.","About 40% of the {workforce} works in services.","A skilled {workforce} attracts foreign investors."],
+"staff turnover":["Good pay and training help to reduce {staff turnover}.","Fast food restaurants usually have very high {staff turnover}.","The HR manager analysed the reasons for {staff turnover}."],
+"job security":["Many people prefer {job security} to a high salary.","Freelancers have more freedom but less {job security}.","A permanent contract gives you more {job security}."],
+"fixed-term contract":["Seasonal workers are usually employed on a {fixed-term contract}.","When her {fixed-term contract} ended, she got a permanent one.","A {fixed-term contract} can be signed for up to five years."],
+"internship":["The {internship} helped her get a full-time job at the company.","Many companies offer paid {internships} to students.","He learned a lot about HR during his {internship}."],
+"apprenticeship":["An {apprenticeship} lets you earn money while you learn a trade.","She chose an {apprenticeship} instead of university.","The {apprenticeship} lasts three years."],
+"vocational training":["{Vocational training} prepares young people for jobs like plumber or hairdresser.","The government invests in {vocational training} for the unemployed.","After {vocational training} he became a qualified welder."],
+"labour law":["Every HR manager must know {labour law} well.","The company broke {labour law} by not paying for overtime.","Students of HR management study {labour law} in their second year."],
+"collective agreement":["The {collective agreement} sets the pay rates for all workers.","Under the {collective agreement}, staff get 30 days of annual leave.","The union is negotiating a new {collective agreement} with the employer."],
+"strike":["The {strike} lasted three days and stopped all the trains.","Workers threatened a {strike} if their wages were not increased.","The {strike} ended when the company agreed to a pay rise."],
+"discrimination":["The law protects workers from {discrimination}.","She complained about {discrimination} against women in her department.","{Discrimination} by age is a problem for older job seekers."],
+"equal opportunities":["The company has an {equal opportunities} policy for all staff.","{Equal opportunities} mean that men and women get the same pay for the same work.","HR managers must make sure there are {equal opportunities} for everyone."],
+"paternity leave":["More fathers now take {paternity leave} to help with the baby.","In some countries, {paternity leave} is fully paid.","He asked his boss for {paternity leave} next month."],
+"absenteeism":["Low job satisfaction often leads to {absenteeism}.","The manager is worried about high {absenteeism} in his team.","Flexible hours helped to reduce {absenteeism}."],
+"headcount":["The bank increased its {headcount} by 500 people this year.","Our department has a {headcount} of twelve.","Because of the crisis, the company froze its {headcount}."],
+"look for a job":["After graduation she started to {look for a job} in HR.","He is {looking for a job} with flexible hours.","It is easier to {look for a job} if you already have one."],
+"get a job":["It is hard to {get a job} without experience.","He hopes to {get a job} in a big international company.","She {got a job} as a receptionist at a hotel."],
+"lose one's job":["He was afraid to {lose his job} because of the new manager.","If you are late every day, you may {lose your job}.","She {lost her job} when the shop closed."],
+"fill a vacancy":["It took three months to {fill the vacancy} for an accountant.","The agency helped us {fill the vacancy} quickly.","We are trying to {fill two vacancies} in the sales team."],
+"hold a position":["He {held the position} of chief accountant for ten years.","To {hold a senior position}, you need a lot of experience.","She currently {holds the position} of team leader."],
+"earn a living":["It is difficult to {earn a living} as an artist.","He {earns his living} by teaching English online.","Many students {earn a living} by working in the evenings."],
+"be out of work":["Thousands of miners will {be out of work} when the mine closes.","She {was out of work} for a year before she found a new job.","If you {are out of work}, you can get unemployment benefit."],
+"hand in one's notice":["If you want to leave, you must {hand in your notice} two weeks before.","He {handed in his notice} after he got a better offer.","She decided to {hand in her notice} because of the long hours."],
+"go on strike":["The pilots threatened to {go on strike} in August.","Doctors rarely {go on strike}.","The workers will {go on strike} if the company cuts their pay."],
+"take time off":["You can {take time off} if you work overtime this week.","She {took two days off} to move to a new flat.","Employees should {take time off} to avoid burnout."],
+"work long hours":["Junior doctors often {work long hours} at the hospital.","He doesn't mind {working long hours} if the pay is good.","People who {work long hours} have less time for their families."],
+"meet a deadline":["If we don't {meet the deadline}, the client will be angry.","She always {meets her deadlines}.","It was difficult to {meet the deadline} because two colleagues were ill."],
+"run a business":["To {run a business} you need good management skills.","He left the bank to {run his own business}.","It is not easy to {run a business} during a crisis."],
+"turn down an offer":["She {turned down the offer} because the office was too far away.","It was difficult to {turn down such a good offer}.","Never {turn down an offer} before you know all the details."],
+"sign a contract":["Read everything carefully before you {sign the contract}.","The new manager will {sign the contract} on Monday.","Both sides {signed the contract} in the director's office."],
+"be in charge of":["Who {is in charge of} training new staff?","He {is in charge of} a team of twenty people.","The HR department {is in charge of} hiring and firing."],
+"report to":["All sales managers {report to} the head of sales.","In your new job you will {report to} me.","She {reports directly to} the CEO."],
+"career prospects":["Young people choose companies with good {career prospects}.","The {career prospects} in IT are excellent.","Training improves your {career prospects}."],
+"job hunting":["{Job hunting} is stressful, so take breaks.","She spent the whole summer {job hunting}.","Online platforms make {job hunting} easier."],
+"a steady job":["My parents want me to find {a steady job} with a good salary.","{A steady job} gives you a regular income.","He gave up {a steady job} to start his own business."],
+"gain experience":["Part-time work is a good way to {gain experience}.","She wants to {gain experience} abroad before coming back.","You will {gain valuable experience} in our company."],
+"make a career":["He wants to {make a career} in human resources.","It takes many years to {make a career} in law.","She {made a successful career} in IT."],
+"apply in writing":["Please {apply in writing}, enclosing your CV.","All candidates must {apply in writing} before 1 May.","You can {apply in writing} or by email."],
+"under pressure":["Can you stay calm {under pressure}?","The team worked {under pressure} to finish the project.","Some people make mistakes when they are {under pressure}."],
 "vacancy":["The bank has a {vacancy} for a cashier, so they are interviewing candidates.","We can't hire anyone now — there are no {vacancies} at the moment.","She applied for the {vacancy} as soon as it appeared on the website."],
 "applicant":["Every {applicant} must fill in the form and attach a CV.","The {applicant} with the best qualifications got the job.","We received 50 {applicants} for one trainee position."],
 "apply for":["You should {apply for} the job before the deadline on Friday.","He decided to {apply for} a position in the HR department.","Many students {apply for} part-time jobs in summer."],
@@ -346,7 +450,8 @@ const isSyn=(a,b)=>SYNG.some(g=>g.includes(a.en)&&g.includes(b.en));
 const norm=s=>s.toLowerCase().replace(/[’`]/g,"'").replace(/[^a-z' -]/g,'').replace(/\s+/g,' ').trim();
 function variants(en){const o=new Set();en.replace(/\(.*?\)/g,'').split('/').forEach(p=>o.add(norm(p)));const par=(en.match(/\((.*?)\)/)||[])[1];if(par)o.add(norm(par));return[...o].filter(Boolean)}
 function lev(a,b){const d=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){let p=d[0];d[0]=i;for(let j=1;j<=b.length;j++){const t=d[j];d[j]=Math.min(d[j]+1,d[j-1]+1,p+(a[i-1]===b[j-1]?0:1));p=t}}return d[b.length]}
-function distract(w,f,n=3,same=true){const pool=W.filter(x=>x!==w&&!isSyn(x,w)&&x[f]!==w[f]);const a=same?shuffle(pool.filter(x=>x.cat===w.cat)).slice(0,2):[];const b=shuffle(pool.filter(x=>!a.includes(x)));return[...a,...b].slice(0,n).map(x=>x[f])}
+let DPOOL=null;/* слова текущего урока/игры: варианты ответа берутся из них, потом из той же темы */
+function distract(w,f,n=3){const ok=x=>x!==w&&!isSyn(x,w)&&x[f]!==w[f];const dp=DPOOL&&DPOOL.length>=3?DPOOL.filter(ok):[];const rest=W.filter(x=>ok(x)&&!dp.includes(x));const tiers=[dp.filter(x=>x.cat===w.cat),dp.filter(x=>x.cat!==w.cat),rest.filter(x=>x.cat===w.cat),rest.filter(x=>x.cat!==w.cat)];const out=[],seen=new Set([w[f]]);tiers.forEach(t=>shuffle(t).forEach(x=>{if(out.length<n&&!seen.has(x[f])){seen.add(x[f]);out.push(x[f])}}));return out}
 function pickWords(n,list=W){return shuffle(list).map(w=>[w,lvl(w)+Math.random()*2.5]).sort((a,b)=>a[1]-b[1]).slice(0,n).map(x=>x[0])}
 function grade(p){return p>=86?['Отлично','5','gr5']:p>=70?['Хорошо','4','']:p>=50?['Удовлетворительно','3','']:['Неудовлетворительно','2','gr2']}
 function ring(p,s=110){const r=s/2-9,c=2*Math.PI*r;const col=p>=86?'var(--ok)':p>=50?'var(--acc)':'var(--bad)';return`<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" style="flex-shrink:0"><circle cx="${s/2}" cy="${s/2}" r="${r}" fill="none" stroke="var(--line)" stroke-width="10"/><circle cx="${s/2}" cy="${s/2}" r="${r}" fill="none" stroke="${col}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-p/100)}" transform="rotate(-90 ${s/2} ${s/2})" style="transition:stroke-dashoffset .8s"/><text x="50%" y="53%" text-anchor="middle" dominant-baseline="middle" font-family="Manrope" font-weight="800" font-size="${s/4.4}" fill="var(--ink)">${p}%</text></svg>`}
@@ -390,12 +495,12 @@ const ACT={
  lstart:v=>lessonFlow(LESSONS.find(x=>x.id===v)),
  lweak:v=>{const L=LESSONS.find(x=>x.id===v);lessonFlow(L,weakStages(L))},
  ld:v=>{S.ld=v;save();lesson(CUR.id)},
- lgame:v=>{LV=S.ld||'m';G={ws:CUR.ws,n:CUR.ws.length,back:'lesson:'+CUR.id};GAMES[v]()},
+ lgame:v=>{LV=S.ld||'m';G={ws:CUR.ws,n:CUR.ws.length,back:'lesson:'+CUR.id};DPOOL=CUR.ws;GAMES[v]()},
  word:v=>wordSheet(W[+v]),
  reset:()=>{const o=sheet(`<h2>Сбросить прогресс?</h2><p class="mut">Все уровни слов, рекорды и история тестов будут удалены.</p><div class="row"><button class="btn ghost" data-close>Отмена</button><button class="btn bad" id="rs">Сбросить</button></div>`);o.querySelector('#rs').onclick=()=>{S=DEF();save();updPill();o.remove();go('home')}}
 };
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el&&ACT[el.dataset.a])ACT[el.dataset.a](el.dataset.v,el)});
-function go(v){if(v.startsWith('lesson:'))return lesson(v.slice(7));if(v.startsWith('book:'))return bookUnit(+v.slice(5));VIEW=v;const hv=v==='learn'?'path':v;document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===hv));(VIEWS[v]||VIEWS.home)();window.scrollTo(0,0)}
+function go(v){DPOOL=null;if(v.startsWith('text:'))return textView(v.slice(5));if(v.startsWith('lesson:'))return lesson(v.slice(7));if(v.startsWith('book:'))return bookUnit(+v.slice(5));VIEW=v;const hv=v==='learn'?'path':v==='texts'?'book':v;document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===hv));(VIEWS[v]||VIEWS.home)();window.scrollTo(0,0)}
 
 /* ---------- lessons & spaced repetition ---------- */
 const LESSONS=[];Object.keys(CATS).forEach(c=>{const ws=W.filter(w=>w.cat===c);const n=Math.ceil(ws.length/8);for(let k=0;k<n;k++)LESSONS.push({id:c+'-'+(k+1),cat:c,n:k+1,ws:ws.slice(Math.round(k*ws.length/n),Math.round((k+1)*ws.length/n))})});
@@ -451,7 +556,7 @@ function lessonFlow(L,only){
    $('#fc').onclick=e=>{if(e.target.closest('.say')||e.target.closest('[data-say]'))return;$('#fc').classList.toggle('on')};
    $('#pv').onclick=()=>{if(i){i--;show()}};$('#nx6').onclick=()=>{if(i<list.length-1){i++;show()}else intro(nextOf(0))}}
   show()}
- function quizStage(k){const qs=shuffle(ws).map((w,i)=>{const q=SGEN[k](w,i);q.re=()=>SGEN[k](w,i);return q});
+ function quizStage(k){DPOOL=ws;const qs=shuffle(ws).map((w,i)=>{const q=SGEN[k](w,i);q.re=()=>SGEN[k](w,i);return q});
   runQuiz(STAGES6[k].t,qs,{back,label:`${STAGES6[k].e} ${k+1}/6`,requeue:true,onFinish:(p,wrong)=>{res[k]=p;wrong.forEach(x=>x.q.w&&missed.add(x.q.w));nextOf(k)!=null?intro(nextOf(k)):finish()}})}
  function finish(){
   const sc=[1,2,3,4,5].map(k=>res[k]||0),p=Math.round(sc.reduce((a,b)=>a+b,0)/5),g=grade(p);LV='m';const ex=lessonDone(L,p);S.les[L.id].stg=res.slice();save();const wk=weakStages(L);
@@ -544,7 +649,7 @@ function setup(g){
  su.onclick=ev=>{const s=ev.target.closest('[data-s]'),nb=ev.target.closest('[data-n]'),db=ev.target.closest('[data-d]');if(db){d=db.dataset.d;draw()}
   if(s){const v=s.dataset.s;if(v==='all')sel=sel.size===LESSONS.length?new Set():new Set(LESSONS.map(L=>L.id));else if(v.startsWith('cat:')){const ls=LESSONS.filter(L=>L.cat===v.slice(4)),on=ls.every(L=>sel.has(L.id));ls.forEach(L=>on?sel.delete(L.id):sel.add(L.id))}else{const id=v.slice(2);sel.has(id)?sel.delete(id):sel.add(id)}draw()}
   if(nb){n=+nb.dataset.n;draw()}
-  if(ev.target.closest('#gogo')){const a=avail();S.gsel={ls:[...sel],n,d};LV=diff?d:'m';save();G={ws:scope?W.filter(w=>LESSONS.some(L=>sel.has(L.id)&&L.ws.includes(w))):W,n:n&&n<a?n:a,back:'games'};o.remove();GAMES[g]()}};
+  if(ev.target.closest('#gogo')){const a=avail();S.gsel={ls:[...sel],n,d};LV=diff?d:'m';save();G={ws:scope?W.filter(w=>LESSONS.some(L=>sel.has(L.id)&&L.ws.includes(w))):W,n:n&&n<a?n:a,back:'games'};DPOOL=G.ws;o.remove();GAMES[g]()}};
  draw()}
 const doneChips=()=>{const d=LESSONS.filter(L=>S.les&&S.les[L.id]);return d.length?`<div class="small mut" style="margin:12px 0 6px">Вернуться к пройденным:</div><div class="chips" style="flex-wrap:wrap;margin:0">${d.map(L=>`<button class="chip" data-a="lstart" data-v="${L.id}">↺ ${CATS[L.cat].split(' ')[0]} · ${L.n} <span class="mut">${S.les[L.id].best}%</span></button>`).join('')}</div>`:''};
 const lbtn=(cls,a,v,ic,t,s)=>`<button class="btn wide lbtn ${cls}" data-a="${a}" data-v="${v}"><span class="ic">${ic}</span><span><span class="t">${t}</span><span class="s">${s}</span></span><span class="ar">›</span></button>`;
@@ -584,7 +689,7 @@ function runQuiz(title,qs,opt={}){
   const ans=$('#ans');if(q.say)(q.force?speak:autoSay)(q.say);
   if(q.kind==='mc'){
    ans.innerHTML=q.opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join('');
-   ans.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(ans.dataset.done)return;ans.dataset.done=1;const o=q.opts[+b.dataset.k],ok=o===q.ans;if(/[a-z]/i.test(o)&&!/[а-яё]/i.test(o)&&!/^(True|False|Appropriate|Inappropriate)/.test(o))speak(o);
+   ans.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(ans.dataset.done)return;ans.dataset.done=1;const o=q.opts[+b.dataset.k],ok=o===q.ans;if(/[a-z]/i.test(o)&&!/[а-яё]/i.test(o)&&!/^(True|False|Not given|Appropriate|Inappropriate)/.test(o))speak(o);
     if(opt.exam)b.classList.add('sel');else{b.classList.add(ok?'ok':'bad');if(!ok)ans.querySelectorAll('.opt').forEach(x=>{if(q.opts[+x.dataset.k]===q.ans)x.classList.add('ok')})}done(ok,o)});
   }else if(q.kind==='spell'){
    const L=shuffle([...q.show.split(''),...decoys()]).map(c=>({c,used:false}));let built=[];const pre=preN(q.show);for(let k=0;k<pre;k++){const t=L.find(t=>!t.used&&t.c===q.show[k]);t.used=true;built.push(t)}
@@ -619,7 +724,7 @@ function result(title,p,line,mist,restart,back='games',showGrade=true,ex=null){
  main.innerHTML=`<div class="card center" style="padding:24px">${ring(p,130)}<h2 class="${g[2]}" style="margin-top:12px">${g[0]}${showGrade?' · '+g[1]:''}</h2><div class="mut">${title} · ${line}</div></div>${ex&&ex.html?ex.html:''}${ex&&ex.btn?'<button class="btn wide" id="exb" style="margin-bottom:8px">'+ex.btn.label+'</button>':''}${mist?`<h3>Работа над ошибками</h3>${mist}<p class="small mut">Эти слова потеряли баллы и будут чаще попадаться в карточках и играх.</p>`:'<p class="center">Без единой ошибки! 🎉</p>'}<div class="row"><button class="btn" id="again">Ещё раз</button><button class="btn ghost" data-a="go" data-v="${back}">В меню</button></div>`;
  $('#again').onclick=restart;if(ex&&ex.btn)$('#exb').onclick=ex.btn.fn;window.scrollTo(0,0);
 }
-function startExam(){LV='m';const ws=shuffle(W).slice(0,21);const t=['enru','enru','enru','enru','enru','ruen','ruen','ruen','ruen','ruen','def','def','def','def','gap','gap','gap','gap','type','type','type'];const qs=ws.map((w,k)=>Q[t[k]](w));shuffle(CONF).slice(0,4).forEach(c=>qs.push(Q.conf(c)));runQuiz('Итоговый тест',shuffle(qs),{exam:true,restart:startExam,back:'exam'})}
+function startExam(){LV='m';DPOOL=null;const ws=shuffle(W).slice(0,21);const t=['enru','enru','enru','enru','enru','ruen','ruen','ruen','ruen','ruen','def','def','def','def','gap','gap','gap','gap','type','type','type'];const qs=ws.map((w,k)=>Q[t[k]](w));shuffle(CONF).slice(0,4).forEach(c=>qs.push(Q.conf(c)));runQuiz('Итоговый тест',shuffle(qs),{exam:true,restart:startExam,back:'exam'})}
 
 /* ---------- flashcards ---------- */
 function cards(list,co={}){
@@ -748,6 +853,7 @@ ACT.bunit=v=>bookUnit(+v);ACT.bdrill=v=>runDrill(v,1);
 ACT.bcards=()=>cards(U1W.map((w,i)=>Object.assign({id:'u'+i,cat:'book',def:'',ex:'{'+w.en+'}',tip:''},w)),{all:true,back:'book:1',title:'Карточки · Unit 1'});
 VIEWS.book=()=>{
  main.innerHTML=`<h2>Учебник</h2><div class="card small"><b>Белогаш, Дубинина, Кондрахина, Федосеева.</b> «Английский язык в профессиональной сфере: Управление персоналом», ч. 1. Финуниверситет, «КноРус».<div class="mut" style="margin-top:6px">Здесь разборы заданий: что нужно сделать, как решать, ответы с объяснениями и тренировки по теме. Текстов из книги тут нет — держи учебник рядом.</div></div>
+ <div class="wi" data-a="go" data-v="texts" style="border:1px solid var(--acc)"><div><b>📰 Тексты по теме Employment</b><span>${TEXTS.length} текстов · чтение, аудио, True/False, вопросы, пропуски</span></div><span class="badge b-new">Читать</span></div><div style="height:8px"></div>
  ${BOOK.map(u=>`<div class="wi" ${u.ready?`data-a="bunit" data-v="${u.n}"`:''} style="${u.ready?'':'opacity:.6;cursor:default'}"><div><b>${u.n<4?'Unit '+u.n+' · ':''}${esc(u.title)}</b><span>стр. ${u.pages} · ${u.ready?u.sections.length+' разделов разобрано':'пришли фото страниц — разберу'}</span></div><span class="badge ${u.ready?'b-ok':'b-new'}">${u.ready?'Готово':'Скоро'}</span></div>`).join('<div style="height:8px"></div>')}`;
 };
 function bookUnit(n){
@@ -756,6 +862,136 @@ function bookUnit(n){
  main.innerHTML=topBar('book',`<b style="flex:1">Unit ${u.n} · ${esc(u.title)}</b>`)+`<div class="card"><b>🎯 Тренировки по юниту</b><div class="ggrid" style="margin-top:10px"><button class="gc" data-a="bcards"><div class="e">🃏</div><b>Карточки</b><span>словарь Unit 1</span></button>${u.drills.map(k=>{const D=DRILLS[k],b=S.best&&S.best['b_'+k];return`<button class="gc" data-a="bdrill" data-v="${k}"><div class="e">${D.e}</div><b>${D.t}</b><span>${D.d}</span>${b!==undefined?`<em>Рекорд: ${b}%</em>`:''}</button>`}).join('')}</div></div>
  <h3>Разделы и ответы</h3>${u.sections.map(s=>`<details><summary>${s.id} ${esc(s.t)} <span class="mut small">· стр. ${s.p}</span></summary><div class="in">${s.expl}${s.keys.map(k=>`<div class="card" style="margin-top:10px"><b>${k.ex}</b><div class="small" style="margin:6px 0">${k.how}</div><details style="margin:8px 0 0"><summary class="small">🔑 Показать ответы (сначала попробуй сам)</summary><div class="in">${k.ans}</div></details></div>`).join('')}</div></details>`).join('')}`;
  window.scrollTo(0,0)}
+
+/* ---------- тексты по теме Employment (оригинальные, по темам учебника) ---------- */
+const TEXTS=[
+{id:'status',e:'👥',t:'Who is employed?',u:'Unit 2 · Employment',lvl:'A2–B1',
+p:["Economists divide the population of a country into several groups. People who have a job are called the employed. They may work full-time or part-time, for a company or for themselves. A person who runs his or her own business is self-employed.",
+"People who do not have a job but are actively looking for one are called the unemployed. It is important to understand that not everyone without a job is unemployed. Students, pensioners and people who look after their children at home and do not look for work are not part of the labour force at all.",
+"The labour force, or workforce, includes both the employed and the unemployed. The unemployment rate shows what percentage of the labour force has no job. For example, if a country has 100 million people in the labour force and 4 million of them are looking for work, the unemployment rate is 4%.",
+"There is also a group that statistics often miss: the underemployed. These are people who work part-time but want a full-time job, or people whose job does not use their qualifications. A graduate in economics who works as a courier is a typical example."],
+gl:[["the employed","занятые (имеющие работу)"],["self-employed","самозанятый"],["the unemployed","безработные"],["labour force","рабочая сила"],["unemployment rate","уровень безработицы"],["underemployed","частично занятый"],["actively","активно"],["pensioner","пенсионер"]],
+tf:[["A student who does not look for a job is unemployed.","False","Абз. 2: студенты, которые не ищут работу, вообще не входят в рабочую силу."],
+["Self-employed people are part of the employed.","True","Абз. 1: работающие на себя тоже относятся к занятым."],
+["The labour force includes pensioners.","False","Абз. 2: пенсионеры не входят в рабочую силу."],
+["The unemployment rate is calculated from the labour force, not from the whole population.","True","Абз. 3: процент от рабочей силы."],
+["In most countries the unemployment rate is higher than 10%.","Not given","Такой информации в тексте нет."],
+["A graduate working as a courier can be called underemployed.","True","Абз. 4 — это пример частичной занятости."]],
+mc:[["What is the main idea of the text?",["How economists classify people by employment status","How to find a job after university","Why unemployment is bad for the economy"],"How economists classify people by employment status","Весь текст — о группах населения по статусу занятости."],
+["If 50 million people are in the labour force and 5 million are unemployed, the unemployment rate is…",["10%","5%","50%"],"10%","5 / 50 = 0,1 = 10%."],
+["Who is NOT part of the labour force?",["a retired person who does not look for work","a part-time cashier","a person who is looking for a job"],"a retired person who does not look for work","Пенсионер, не ищущий работу, не входит в рабочую силу."]],
+cl:["People who have a job are called the {employed}.","A person who runs his own business is {self-employed}.","The {unemployed} do not have a job but are looking for one.","The {unemployment rate} shows the percentage of people without a job.","She works part-time but wants a full-time job, so she is {underemployed}."]},
+
+{id:'types',e:'📉',t:'Types of unemployment',u:'Unit 2 · Employment',lvl:'B1',
+p:["Unemployment is never zero, even in a strong economy. Economists usually describe three main types of unemployment, and each of them has different causes.",
+"Frictional unemployment is short-term. It appears when people leave one job and spend some time looking for a better one, or when young people finish university and search for their first job. This type of unemployment is natural: it takes time to find the right job, and employers need time to choose the right candidate.",
+"Structural unemployment is more serious. It happens when the structure of the economy changes and workers' skills no longer match the jobs that are available. For example, when factories install robots, some workers lose their jobs and cannot find similar work. They often need vocational training or retraining to change their profession.",
+"Cyclical unemployment depends on the business cycle. During a recession, demand for goods and services falls, companies produce less and lay off staff. When the economy grows again, companies start hiring and cyclical unemployment goes down.",
+"Governments fight each type in a different way: job websites and job centres reduce frictional unemployment, retraining programmes help with structural unemployment, and economic policy is used against cyclical unemployment."],
+gl:[["frictional unemployment","фрикционная безработица"],["structural unemployment","структурная безработица"],["cyclical unemployment","циклическая безработица"],["recession","спад, рецессия"],["retraining","переобучение"],["lay off","сокращать, увольнять"],["demand","спрос"],["business cycle","экономический цикл"]],
+tf:[["Frictional unemployment is usually short-term.","True","Абз. 2: short-term."],
+["Structural unemployment appears when workers' skills do not match the available jobs.","True","Абз. 3."],
+["Cyclical unemployment rises when the economy grows.","False","Абз. 4: растёт при спаде, падает при росте."],
+["Economists believe unemployment can be completely removed.","False","Абз. 1: безработица никогда не равна нулю."],
+["Retraining programmes are most useful against structural unemployment.","True","Абз. 5."],
+["Frictional unemployment is the most expensive type for the state.","Not given","Об этом в тексте ничего не сказано."]],
+mc:[["A programmer leaves his job to look for a better-paid position. This is…",["frictional unemployment","structural unemployment","cyclical unemployment"],"frictional unemployment","Человек временно между двумя работами."],
+["Typists lost their jobs because everyone started using computers. This is…",["structural unemployment","frictional unemployment","cyclical unemployment"],"structural unemployment","Изменилась структура экономики, навыки устарели."],
+["During the crisis car factories laid off thousands of workers. This is…",["cyclical unemployment","frictional unemployment","structural unemployment"],"cyclical unemployment","Связано со спадом экономического цикла."]],
+cl:["People between two jobs create {frictional unemployment}.","When robots replace workers, we see {structural unemployment}.","{Cyclical unemployment} goes up during a recession.","Workers whose skills are out of date need {retraining}.","In a crisis companies {lay off} staff."]},
+
+{id:'placement',e:'🔎',t:'How job placement works',u:'Unit 2 · Employment',lvl:'B1',
+p:["Finding the right person for a job is one of the main tasks of an HR department. The process is called recruitment, and it usually starts when a vacancy appears: an employee resigns, retires or is promoted, or the company grows and needs new staff.",
+"First, the HR manager writes a job description, which lists the duties and responsibilities of the position, and a person specification, which describes the qualifications, skills and experience the ideal candidate should have. Then the company advertises the vacancy on job websites, on social networks or through a recruitment agency. For senior positions, companies sometimes use headhunters.",
+"Applicants send their CVs and cover letters or fill in an application form. The HR department reads all applications and makes a shortlist of the best candidates. These candidates are invited for an interview. Some companies also use tests to check the candidates' skills.",
+"After the interviews, the company checks the references of the best candidate and makes a job offer. If the candidate accepts it, he or she signs an employment contract. The new employee usually has a probation period of up to three months, and onboarding helps him or her to get used to the new workplace."],
+gl:[["recruitment","набор персонала"],["job description","должностная инструкция"],["person specification","требования к кандидату"],["headhunter","хедхантер"],["shortlist","шорт-лист"],["reference","рекомендация, отзыв"],["probation period","испытательный срок"],["onboarding","адаптация"]],
+tf:[["A vacancy can appear when an employee retires.","True","Абз. 1."],
+["A job description describes the ideal candidate's qualifications.","False","Абз. 2: это person specification; job description — обязанности."],
+["Headhunters are usually used for junior positions.","False","Абз. 2: для senior positions."],
+["All candidates who send a CV are invited for an interview.","False","Абз. 3: приглашают только кандидатов из шорт-листа."],
+["References are checked before the job offer is made.","True","Абз. 4."],
+["The probation period in Russia is always six months.","Not given","Про Россию и шесть месяцев в тексте нет."]],
+mc:[["What does the HR department do right after reading all the applications?",["makes a shortlist","signs a contract","checks references"],"makes a shortlist","Абз. 3."],
+["What is the correct order?",["advertise → shortlist → interview → job offer","interview → advertise → shortlist → job offer","shortlist → advertise → job offer → interview"],"advertise → shortlist → interview → job offer","Порядок этапов из текста."],
+["The text is mainly about…",["the stages of recruitment","how to write a CV","the rights of employees"],"the stages of recruitment","Текст описывает этапы найма."]],
+cl:["The company advertised the {vacancy} on hh.ru.","The HR manager made a {shortlist} of five candidates.","Before the offer, we checked his {references}.","New employees have a three-month {probation period}.","Good {onboarding} helps new staff get used to the company."]},
+
+{id:'contract',e:'📝',t:'The employment contract',u:'Unit 2 · Employment',lvl:'B1',
+p:["When a person gets a job, the employer and the employee sign an employment contract. This document protects both sides: it says what the employee must do and what the employer must give in return. In Russia, the rules for employment contracts are set by the Labour Code.",
+"A typical contract includes the job title and duties, the place of work, working hours, the amount of salary and when it is paid, the length of annual leave and the benefits the employee will receive. It may also say if there is a probation period.",
+"Contracts can be permanent or fixed-term. A permanent contract has no end date, so it gives the worker more job security. A fixed-term contract ends on a particular date; it is often used for seasonal or temporary work, or to replace an employee who is on maternity leave.",
+"If the employee works more hours than the contract says, this is overtime, and by law it must be paid at a higher rate. Either side can end the contract, but they must follow the rules: an employee who wants to resign usually has to give two weeks' notice, and an employer cannot dismiss a worker without a legal reason."],
+gl:[["employment contract","трудовой договор"],["Labour Code","Трудовой кодекс"],["duties","обязанности"],["annual leave","ежегодный отпуск"],["permanent contract","бессрочный договор"],["fixed-term contract","срочный договор"],["overtime","сверхурочная работа"],["give notice","предупредить об уходе"]],
+tf:[["An employment contract protects only the employer.","False","Абз. 1: защищает обе стороны."],
+["A permanent contract has no end date.","True","Абз. 3."],
+["A fixed-term contract can be used to replace a worker on maternity leave.","True","Абз. 3."],
+["Overtime must be paid at the normal rate.","False","Абз. 4: по повышенной ставке."],
+["An employer can dismiss a worker without any reason.","False","Абз. 4: только по законному основанию."],
+["Most Russian workers prefer fixed-term contracts.","Not given","В тексте этого нет."]],
+mc:[["Which contract gives more job security?",["a permanent contract","a fixed-term contract","both are the same"],"a permanent contract","Абз. 3."],
+["What usually happens if an employee wants to resign?",["he gives two weeks' notice","he leaves the same day","the employer must pay him a bonus"],"he gives two weeks' notice","Абз. 4."],
+["Which of these is NOT mentioned as part of a typical contract?",["the names of the employee's colleagues","working hours","the amount of salary"],"the names of the employee's colleagues","Абз. 2 — коллеги не упоминаются."]],
+cl:["Both sides sign an {employment contract}.","In Russia the rules are set by the {Labour Code}.","A {permanent} contract has no end date.","Work above normal hours is called {overtime}.","She gave two weeks' {notice} before leaving."]},
+
+{id:'leaving',e:'🚪',t:'Leaving a job',u:'Unit 2 · Employment',lvl:'B1',
+p:["People leave their jobs for many different reasons, and English has different words for each situation. If you decide to leave because you have found a better job or you are not happy, you resign or quit. Usually you write a resignation letter and hand in your notice.",
+"When people stop working because of their age, they retire and start receiving a pension. In Russia the retirement age is gradually rising.",
+"Sometimes the decision is made by the employer. If a worker is dismissed because of bad work or bad behaviour, for example, regular absenteeism, we say that he was fired or got the sack. These are informal expressions; in official documents the word dismissal is used.",
+"Redundancy is different. A worker is made redundant when the company no longer needs his job, for example, because a department closes or the company is losing money. It is not the worker's fault, so he usually receives severance pay. In American English, the phrase lay off is often used for this situation.",
+"A person who has lost a job can register at a job centre, receive unemployment benefit and get help with job hunting."],
+gl:[["resign / quit","уволиться по собственному желанию"],["hand in one's notice","подать заявление об уходе"],["retire","выйти на пенсию"],["dismiss / fire","уволить (за проступок)"],["absenteeism","прогулы"],["be made redundant","попасть под сокращение"],["severance pay","выходное пособие"],["unemployment benefit","пособие по безработице"]],
+tf:[["If you leave a job because you are unhappy, you resign.","True","Абз. 1."],
+["Got the sack is a formal expression used in documents.","False","Абз. 3: это неформальное выражение."],
+["A worker who is made redundant is not guilty.","True","Абз. 4: it is not the worker's fault."],
+["Regular absenteeism can be a reason for dismissal.","True","Абз. 3."],
+["Redundant workers never get any money from the company.","False","Абз. 4: обычно получают выходное пособие."],
+["Most people in Russia retire at 70.","Not given","Конкретного возраста в тексте нет."]],
+mc:[["The bank closed its branch and 30 people lost their jobs. They were…",["made redundant","fired","retired"],"made redundant","Сокращение — работник не виноват."],
+["He was always late and rude to clients, so he was…",["fired","made redundant","retired"],"fired","Увольнение за проступки."],
+["Which word is used in official documents?",["dismissal","the sack","quit"],"dismissal","Абз. 3."]],
+cl:["She wrote a {resignation letter} and left in two weeks.","At 65 he decided to {retire}.","He was {fired} for stealing.","The factory closed and 200 workers were made {redundant}.","Redundant workers usually receive {severance pay}."]},
+
+{id:'wages',e:'💰',t:'The price of labour',u:'Unit 3 · Price of Labour',lvl:'B1',
+p:["Labour, like any other product, has a price. The price of labour is the money that workers receive for their work. In English, there are two main words for it. A salary is a fixed amount of money paid every month, usually to office workers and specialists. A wage is usually paid per hour or per week, often to manual workers.",
+"The level of pay depends on supply and demand on the labour market. If there is a labour shortage in a profession, for example, in IT or medicine, employers have to offer higher salaries. If many people can do a job, the pay is usually lower.",
+"The state also influences wages. In most countries, including Russia, the law sets a minimum wage, the lowest amount an employer can pay. Trade unions negotiate with employers and sign collective agreements to protect workers' pay.",
+"Money is not the only reward. Many companies offer benefits, such as health insurance, a company car or free meals, and incentives, such as bonuses and commission, to motivate staff. Together, salary and benefits are called the remuneration package. HR managers know that a good package helps to attract talented people and reduce staff turnover."],
+gl:[["salary","оклад"],["wage","почасовая оплата"],["supply and demand","спрос и предложение"],["labour shortage","нехватка рабочей силы"],["minimum wage","МРОТ"],["collective agreement","коллективный договор"],["incentive","стимул"],["remuneration package","компенсационный пакет"]],
+tf:[["A salary is usually paid per hour.","False","Абз. 1: оклад — фиксированная сумма в месяц."],
+["A labour shortage usually makes pay higher.","True","Абз. 2."],
+["The minimum wage is set by trade unions.","False","Абз. 3: МРОТ устанавливает закон (государство)."],
+["Bonuses and commission are examples of incentives.","True","Абз. 4."],
+["A good remuneration package can reduce staff turnover.","True","Абз. 4."],
+["Doctors earn more than programmers in Russia.","Not given","Сравнения зарплат в тексте нет."]],
+mc:[["What does the level of pay mainly depend on?",["supply and demand on the labour market","the age of the company","the size of the office"],"supply and demand on the labour market","Абз. 2."],
+["Health insurance and a company car are examples of…",["benefits","wages","commission"],"benefits","Абз. 4."],
+["What is the remuneration package?",["salary and benefits together","only the bonus","the minimum wage"],"salary and benefits together","Абз. 4."]],
+cl:["Office workers receive a monthly {salary}.","Builders often get an hourly {wage}.","Nobody can be paid less than the {minimum wage}.","A bonus is an {incentive} to work harder.","Trade unions sign {collective agreements} with employers."]}
+];
+const TQN={tf:'True / False / Not given',mc:'Вопросы по тексту',cl:'Вставь слово из текста'};
+VIEWS.texts=()=>{
+ main.innerHTML=topBar('book','<b style="flex:1">📰 Тексты · Employment</b>')+`<div class="card small">Короткие тексты по темам учебника (Unit 2 Employment, Unit 3 Price of Labour). Читай, нажимай 🔊, чтобы послушать абзац, потом делай задания: True / False / Not given, вопросы по содержанию и пропуски. Оценка в %.</div>`+TEXTS.map(T=>{const b=S.best&&S.best['t_'+T.id];return`<div class="wi" data-a="text" data-v="${T.id}"><div><b>${T.e} ${esc(T.t)}</b><span>${T.u} · ${T.lvl} · ${T.p.length} абз. · ${T.tf.length+T.mc.length+T.cl.length} заданий</span></div><span class="badge ${b>=80?'b-ok':b!==undefined?'b-learn':'b-new'}">${b!==undefined?b+'%':'Новый'}</span></div>`}).join('<div style="height:8px"></div>');
+};
+function textView(id){
+ const T=TEXTS.find(x=>x.id===id);if(!T)return go('texts');VIEW='text';
+ document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v==='book'));
+ const bs=k=>{const b=S.best&&S.best['t_'+T.id+(k?'_'+k:'')];return b!==undefined?`<em>Рекорд: ${b}%</em>`:''};
+ main.innerHTML=topBar('texts',`<b style="flex:1">${T.e} ${esc(T.t)}</b>`)+`<div class="card"><div class="small mut" style="margin-bottom:8px">${T.u} · уровень ${T.lvl} · нажми на абзац, чтобы послушать</div>${T.p.map((x,i)=>`<p class="tpara" data-say="${esc(x)}" style="cursor:pointer;line-height:1.55;margin:0 0 12px"><span class="mut small">${i+1}</span> ${esc(x)}</p>`).join('')}</div>
+ <details class="card" style="padding:12px 14px"><summary><b>📘 Словарик к тексту</b></summary><div class="wl" style="margin-top:8px">${T.gl.map(g=>`<div class="wi" data-say="${esc(g[0])}"><div><b>${esc(g[0])}</b><span>${esc(g[1])}</span></div><span>🔊</span></div>`).join('')}</div></details>
+ <button class="btn wide" data-a="tquiz" data-v="${T.id}|">📝 Все задания подряд · ${T.tf.length+T.mc.length+T.cl.length}</button>${bs('')?`<div class="small center" style="margin:-4px 0 8px">${bs('')}</div>`:''}
+ <div class="ggrid">${['tf','mc','cl'].map(k=>`<button class="gc" data-a="tquiz" data-v="${T.id}|${k}"><div class="e">${k==='tf'?'✅':k==='mc'?'❓':'🔤'}</div><b>${TQN[k]}</b><span>${T[k].length} заданий</span>${bs(k)}</button>`).join('')}</div>`;
+ window.scrollTo(0,0)}
+function textQs(T,mode){
+ const out=[];const cw=T.cl.map(s=>(s.match(/\{(.*?)\}/)||[])[1]);
+ const tr=a=>{const g=T.gl.find(g=>g[0].toLowerCase().includes(a.toLowerCase())||a.toLowerCase().includes(g[0].toLowerCase().split(' / ')[0]));return g?`<b>${esc(g[0])}</b> — ${esc(g[1])}`:''};
+ if(!mode||mode==='tf')shuffle(T.tf).forEach(x=>out.push({kind:'mc',hint:'По тексту: True, False или Not given?',q:esc(x[0]),opts:['True','False','Not given'],ans:x[1],exp:esc(x[2])}));
+ if(!mode||mode==='mc')shuffle(T.mc).forEach(x=>out.push({kind:'mc',hint:'Выбери ответ по тексту',q:esc(x[0]),opts:shuffle(x[1]),ans:x[2],exp:esc(x[3])}));
+ if(!mode||mode==='cl')shuffle(T.cl).forEach((s,i)=>{const a=(s.match(/\{(.*?)\}/)||[])[1];out.push({kind:'mc',hint:'Вставь слово из текста',q:esc(s).replace(/\{(.*?)\}/,'<span class="gap">&nbsp;?&nbsp;</span>'),opts:shuffle([a,...shuffle(cw.filter(x=>x!==a)).slice(0,3)]),ans:a,exp:esc(s.replace(/[{}]/g,''))+(tr(a)?'<br>'+tr(a):'')})});
+ return out}
+function textQuiz(id,mode){const T=TEXTS.find(x=>x.id===id);if(!T)return go('texts');LV='m';DPOOL=null;
+ runQuiz(T.t+(mode?' · '+TQN[mode]:''),textQs(T,mode),{back:'text:'+id,restart:()=>textQuiz(id,mode),key:'t_'+id+(mode?'_'+mode:'')})}
+ACT.text=v=>textView(v);ACT.tquiz=v=>{const[a,b]=v.split('|');textQuiz(a,b||'')};
 
 updPill();go('home');
 
