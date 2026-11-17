@@ -111,7 +111,7 @@ select{font:600 15px Manrope;width:100%;padding:12px;border-radius:12px;border:1
 <button data-a="go" data-v="path"><span>🗺️</span>Уроки</button>
 <button data-a="go" data-v="games"><span>🎮</span>Игры</button>
 <button data-a="go" data-v="book"><span>📘</span>Учебник</button>
-<button data-a="go" data-v="exam"><span>📝</span>Тест</button>
+<button data-a="go" data-v="session"><span>🎓</span>Сессия</button>
 <button data-a="go" data-v="theory"><span>📖</span>Теория</button>
 </nav>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -500,7 +500,7 @@ const ACT={
  reset:()=>{const o=sheet(`<h2>Сбросить прогресс?</h2><p class="mut">Все уровни слов, рекорды и история тестов будут удалены.</p><div class="row"><button class="btn ghost" data-close>Отмена</button><button class="btn bad" id="rs">Сбросить</button></div>`);o.querySelector('#rs').onclick=()=>{S=DEF();save();updPill();o.remove();go('home')}}
 };
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el&&ACT[el.dataset.a])ACT[el.dataset.a](el.dataset.v,el)});
-function go(v){DPOOL=null;if(v.startsWith('text:'))return textView(v.slice(5));if(v.startsWith('lesson:'))return lesson(v.slice(7));if(v.startsWith('book:'))return bookUnit(+v.slice(5));VIEW=v;const hv=v==='learn'?'path':v==='texts'?'book':v;document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===hv));(VIEWS[v]||VIEWS.home)();window.scrollTo(0,0)}
+function go(v){DPOOL=null;if(v.startsWith('topic:'))return topicView(v.slice(6));if(v.startsWith('ticket:'))return ticketView(v.slice(7));if(v.startsWith('text:'))return textView(v.slice(5));if(v.startsWith('lesson:'))return lesson(v.slice(7));if(v.startsWith('book:'))return bookUnit(+v.slice(5));VIEW=v;const hv=v==='learn'?'path':v==='texts'?'book':['exam','topics'].includes(v)?'session':v;document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===hv));(VIEWS[v]||VIEWS.home)();window.scrollTo(0,0)}
 
 /* ---------- lessons & spaced repetition ---------- */
 const LESSONS=[];Object.keys(CATS).forEach(c=>{const ws=W.filter(w=>w.cat===c);const n=Math.ceil(ws.length/8);for(let k=0;k<n;k++)LESSONS.push({id:c+'-'+(k+1),cat:c,n:k+1,ws:ws.slice(Math.round(k*ws.length/n),Math.round((k+1)*ws.length/n))})});
@@ -992,6 +992,232 @@ function textQs(T,mode){
 function textQuiz(id,mode){const T=TEXTS.find(x=>x.id===id);if(!T)return go('texts');LV='m';DPOOL=null;
  runQuiz(T.t+(mode?' · '+TQN[mode]:''),textQs(T,mode),{back:'text:'+id,restart:()=>textQuiz(id,mode),key:'t_'+id+(mode?'_'+mode:'')})}
 ACT.text=v=>textView(v);ACT.tquiz=v=>{const[a,b]=v.split('|');textQuiz(a,b||'')};
+
+/* ---------- 🎓 СЕССИЯ: темы для монолога, билеты, пробный тест (авторские материалы) ---------- */
+const TOPICS=[
+{id:'hrm',e:'🏢',t:'Human Resource Management',ru:'Управление персоналом: что это и зачем',
+m:["Human resource management, or HRM, is the management of people in an organisation. People are the most valuable resource of any company, because machines and money cannot work without them.",
+"The main aim of HRM is to help the company reach its goals by attracting, developing and keeping the right employees. HR managers deal with many tasks: workforce planning, recruitment and selection, training and development, performance appraisal, pay and benefits, and employee relations.",
+"In the past, this area was called personnel management, and it was mostly about paperwork: contracts, holidays and wages. Today HRM is more strategic. HR managers take part in business decisions and help to build a strong corporate culture.",
+"In my opinion, HRM is especially important now, because there is a labour shortage in many industries, and companies have to compete for talented people. That is why I chose this profession, and I hope to become a good HR specialist in the future."],
+k:['valuable resource','reach its goals','recruitment and selection','performance appraisal','personnel management','strategic','corporate culture','labour shortage'],
+q:[["What is the difference between personnel management and HRM?","Personnel management was mostly administrative, while HRM is strategic and connected with the goals of the company."],["Why are people called the most valuable resource?","Because a company cannot work without people; their skills and ideas create the value."],["Name three functions of HRM.","Recruitment and selection, training and development, and pay and benefits."],["Why did you choose this profession?","I like working with people and I want to help companies and employees find each other."]]},
+{id:'manager',e:'👩‍💼',t:'The HR manager',ru:'Профессия HR-менеджера: обязанности и качества',
+m:["An HR manager is a specialist who is responsible for the people in a company. He or she reports to the general director and works closely with the heads of all departments.",
+"The duties of an HR manager are very different. He or she writes job descriptions, places job advertisements, interviews candidates, prepares employment contracts and organises onboarding for new staff. The HR manager also plans training, deals with conflicts, keeps personnel records and makes sure that the company follows labour law.",
+"To be successful, an HR manager needs special personal qualities. First of all, good communication skills, because the job is about people. Second, he or she must be fair, patient and able to keep information confidential. Finally, a modern HR manager should understand economics, psychology and law.",
+"I think it is a difficult but interesting job. You never do the same thing twice, and you can really change people’s lives when you help them find a good job."],
+k:['is responsible for','reports to','job descriptions','onboarding','personnel records','labour law','communication skills','confidential'],
+q:[["Who does an HR manager report to?","Usually to the general director or to the HR director."],["What qualities should an HR manager have?","Communication skills, fairness, patience, and the ability to keep information confidential."],["What subjects does an HR manager need to know?","Economics, psychology and labour law."],["Would you like to be an HR manager? Why?","Yes, because the job is varied and I can help people find a good job."]]},
+{id:'recruit',e:'🔎',t:'Recruitment and selection',ru:'Подбор и отбор персонала',
+m:["Recruitment is the process of finding and attracting candidates for a vacancy. Selection is the process of choosing the best candidate from all applicants.",
+"Recruitment can be internal or external. Internal recruitment means that a vacancy is filled by a person who already works in the company, for example, through promotion. It is cheaper and motivates staff. External recruitment means looking for people outside the company: through job websites, social networks, recruitment agencies or headhunters. It brings new ideas, but it takes more time and money.",
+"The selection process usually includes several stages: screening CVs and making a shortlist, interviews, tests, and checking references. After that the company makes a job offer to the best candidate.",
+"Mistakes in recruitment are very expensive. If the company hires the wrong person, it loses money on training, and staff turnover grows. That is why HR managers must plan every stage carefully."],
+k:['attracting candidates','internal','external','promotion','headhunters','shortlist','checking references','staff turnover'],
+q:[["What is the difference between recruitment and selection?","Recruitment is finding candidates; selection is choosing the best one."],["What are the advantages of internal recruitment?","It is cheaper, faster and it motivates employees."],["Where can a company find external candidates?","On job websites, social networks, through agencies or headhunters."],["Why are recruitment mistakes expensive?","The company loses money on training and staff turnover grows."]]},
+{id:'interview',e:'🤝',t:'The job interview',ru:'Собеседование при приёме на работу',
+m:["A job interview is a formal meeting where an employer asks a candidate questions to find out if he or she is suitable for the job. It is one of the most important stages of selection.",
+"Interviews can be face-to-face, by phone or online. There can be one interviewer or a panel of several people. Typical questions are: Tell me about yourself; Why do you want to work for our company; What are your strengths and weaknesses; Where do you see yourself in five years.",
+"To succeed at an interview, a candidate should prepare well. He or she should find information about the company, think about answers to typical questions, dress smartly and arrive on time. During the interview it is important to be polite, confident and honest, and at the end to ask a couple of questions about the job.",
+"Personally, I think the most difficult question is about weaknesses. The best answer is to name a real weakness and explain how you are working on it."],
+k:['formal meeting','suitable for the job','face-to-face','panel','strengths and weaknesses','dress smartly','arrive on time','confident'],
+q:[["How should a candidate prepare for an interview?","Find information about the company, prepare answers, dress smartly and arrive on time."],["What typical questions do interviewers ask?","Tell me about yourself, why our company, strengths and weaknesses, plans for five years."],["What is a panel interview?","An interview with several interviewers at the same time."],["How would you answer the question about your weaknesses?","I would name a real weakness and say how I am working on it."]]},
+{id:'cv',e:'📄',t:'CV and cover letter',ru:'Резюме и сопроводительное письмо',
+m:["When people apply for a job, they usually send a CV and a cover letter. CV stands for curriculum vitae, which means “the course of life” in Latin.",
+"A good CV is short, usually one or two pages. It includes personal details and contact information, a short profile, work experience starting with the most recent job, education, skills such as languages and computer programs, and sometimes hobbies. Many employers also ask for references.",
+"A cover letter is a short letter that you send together with your CV. In it, you say which position you are applying for, explain why you are interested in the job and why you are a good candidate. The letter should be polite, formal and without mistakes.",
+"An HR manager often has only half a minute to look at one CV, so it must be clear and easy to read. I think the most common mistakes are spelling mistakes, too much text and information that has nothing to do with the job."],
+k:['apply for a job','curriculum vitae','personal details','work experience','the most recent','references','applying for','spelling mistakes'],
+q:[["What does CV stand for?","Curriculum vitae — “the course of life” in Latin."],["What sections does a CV include?","Personal details, profile, work experience, education, skills."],["What is the purpose of a cover letter?","To explain why you want the job and why you are a good candidate."],["What are common mistakes in a CV?","Spelling mistakes, too much text and irrelevant information."]]},
+{id:'contract',e:'📝',t:'Employment contract and working conditions',ru:'Трудовой договор и условия труда',
+m:["An employment contract is an agreement between an employer and an employee. In Russia it must be in writing, and its rules are set by the Labour Code.",
+"The contract states the job title and duties, the place of work, working hours, salary, annual leave and benefits. It can also include a probation period, which usually lasts up to three months.",
+"There are two main types of contracts. A permanent contract has no end date and gives the employee job security. A fixed-term contract ends on a certain date; it is used for temporary or seasonal work.",
+"Working conditions are also very important. They include the working schedule, for example full-time, part-time, shift work or flexitime, the safety of the workplace and the possibility to work remotely. Nowadays many young people prefer flexible working hours and remote work, so modern companies try to offer them."],
+k:['agreement between','in writing','Labour Code','probation period','permanent','fixed-term','job security','flexitime'],
+q:[["What does an employment contract include?","Job title and duties, working hours, salary, leave and benefits."],["What is the difference between permanent and fixed-term contracts?","A permanent one has no end date; a fixed-term one ends on a certain date."],["How long is a probation period?","Usually up to three months."],["What working conditions are important for you?","Good pay, flexible hours and the possibility to work remotely."]]},
+{id:'types',e:'⏱️',t:'Types of employment',ru:'Виды занятости',
+m:["People can be employed in different ways. The most traditional type is full-time employment, when a person works about forty hours a week for one employer.",
+"Part-time employment means working fewer hours, for example, twenty hours a week. It is popular among students and parents with small children. Temporary employment is work for a limited period, for example, seasonal work in summer.",
+"Some people are self-employed: they do not have an employer and work for themselves. Freelancers, for example designers or translators, work for different clients on different projects. In Russia there is now a special tax status for the self-employed.",
+"Today more and more people work remotely, from home or from another city. This type of work saves time on travel, but it needs a lot of self-discipline. As for me, I would prefer full-time work in an office at the beginning of my career, because I want to learn from experienced colleagues."],
+k:['full-time','part-time','temporary','seasonal work','self-employed','freelancers','remotely','self-discipline'],
+q:[["What is part-time employment?","Working fewer hours than full-time, for example twenty hours a week."],["Who are freelancers?","People who work for different clients on different projects."],["What are the pros and cons of remote work?","It saves time, but it needs self-discipline."],["What type of employment would you prefer and why?","Full-time in an office, to learn from experienced colleagues."]]},
+{id:'unemployment',e:'📉',t:'Unemployment',ru:'Безработица: виды, причины, последствия',
+m:["Unemployment is a situation when people who are able and want to work cannot find a job. The unemployment rate shows the percentage of the labour force without work.",
+"Economists name three main types of unemployment. Frictional unemployment is short-term: people are between two jobs. Structural unemployment appears when the economy changes and people’s skills are no longer needed. Cyclical unemployment grows during a recession.",
+"Unemployment has serious consequences. For people, it means lower income, stress and the loss of skills. For the state, it means less tax money and more spending on unemployment benefit.",
+"The government fights unemployment in different ways. Job centres help people find work, retraining programmes teach new professions, and the state supports small business. Nowadays the unemployment rate in Russia is quite low, and many companies have the opposite problem: a labour shortage."],
+k:['unemployment rate','labour force','frictional','structural','cyclical','consequences','unemployment benefit','retraining'],
+q:[["Name the types of unemployment.","Frictional, structural and cyclical."],["What are the consequences of unemployment?","Lower income and stress for people, less tax and more spending for the state."],["How does the state fight unemployment?","Job centres, retraining programmes and support for small business."],["What is the situation in Russia now?","Unemployment is low; many companies face a labour shortage."]]},
+{id:'leaving',e:'🚪',t:'Leaving a job',ru:'Увольнение: виды и причины',
+m:["People leave their jobs for different reasons, and in English there are special words for each situation.",
+"If a person leaves because he wants to, he resigns or quits. Usually he writes a resignation letter and gives notice, in Russia two weeks before leaving. People resign because they have found a better job, want a higher salary or are unhappy with the conditions.",
+"Sometimes the employer decides. If a worker is dismissed for bad work or bad behaviour, we say he was fired. If the company does not need the job any more, for example, because of a crisis, the worker is made redundant. In this case it is not his fault, and he receives severance pay.",
+"Finally, people retire when they reach the retirement age and receive a pension. For an HR manager it is important to know why people leave. Exit interviews help to understand the reasons and to reduce staff turnover."],
+k:['resigns','resignation letter','gives notice','dismissed','fired','made redundant','severance pay','retire'],
+q:[["What is the difference between ‘fired’ and ‘made redundant’?","Fired — for bad work or behaviour; made redundant — the job is no longer needed."],["How much notice does an employee give in Russia?","Usually two weeks."],["Why do people resign?","For a better job, a higher salary or because of bad conditions."],["What is an exit interview?","A conversation with a leaving employee to find out why he is leaving."]]},
+{id:'motivation',e:'🔥',t:'Motivation and job satisfaction',ru:'Мотивация и удовлетворённость работой',
+m:["Motivation is what makes people want to work well. Motivated employees are more productive, make fewer mistakes and stay in the company longer.",
+"There are two kinds of motivation. Financial incentives include salary, bonuses, commission and benefits such as health insurance. Non-financial motivation includes interesting work, praise, training, career prospects, a good team and a comfortable workplace.",
+"Job satisfaction is the feeling of being happy with your job. It depends not only on money but also on relationships with colleagues and the supervisor, workload and the balance between work and private life. Low job satisfaction leads to absenteeism and high staff turnover.",
+"I believe that money is important, but it is not everything. For example, many young people choose a company because it offers training, flexible hours and a friendly atmosphere. The task of an HR manager is to find the right mix of incentives for every employee."],
+k:['productive','financial incentives','bonuses','benefits','career prospects','job satisfaction','workload','absenteeism'],
+q:[["What financial incentives do you know?","Salary, bonuses, commission and benefits."],["Give examples of non-financial motivation.","Interesting work, praise, training, career prospects, a good team."],["What does job satisfaction depend on?","Relationships, workload, work-life balance and pay."],["What motivates you personally?","Interesting tasks and the possibility to grow."]]},
+{id:'pay',e:'💰',t:'Pay: wages, salaries and benefits',ru:'Оплата труда: зарплата и соцпакет',
+m:["Pay is the money that employees receive for their work. It is often called the price of labour.",
+"There are two main forms of pay. A salary is a fixed amount paid monthly, usually to office workers and specialists. A wage is paid per hour or per week, usually to manual workers. Some employees, for example salespeople, also get commission, a percentage of what they sell.",
+"The level of pay depends on many factors: qualifications and experience, the industry, the region and the situation on the labour market. The state sets a minimum wage, and trade unions protect workers’ pay through collective agreements.",
+"Besides money, many companies offer a benefits package: health insurance, paid meals, a company car, sports or training. Together with the salary, it is called the remuneration package. In my opinion, a good package is one of the main reasons why people choose an employer."],
+k:['price of labour','salary','wage','commission','qualifications','minimum wage','collective agreements','remuneration package'],
+q:[["What is the difference between a salary and a wage?","A salary is fixed and paid monthly; a wage is paid per hour or week."],["What does the level of pay depend on?","Qualifications, experience, industry, region and the labour market."],["What is commission?","A percentage of sales that a salesperson receives."],["What benefits would you like to have?","Health insurance, training and flexible hours."]]},
+{id:'training',e:'🎓',t:'Training and career development',ru:'Обучение и развитие карьеры',
+m:["Training and development help employees to get new knowledge and skills. For a company, it is an investment in its workforce.",
+"Training can be on-the-job, when an employee learns at the workplace from a mentor or a supervisor, and off-the-job, for example courses, seminars or online programmes. New employees also have onboarding to get used to the company.",
+"Every company should evaluate how well people work. This is called performance appraisal. Usually once or twice a year, a manager and an employee discuss results, set new goals and decide what training is needed.",
+"A career is a person’s progress at work over many years. People climb the career ladder when they get promotion to a higher position. Good companies show their staff clear career prospects. As for me, I plan to start as a trainee or an HR assistant, gain experience and in the future become an HR director."],
+k:['investment','on-the-job','off-the-job','mentor','performance appraisal','career ladder','promotion','gain experience'],
+q:[["What is the difference between on-the-job and off-the-job training?","On-the-job is at the workplace; off-the-job is courses outside work."],["What is performance appraisal?","A regular evaluation of an employee’s work and goals."],["How do people climb the career ladder?","They get promoted to higher positions."],["What are your career plans?","To start as an HR assistant, gain experience and become an HR director."]]},
+{id:'unions',e:'✊',t:'Employee relations and trade unions',ru:'Трудовые отношения и профсоюзы',
+m:["Employee relations are the relations between the employer and the employees. Good relations help the company work well and avoid conflicts.",
+"A trade union is an organisation of workers that protects their rights and interests. Unions negotiate with employers about pay, working hours and safety, and sign collective agreements.",
+"If the negotiations fail, workers can go on strike — they stop working as a protest. Strikes are expensive for both sides, so it is better to find a compromise.",
+"The rights of workers are also protected by labour law. It forbids discrimination by age, sex or nationality and guarantees equal opportunities. An HR manager plays an important role here: he or she must listen to employees, solve conflicts and make sure that the company follows the law."],
+k:['employee relations','trade union','negotiate','collective agreements','go on strike','compromise','discrimination','equal opportunities'],
+q:[["What does a trade union do?","It protects workers’ rights and negotiates with employers."],["What is a strike?","When workers stop working as a protest."],["What does labour law forbid?","Discrimination by age, sex or nationality."],["What is the role of the HR manager in employee relations?","To listen to employees, solve conflicts and follow the law."]]},
+{id:'market',e:'🌍',t:'The labour market in Russia',ru:'Рынок труда в России',
+m:["The labour market is the place where employers look for workers and people look for jobs. The price of labour on this market is pay.",
+"Today the Russian labour market has several features. First, the unemployment rate is very low. Second, there is a labour shortage in many areas: IT, engineering, medicine, construction and transport. That is why salaries in these areas grow fast.",
+"Third, the market is changing because of new technologies. Some jobs disappear, and new professions appear, so people need lifelong learning. Remote work and freelancing are also becoming more popular, especially among young people.",
+"For HR managers this situation is a challenge. They have to compete for good employees, offer attractive conditions and keep people in the company. I think that is why the HR profession is in high demand now."],
+k:['labour market','features','unemployment rate','labour shortage','new technologies','lifelong learning','a challenge','in high demand'],
+q:[["What are the features of the Russian labour market now?","Low unemployment and a labour shortage in many areas."],["Which professions are in demand?","IT, engineering, medicine, construction and transport."],["How do new technologies change the market?","Some jobs disappear and new professions appear."],["Why is the HR profession in demand?","Companies compete for employees and need to keep them."]]}
+];
+/* ситуации для диалога / ролевой игры */
+const SITU=[
+"You are an HR manager. Interview a candidate for the position of sales manager: ask about education, experience and strengths.",
+"You are a candidate at a job interview at a bank. Answer the interviewer’s questions and ask two questions about the job.",
+"Your friend wants to resign because of a conflict with the boss. Give him advice.",
+"Explain to a new employee what onboarding in your company includes.",
+"A colleague asks you how to write a good CV. Give him five pieces of advice.",
+"You are an HR manager. Tell an employee that his probation period is over and he has got a permanent contract.",
+"Your company has to make ten workers redundant. Explain the situation to the employees and their rights.",
+"You are choosing between two job offers: a high salary but long hours, or a lower salary with flexitime. Discuss with a friend.",
+"Persuade your boss to organise training for your team.",
+"You are a student looking for an internship. Call the HR department and ask about vacancies.",
+"Describe the benefits package of your dream company to a friend.",
+"An employee is often absent from work. As an HR manager, talk to him and find out the reasons."
+];
+const SUMPH=[["The text is about… / The text deals with…","Текст о…"],["The author says that…","Автор говорит, что…"],["The main idea of the text is…","Основная мысль текста —"],["First,… Then,… Finally,…","Во-первых… Затем… Наконец…"],["According to the text,…","Согласно тексту…"],["The text describes / explains / compares…","Текст описывает / объясняет / сравнивает…"],["I found the text interesting / useful because…","Текст показался мне интересным / полезным, потому что…"],["In my opinion,… / I agree that…","По-моему… / Я согласен, что…"]];
+const MONPH=[["I’d like to talk about…","Я хотел бы рассказать о…"],["First of all,…","Прежде всего…"],["Moreover, / In addition,…","Кроме того…"],["On the one hand,… on the other hand,…","С одной стороны… с другой стороны…"],["For example, / For instance,…","Например…"],["That is why…","Вот почему…"],["As for me, / Personally, I think…","Что касается меня…"],["To sum up, / In conclusion,…","Подводя итог…"]];
+/* грамматика в контексте HR — пробный письменный тест */
+const GRAM=[
+["She ___ in the HR department since 2022.",["has worked","works","is working","worked"],"has worked","Since + момент в прошлом → Present Perfect (has worked)."],
+["Look! The manager ___ a candidate right now.",["is interviewing","interviews","has interviewed","interviewed"],"is interviewing","Right now → Present Continuous."],
+["Our company usually ___ new staff in September.",["hires","is hiring","hired","has hired"],"hires","Usually → регулярное действие, Present Simple."],
+["He ___ his job last year.",["lost","has lost","loses","was losing"],"lost","Last year → Past Simple."],
+["The vacancy ___ on the website yesterday.",["was advertised","advertised","is advertised","has advertised"],"was advertised","Пассив в прошлом: was + V3."],
+["All candidates ___ by the HR manager every Monday.",["are interviewed","interview","were interviewed","is interviewed"],"are interviewed","Пассив Present Simple: are + V3, candidates — мн. число."],
+["The contract ___ by both sides already.",["has been signed","was signed","has signed","is signing"],"has been signed","Already → Present Perfect Passive: has been + V3."],
+["If I ___ the job, I will move to Moscow.",["get","will get","got","would get"],"get","Первый тип условных: if + Present Simple, will + V."],
+["If I ___ the director, I would raise salaries.",["were","am","will be","had been"],"were","Второй тип: if + were, would + V."],
+["Employees ___ follow the safety rules. It’s the law.",["must","can","may","might"],"must","Обязанность по закону → must."],
+["You ___ wear a suit. The dress code here is casual.",["don’t have to","mustn’t","can’t","shouldn’t to"],"don’t have to","Нет необходимости → don’t have to (mustn’t — запрещено)."],
+["She is ___ candidate of all.",["the most experienced","more experienced","most experienced","the more experienced"],"the most experienced","Превосходная степень: the most + прил."],
+["This job is ___ than my previous one.",["better paid","the best paid","more better paid","good paid"],"better paid","Сравнительная: better + than."],
+["I’m looking forward to ___ from you.",["hearing","hear","heard","be hearing"],"hearing","look forward to + -ing."],
+["He was interested ___ the position of HR assistant.",["in","on","at","for"],"in","be interested IN."],
+["She is responsible ___ recruitment.",["for","of","about","to"],"for","be responsible FOR."],
+["We ___ for a new accountant at the moment.",["are looking","look","have looked","looked"],"are looking","At the moment → Present Continuous."],
+["By the time he arrived, the interview ___.",["had already started","already started","has already started","was already starting"],"had already started","Действие до другого в прошлом → Past Perfect."],
+["The manager asked me where I ___ before.",["had worked","have worked","work","am working"],"had worked","Косвенная речь: сдвиг времён → Past Perfect."],
+["There ___ many applicants for this vacancy last month.",["were","was","are","have been"],"were","Last month + many applicants → were."],
+["How ___ experience do you have?",["much","many","a lot","few"],"much","Experience (опыт) — неисчисляемое → much."],
+["She gave me some useful ___.",["advice","advices","an advice","advise"],"advice","Advice — неисчисляемое, без -s и без an."],
+["The new employee ___ to the team tomorrow.",["will be introduced","will introduce","is introduce","introduces"],"will be introduced","Пассив будущего: will be + V3."],
+["He has worked here ___ five years.",["for","since","during","from"],"for","Период → for; момент → since."],
+["___ you ever ___ a job interview in English?",["Have / had","Did / have","Do / have","Had / have"],"Have / had","Ever → Present Perfect: Have you ever had…?"],
+["The person ___ interviewed me was very polite.",["who","which","whose","where"],"who","О человеке → who."],
+["The company ___ I work is very big.",["where","which","who","whose"],"where","Место → where (= in which)."],
+["Employees ___ work overtime get extra pay.",["who","which","whom","what"],"who","Люди → who."],
+["She suggested ___ a new training programme.",["introducing","to introduce","introduce","introduced"],"introducing","suggest + -ing."],
+["The HR manager made the candidates ___ a test.",["do","to do","doing","done"],"do","make sb do sth — без to."]
+];
+const SUMS={
+status:"The text is about how economists divide the population by employment status. First, it explains who the employed and the self-employed are. Then it says that the unemployed are people without a job who are looking for one, and that students and pensioners who don’t look for work are not in the labour force. The text also explains how the unemployment rate is calculated. Finally, it describes the underemployed — people who work part-time or below their qualifications.",
+types:"The text deals with three types of unemployment. Frictional unemployment is short-term and happens when people are between jobs. Structural unemployment appears when workers’ skills no longer match the jobs, for example because of robots. Cyclical unemployment grows during a recession. The author concludes that governments fight each type in a different way.",
+placement:"The text describes the stages of recruitment. A vacancy appears, the HR manager writes a job description and a person specification and advertises the job. Then applicants send CVs, the company makes a shortlist and interviews the best candidates. Finally, it checks references, makes a job offer, and the new employee signs a contract and starts the probation period.",
+contract:"The text is about the employment contract. It explains that the contract protects both sides and lists what it usually includes. Then it compares permanent and fixed-term contracts. Finally, it says that overtime must be paid at a higher rate and that both sides must follow the rules when they end a contract.",
+leaving:"The text explains different ways of leaving a job. People resign or quit when they decide to leave, and retire because of their age. They are fired when they work or behave badly, and made redundant when the company no longer needs their job. The text also says that redundant workers get severance pay and that people who lose a job can get help at a job centre.",
+wages:"The text deals with the price of labour. It explains the difference between a salary and a wage and says that pay depends on supply and demand on the labour market. Then it describes how the state and trade unions influence pay. Finally, it says that benefits and incentives are also part of the remuneration package, which helps to attract and keep good staff."};
+/* ---------- 🎓 Сессия: интерфейс ---------- */
+const NT=20;
+const TK=(()=>{const tp=[0,5,2,9,13,3,7,10,1,12,4,8,11,6,2,9,0,13,5,10],sx=[0,6,3,9,1,7,4,10,2,11,5,8,0,6,3,9,1,7,4,10];return Array.from({length:NT},(_,i)=>({n:i+1,text:TEXTS[i%TEXTS.length],topic:TOPICS[tp[i]%TOPICS.length],sit:SITU[sx[i]%SITU.length]}))})();
+const tkey=n=>'tk_'+n,topk=id=>'top_'+id;
+let TMR=null;
+VIEWS.session=()=>{
+ const tdone=TK.filter(t=>S.best[tkey(t.n)]!==undefined).length,tl=TOPICS.filter(t=>(S.best[topk(t.id)]||0)>=80).length,mk=S.best.mock;
+ main.innerHTML=`<h2>🎓 Подготовка к сессии</h2>
+ <div class="card small"><b>Как обычно устроен экзамен / зачёт по английскому</b> на 1 курсе (типичный формат для вуза — точный уточни у своего преподавателя):
+ <div style="margin:8px 0 0">1️⃣ <b>Письменная часть</b> — тест: профессиональная лексика, грамматика, понимание текста.</div>
+ <div>2️⃣ <b>Устная часть по билету</b>: прочитать текст по специальности и пересказать его (summary), монолог по теме курса, беседа с преподавателем или ситуация.</div>
+ <div class="mut" style="margin-top:6px">Здесь всё это можно отрепетировать: 20 авторских билетов, 14 тем с образцами монологов и пробный тест.</div></div>
+ <div class="ggrid">
+ <button class="gc" data-a="tkrand"><div class="e">🎫</div><b>Вытянуть билет</b><span>случайный из ${NT}</span><em>Пройдено: ${tdone}/${NT}</em></button>
+ <button class="gc" data-a="go" data-v="topics"><div class="e">🗣️</div><b>Темы для монолога</b><span>образцы + учить наизусть</span><em>Выучено: ${tl}/${TOPICS.length}</em></button>
+ <button class="gc" data-a="mock"><div class="e">✍️</div><b>Пробный письменный тест</b><span>лексика + грамматика + текст · 30</span>${mk!==undefined?`<em>Рекорд: ${mk}%</em>`:''}</button>
+ <button class="gc" data-a="gram"><div class="e">🧩</div><b>Грамматика в HR</b><span>${GRAM.length} заданий с разбором</span>${S.best.gram!==undefined?`<em>Рекорд: ${S.best.gram}%</em>`:''}</button>
+ <button class="gc" data-a="go" data-v="exam"><div class="e">📝</div><b>Тест по словам</b><span>21 вопрос, оценка</span></button>
+ <button class="gc" data-a="go" data-v="texts"><div class="e">📰</div><b>Тексты</b><span>чтение и пересказ</span></button>
+ </div>
+ <h3>Все билеты</h3><div class="ggrid">${TK.map(t=>{const b=S.best[tkey(t.n)];return`<button class="gc" data-a="ticket" data-v="${t.n}" style="padding:10px 6px"><b>№${t.n}</b><span>${t.topic.e} ${esc(t.topic.t)}</span>${b!==undefined?`<em>${b}%</em>`:''}</button>`}).join('')}</div>
+ <details class="card" style="padding:12px 14px"><summary><b>📋 Фразы для пересказа текста</b></summary>${SUMPH.map(p=>`<div class="wi" data-say="${esc(p[0])}" style="margin-top:6px"><div><b>${esc(p[0])}</b><span>${esc(p[1])}</span></div></div>`).join('')}</details>
+ <details class="card" style="padding:12px 14px"><summary><b>🗣️ Фразы для монолога</b></summary>${MONPH.map(p=>`<div class="wi" data-say="${esc(p[0])}" style="margin-top:6px"><div><b>${esc(p[0])}</b><span>${esc(p[1])}</span></div></div>`).join('')}</details>`;
+};
+VIEWS.topics=()=>{
+ main.innerHTML=topBar('session','<b style="flex:1">🗣️ Темы для монолога</b>')+`<div class="card small">Каждая тема — образец монолога (≈ 2 минуты, уровень B1), ключевые слова, вопросы преподавателя с ответами и тренажёр «учить наизусть».</div>`+TOPICS.map(T=>{const b=S.best[topk(T.id)];return`<div class="wi" data-a="topic" data-v="${T.id}"><div><b>${T.e} ${esc(T.t)}</b><span>${esc(T.ru)}</span></div><span class="badge ${b>=80?'b-ok':b!==undefined?'b-learn':'b-new'}">${b!==undefined?b+'%':'Новая'}</span></div>`}).join('<div style="height:8px"></div>');
+};
+const words=s=>s.split(/(\s+)/);
+function hideText(txt,lv,seed){if(!lv)return esc(txt);let k=0;return words(txt).map(w=>{if(/^\s+$/.test(w)||!/[a-z]/i.test(w))return esc(w);k++;const h=lv===3||(lv===2?(k+seed)%2===0:(k+seed)%4===0);if(!h)return esc(w);const m=w.match(/^([^a-z]*)([a-z’'-]+)(.*)$/i);if(!m)return esc(w);const core=m[2],show=lv===3?core[0]+'·'.repeat(core.length-1):'·'.repeat(core.length);return esc(m[1])+`<span class="hid" data-w="${esc(core)}" style="border-bottom:1px dashed var(--acc);cursor:pointer;color:var(--acc)">${show}</span>`+esc(m[3])}).join('')}
+function topicView(id,lv=0){
+ const T=TOPICS.find(x=>x.id===id);if(!T)return go('topics');VIEW='topic';
+ document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v==='session'));
+ const LV4=['Весь текст','Скрыть 25%','Скрыть 50%','Первые буквы'];
+ main.innerHTML=topBar('topics',`<b style="flex:1">${T.e} ${esc(T.t)}</b>`)+`<div class="small mut" style="margin:-4px 0 8px">${esc(T.ru)}</div>
+ <div class="card"><b>🧠 Режим заучивания</b><div class="row" style="margin-top:8px;flex-wrap:wrap">${LV4.map((x,i)=>`<button class="btn ${i===lv?'':'ghost'}" data-a="tlv" data-v="${T.id}|${i}" style="flex:1;min-width:70px;padding:8px 4px;font-size:13px">${x}</button>`).join('')}</div><div class="small mut" style="margin-top:6px">Рассказывай вслух, подглядывая; нажми на скрытое слово — оно откроется. Потом усложняй уровень.</div></div>
+ <div class="card">${T.m.map((p,i)=>`<p style="line-height:1.6;margin:0 0 12px">${lv?'':`<span data-say="${esc(p)}" style="cursor:pointer">🔊</span> `}${hideText(p,lv,i)}</p>`).join('')}</div>
+ <div class="card"><b>🔑 Ключевые слова</b><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${T.k.map(k=>`<span class="badge b-new" data-say="${esc(k)}" style="cursor:pointer">${esc(k)}</span>`).join('')}</div></div>
+ <button class="btn wide" data-a="topq" data-v="${T.id}">🧩 Проверка: вставь ключевые слова в монолог</button>
+ <h3>Вопросы преподавателя</h3>${T.q.map(q=>`<details class="card" style="padding:12px 14px"><summary><span data-say="${esc(q[0])}">🔊</span> <b>${esc(q[0])}</b></summary><div class="in" style="margin-top:6px" data-say="${esc(q[1])}">💬 ${esc(q[1])}</div></details>`).join('')}`;
+ main.querySelectorAll('.hid').forEach(s=>s.onclick=()=>{s.textContent=s.dataset.w;s.style.borderBottom='0'});
+ window.scrollTo(0,0)}
+function topicQuiz(id){const T=TOPICS.find(x=>x.id===id);LV='m';DPOOL=null;
+ const sents=T.m.join(' ').split(/(?<=[.!?])\s+/);const qs=[];
+ T.k.forEach(k=>{const s=sents.find(x=>x.toLowerCase().includes(k.toLowerCase()));if(!s)return;const i=s.toLowerCase().indexOf(k.toLowerCase());const orig=s.substr(i,k.length);
+  qs.push({kind:'mc',hint:'Вставь слово из монолога',q:esc(s.slice(0,i))+'<span class="gap">&nbsp;?&nbsp;</span>'+esc(s.slice(i+k.length)),opts:shuffle([orig,...shuffle(T.k.filter(x=>x.toLowerCase()!==k.toLowerCase())).slice(0,3)].map(o=>i===0?o[0].toUpperCase()+o.slice(1):o)),ans:i===0?orig[0].toUpperCase()+orig.slice(1):orig,exp:esc(s)})});
+ runQuiz(T.t,shuffle(qs),{back:'topic:'+id,restart:()=>topicQuiz(id),key:topk(id)})}
+function ticketView(n){
+ const t=TK.find(x=>x.n===+n);if(!t)return go('session');VIEW='ticket';clearInterval(TMR);
+ document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v==='session'));
+ main.innerHTML=topBar('session',`<b style="flex:1">🎫 Билет №${t.n}</b>`)+`<div class="card center"><div class="big" id="tmr">20:00</div><div class="small mut">время на подготовку</div><button class="btn" id="tgo" style="margin-top:8px">▶ Начать подготовку</button></div>
+ <div class="card"><b>Задание 1.</b> Read the text and give its summary in English (5–7 sentences).<details style="margin-top:8px"><summary>📰 ${esc(t.text.t)}</summary><div class="in">${t.text.p.map(x=>`<p data-say="${esc(x)}" style="cursor:pointer;line-height:1.55">${esc(x)}</p>`).join('')}</div></details>
+ <details style="margin-top:8px"><summary class="small">🔑 Образец пересказа (сначала попробуй сам)</summary><div class="in" data-say="${esc(SUMS[t.text.id]||'')}">${esc(SUMS[t.text.id]||'')}</div></details></div>
+ <div class="card"><b>Задание 2.</b> Speak on the topic: <b>«${esc(t.topic.t)}»</b> <span class="mut small">(${esc(t.topic.ru)})</span>
+ <div class="small" style="margin-top:6px">План: ${t.topic.m.map(p=>esc(p.split(/(?<=[.!?])\s/)[0])).map((x,i)=>`<div>${i+1}. ${x}</div>`).join('')}</div>
+ <button class="btn ghost wide" data-a="topic" data-v="${t.topic.id}" style="margin-top:8px">📖 Образец монолога и вопросы</button></div>
+ <div class="card"><b>Задание 3.</b> Situation / Discussion:<div style="margin-top:6px" data-say="${esc(t.sit)}">💬 ${esc(t.sit)}</div><div class="small mut" style="margin-top:6px">Говори 6–8 фраз. Используй: I think… / I would recommend… / Could you tell me…? / In my opinion…</div></div>
+ <div class="card"><b>✅ Оцени себя честно</b>${['Пересказал текст своими словами, 5+ предложений','Рассказал тему без подглядывания, ~2 минуты','Ответил на 2–3 вопроса по теме','Справился с ситуацией, 6+ фраз','Почти без грамматических ошибок'].map((x,i)=>`<label style="display:flex;gap:8px;margin-top:8px;align-items:flex-start"><input type="checkbox" class="sa"> <span class="small">${x}</span></label>`).join('')}<button class="btn wide" id="tsave" style="margin-top:10px">Сохранить результат</button></div>
+ <div class="row"><button class="btn ghost" data-a="ticket" data-v="${t.n>1?t.n-1:NT}">← №${t.n>1?t.n-1:NT}</button><button class="btn ghost" data-a="tkrand">🎲 Другой</button><button class="btn ghost" data-a="ticket" data-v="${t.n<NT?t.n+1:1}">№${t.n<NT?t.n+1:1} →</button></div>`;
+ $('#tgo').onclick=()=>{let s=1200;clearInterval(TMR);$('#tgo').textContent='⏳ Идёт подготовка';TMR=setInterval(()=>{s--;const e=$('#tmr');if(!e||VIEW!=='ticket'){clearInterval(TMR);return}e.textContent=String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');if(s<=0){clearInterval(TMR);e.textContent='Время! 🔔'}},1000)};
+ $('#tsave').onclick=()=>{const c=[...main.querySelectorAll('.sa')],p=Math.round(c.filter(x=>x.checked).length/c.length*100);S.best[tkey(t.n)]=Math.max(S.best[tkey(t.n)]||0,p);touchStreak();save();$('#tsave').textContent=`Сохранено: ${p}% ✓`};
+ window.scrollTo(0,0)}
+function gramQs(list){return list.map(g=>({kind:'mc',hint:'Грамматика: выбери вариант',q:esc(g[0]).replace('___','<span class="gap">&nbsp;?&nbsp;</span>'),opts:shuffle(g[1]),ans:g[2],exp:esc(g[3])}))}
+function mockTest(){LV='m';DPOOL=null;const ws=shuffle(W).slice(0,10);const vq=ws.map((w,i)=>(i%2?Q.def:Q.gap)(w));const T=pick(TEXTS);
+ const tq=textQs(T,'').filter(q=>!/Вставь/.test(q.hint)).slice(0,5);tq.forEach(q=>q.hint='Текст «'+T.t+'»: '+q.hint);
+ runQuiz('Пробный письменный тест',[...vq,...gramQs(shuffle(GRAM).slice(0,15)),...tq],{back:'session',restart:mockTest,key:'mock',exam:false})}
+function gramTest(){LV='m';runQuiz('Грамматика в HR',gramQs(shuffle(GRAM)),{back:'session',restart:gramTest,key:'gram',requeue:false})}
+ACT.tkrand=()=>ticketView(1+Math.random()*NT|0);ACT.ticket=v=>ticketView(v);ACT.topic=v=>topicView(v);ACT.topq=v=>topicQuiz(v);ACT.tlv=v=>{const[a,b]=v.split('|');topicView(a,+b)};ACT.mock=mockTest;ACT.gram=gramTest;
 
 updPill();go('home');
 
