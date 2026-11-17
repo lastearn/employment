@@ -668,7 +668,7 @@ const cloud=(t,tip)=>{const e=$('#cloud');if(e){e.textContent=t;e.title=tip}};
 function toast(m){const t=document.createElement('div');t.textContent=m;t.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;font:600 14px Manrope;z-index:30;max-width:90%;text-align:center';document.body.appendChild(t);setTimeout(()=>t.remove(),3500)}
 function syncSoon(){if(!REF)return;clearTimeout(timer);timer=setTimeout(push,1200)}
 async function push(){if(!REF)return;if(writing){again=true;return}writing=true;cloud('🔄','Сохраняю…');
- try{await REF.set({state:JSON.stringify(S),t:S.t||Date.now()});cloud('☁️','Прогресс сохранён в аккаунте')}
+ try{await REF.set({state:JSON.stringify(S),t:S.t||Date.now()},{merge:true});cloud('☁️','Прогресс сохранён в аккаунте')}
  catch(e){cloud('⚠️','Не удалось сохранить в облако — прогресс пока на этом устройстве')}
  writing=false;if(again){again=false;push()}}
 function applyRemote(d){try{const r=JSON.parse(d.state);if(!r||typeof r!=='object')return;S=Object.assign(DEF(),r);try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}updPill();if(['home','path','learn','games','exam'].includes(VIEW)&&!document.querySelector('.overlay'))go(VIEW)}catch(e){}}
