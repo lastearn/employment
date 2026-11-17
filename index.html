@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Employment — тренажёр лексики</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f3ee;--card:#fff;--ink:#1c1e23;--mut:#6c707a;--line:#e5e2d8;--acc:#2f5bea;--acc2:#e8edfd;--ok:#178a4b;--okb:#e2f5e9;--bad:#cf3f3f;--badb:#fbe6e6;--gold:#e0a106;--r:16px}
+@media (prefers-color-scheme:dark){:root{--bg:#121318;--card:#1c1e25;--ink:#ecedf0;--mut:#9a9fab;--line:#2c2f38;--acc:#7591ff;--acc2:#232a46;--ok:#40cf80;--okb:#15301f;--bad:#ff6d6d;--badb:#3b1d1d}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45;font-size:16px}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+header h1{font-size:17px;margin:0;font-weight:800;letter-spacing:-.02em}
+header h1 small{display:block;font-weight:500;font-size:11px;color:var(--mut);letter-spacing:0}
+.pill{font-size:13px;font-weight:800;background:var(--acc2);color:var(--acc);padding:5px 11px;border-radius:99px}
+main{max-width:720px;margin:0 auto;padding:16px 16px 110px}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:10}
+nav button{flex:1;background:none;border:0;color:var(--mut);font:700 11px Manrope,sans-serif;display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 0;cursor:pointer}
+nav button span{font-size:20px;filter:grayscale(1);opacity:.7}
+nav button.on{color:var(--acc)}nav button.on span{filter:none;opacity:1}
+h2{font-size:22px;margin:6px 0 10px;letter-spacing:-.02em}h3{font-size:16px;margin:22px 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.center{text-align:center}.mut{color:var(--mut)}.small{font-size:13px}
+.btn{font:700 15px Manrope,sans-serif;border:0;border-radius:12px;padding:13px 18px;background:var(--acc);color:#fff;cursor:pointer}
+.btn.ghost{background:var(--acc2);color:var(--acc)}.btn.good{background:var(--ok)}.btn.bad{background:var(--bad)}
+.btn.wide{width:100%;margin-top:10px}.btn:active{transform:scale(.97)}
+.row{display:flex;gap:10px;margin-top:12px}.row .btn{flex:1}
+.link{background:none;border:0;color:var(--mut);font:600 14px Manrope;text-decoration:underline;cursor:pointer;margin-top:10px;padding:6px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--mut)}
+.catbar{display:flex;flex-direction:column;gap:6px;cursor:pointer}
+.catbar .top{display:flex;justify-content:space-between;font-weight:700;font-size:14px}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden;flex:1}.bar i{display:block;height:100%;background:var(--acc);border-radius:9px;transition:width .4s}
+.hero{display:flex;align-items:center;gap:18px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none}
+.chip{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:7px 13px;font:600 13px Manrope;cursor:pointer}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+input{font:500 16px Manrope;width:100%;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);outline:none}
+input:focus{border-color:var(--acc)}input.ok{border-color:var(--ok);background:var(--okb)}input.bad{border-color:var(--bad);background:var(--badb)}
+.wl{display:flex;flex-direction:column;gap:8px}
+.wi{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 13px;cursor:pointer}
+.wi b{font-size:15px}.wi div span{display:block;color:var(--mut);font-size:13px}
+.dots{display:flex;gap:3px;flex-shrink:0}.dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--ok)}
+.ggrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;cursor:pointer;text-align:left;font-family:inherit;color:var(--ink)}
+.gc .e{font-size:28px}.gc b{display:block;margin:4px 0 2px;font-size:15px}.gc span{font-size:12px;color:var(--mut);display:block}.gc em{font-style:normal;font-size:12px;font-weight:700;color:var(--acc)}
+.qtop{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.ghostx{background:var(--acc2);color:var(--acc);border:0;border-radius:10px;width:36px;height:36px;font-size:16px;cursor:pointer;flex-shrink:0}
+.qcard{position:relative;padding:22px 18px}.hint{font-size:12px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.qtext{font-size:18px;font-weight:600}.big{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.sub{font-size:14px;color:var(--mut);font-weight:500;margin-top:8px}
+.gap{display:inline-block;min-width:70px;border-bottom:2px solid var(--acc);color:var(--acc)}
+.say{position:absolute;top:12px;right:12px;background:var(--acc2);border:0;border-radius:10px;width:38px;height:38px;font-size:17px;cursor:pointer}
+.opt{display:block;width:100%;text-align:left;font:600 16px Manrope;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px;margin-bottom:9px;cursor:pointer}
+.opt.ok{border-color:var(--ok);background:var(--okb)}.opt.bad{border-color:var(--bad);background:var(--badb)}.opt.sel{border-color:var(--acc);background:var(--acc2)}
+.tform{display:flex;gap:8px}.tform input{flex:1}
+.fb{border-radius:14px;padding:14px;margin-top:12px;font-size:15px}.fb.okb{background:var(--okb)}.fb.badb{background:var(--badb)}
+.exp{margin-top:8px;font-size:14px}.tip{margin-top:10px;font-size:14px;background:#fff6db;color:#5a4300;border-radius:10px;padding:9px 11px}
+@media (prefers-color-scheme:dark){.tip{background:#3a3014;color:#f3dc9a}}
+.flip{background:var(--card);border:1px solid var(--line);border-radius:22px;min-height:300px;padding:26px 20px;display:flex;flex-direction:column;justify-content:center;text-align:center;cursor:pointer;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.05)}
+.flip .back{display:none}.flip.on .front{display:none}.flip.on .back{display:block;animation:fl .3s}
+@keyframes fl{from{opacity:0;transform:rotateY(60deg)}to{opacity:1;transform:none}}
+.flip .ru{font-size:20px;font-weight:700;color:var(--acc);margin:6px 0 12px}.flip .def{color:var(--mut);font-size:14px}.flip .ex{margin-top:10px;font-style:italic;font-size:15px}
+.slots{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin:16px 0}
+.slot{width:34px;height:42px;border-bottom:3px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800}
+.slot.f{border-color:var(--acc)}.slots.win .slot{color:var(--ok);border-color:var(--ok)}.slots.lose .slot{color:var(--bad);border-color:var(--bad)}
+.tiles{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.tile{width:44px;height:48px;border-radius:11px;border:0;background:var(--acc2);color:var(--acc);font:800 21px Manrope;cursor:pointer}.tile:disabled{opacity:.15}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mt{min-height:64px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:700 14px Manrope;padding:8px;cursor:pointer;transition:.2s}
+.mt.ru{font-weight:500}.mt.sel{border-color:var(--acc);background:var(--acc2)}.mt.bad{border-color:var(--bad);background:var(--badb)}.mt.gone{opacity:0;pointer-events:none;transform:scale(.8)}
+.sp{min-height:220px;display:flex;flex-direction:column;justify-content:center}.ru2{font-size:20px;color:var(--acc);font-weight:700;margin-top:10px}
+.sp.ok{background:var(--okb)}.sp.bad{background:var(--badb)}.combo{font-weight:800;color:var(--gold);min-height:22px}
+.shake{animation:sh .35s}@keyframes sh{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.ord{display:block;width:100%;text-align:left;font:600 15px Manrope;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer}
+.ord small{display:block;color:var(--mut);font-weight:500}.ord.done{border-color:var(--ok);background:var(--okb);pointer-events:none}.ord.bad{border-color:var(--bad);background:var(--badb)}
+.ordlist{counter-reset:s}.ordlist div{counter-increment:s;padding:8px 12px;background:var(--okb);border-radius:10px;margin-bottom:6px;font-weight:600;font-size:14px}.ordlist div::before{content:counter(s)". ";color:var(--ok)}
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+summary{padding:15px 16px;font-weight:800;cursor:pointer;list-style:none}summary::after{content:"＋";float:right;color:var(--mut)}details[open] summary::after{content:"－"}
+details .in{padding:0 16px 14px;font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:14px}td{padding:7px 4px;border-top:1px solid var(--line);vertical-align:top}td:first-child{font-weight:700;width:42%}
+.mist{font-size:15px}.mist s{color:var(--bad)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:20;display:flex;align-items:flex-end;justify-content:center;animation:fi .2s}
+.sheet{background:var(--card);width:100%;max-width:720px;border-radius:22px 22px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom));max-height:85vh;overflow:auto}
+@keyframes fi{from{opacity:0}}
+.badge{display:inline-block;font-size:12px;font-weight:800;padding:4px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.b-new{background:var(--line);color:var(--mut)}.b-learn{background:#fff1cc;color:#8a5a00}.b-due{background:var(--badb);color:var(--bad)}.b-ok{background:var(--okb);color:var(--ok)}
+@media (prefers-color-scheme:dark){.b-learn{background:#3a3014;color:#f3cf6a}}
+select{font:600 15px Manrope;width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);margin:6px 0 14px}
+.btn:disabled{opacity:.4;pointer-events:none}
+.steps .btn{display:block;width:100%;text-align:left;margin-top:9px}
+.scale td:first-child{width:auto}
+.pat{font-family:ui-monospace,Menlo,monospace;letter-spacing:.28em;font-size:18px;color:var(--ink)}
+.mt.df{font-size:12px;font-weight:500;line-height:1.3}
+.lvd{font-size:13px;color:var(--mut);margin-top:6px}.gr5{color:var(--ok)}.gr2{color:var(--bad)}
+</style>
+</head>
+<body>
+<header><h1>Employment<small>Финансовый университет · Управление персоналом</small></h1><div style="display:flex;gap:8px;align-items:center"><span class="small mut" id="cloud" title="Синхронизация">⏳</span><span class="pill" id="pill">0%</span></div></header>
+<main id="main"></main>
+<nav id="nav">
+<button data-a="go" data-v="home" class="on"><span>🏠</span>Главная</button>
+<button data-a="go" data-v="path"><span>🗺️</span>Уроки</button>
+<button data-a="go" data-v="games"><span>🎮</span>Игры</button>
+<button data-a="go" data-v="exam"><span>📝</span>Тест</button>
+<button data-a="go" data-v="theory"><span>📖</span>Теория</button>
+</nav>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* ===== НАСТРОЙКА: вставь сюда конфиг из Firebase (Project settings → Your apps → SDK setup and configuration → Config) ===== */
+const firebaseConfig = {
+  apiKey: "AIzaSyC65h5cJ-z5Igis9dJiXtMDWtDBKla-qVQ",
+  authDomain: "employment-trainer.firebaseapp.com",
+  projectId: "employment-trainer",
+  storageBucket: "employment-trainer.firebasestorage.app",
+  messagingSenderId: "495467669562",
+  appId: "1:495467669562:web:1c8cd29835034575eeed03"
+};
+/* ================================================================================================================ */
+const CATS={search:'Поиск работы и найм',contract:'Условия и договор',career:'Карьера в компании',leaving:'Увольнение и безработица'};
+const RAW=`search|vacancy|вакансия|a job in a company that is available for someone to do|There is a {vacancy} for a sales manager — the last one left in May.|«Вакантный» = свободный: vacancy — свободное место в штате.
+search|applicant|соискатель|a person who formally asks for a job|Over 200 {applicants} sent their CVs for one position.|apply → applicant: «тот, кто подаёт» заявку.
+search|apply for|подавать заявку (на работу)|to formally ask for a job, usually by sending a CV|I'm going to {apply for} the manager position at Sber.|apply FOR a job (на что), apply TO a company (куда).
+search|application form|анкета соискателя|a document with questions you fill in when you ask for a job|Please fill in the {application form} on our website.|form — бланк. Заполнить = fill in / fill out.
+search|CV (curriculum vitae)|резюме|a short document about your education, work experience and skills|Send your {CV} with a photo to the HR department.|Лат. «ход жизни». В США говорят résumé.
+search|cover letter|сопроводительное письмо|a letter you send with your CV explaining why you want the job|In my {cover letter} I explained why I want to work in HR.|cover — «накрывать»: письмо лежит поверх резюме.
+search|job advertisement|объявление о вакансии|a public notice in which a company says it is looking for staff|I saw the {job advertisement} on hh.ru yesterday.|Коротко: job ad / advert.
+search|recruit|набирать (персонал)|to find and bring new people into a company|The company plans to {recruit} 50 new IT specialists.|Рекрут — новобранец: recruit = набирать новичков.
+search|recruitment agency|кадровое агентство|a company that finds suitable workers for other companies|She found her job through a {recruitment agency}.|agency — агентство. Recruiter — сотрудник такого агентства.
+search|headhunter|хедхантер|a person who finds experienced people for top jobs and persuades them to change company|A {headhunter} called him with an offer to become director.|head + hunter — «охотник за головами», то есть за топ-специалистами.
+search|shortlist|шорт-лист, короткий список|a final list of the best candidates chosen from all applicants|Only five people out of 200 made it onto the {shortlist}.|short list — короткий список лучших.
+search|job interview|собеседование|a formal meeting where an employer asks a candidate questions|I'm nervous — my {job interview} is tomorrow at 10.|inter + view — «посмотреть друг на друга».
+search|interviewee|тот, кого собеседуют|the person who answers questions at an interview|The {interviewee} answered every question confidently.|-ee = тот, НАД кем действие: interviewee, employee, trainee.
+search|candidate|кандидат|a person who is being considered for a job|The strongest {candidate} will be invited to a second interview.|Как на выборах: из кандидатов выбирают одного.
+search|reference|рекомендация, отзыв|a letter from a former employer describing your work and character|My previous boss wrote me an excellent {reference}.|refer — ссылаться: на тебя «ссылается» прежний начальник.
+search|qualifications|квалификация (дипломы, сертификаты)|exams you have passed, diplomas and certificates that show you are trained|You need a law degree and other {qualifications} to work as a lawyer.|qualify — соответствовать требованиям.
+search|work experience|опыт работы|knowledge and skills you get from doing a job|Do you have any {work experience} in HR?|experience в этом значении неисчисляемое: much experience, без -s.
+search|skills|навыки|abilities you have learned, e.g. communication or computer skills|Employers value soft {skills} such as teamwork and communication.|hard skills — технические, soft skills — общение, командная работа.
+search|hire|нанимать|to employ someone and pay them for their work|We decided to {hire} her as a personal assistant.|hire — «хайр»: нанять. В BrE ещё «брать напрокат».
+search|take on|брать на работу|(phrasal verb) to start to employ new people|The factory is {taking on} 30 new workers this month.|take on board — «взять на борт».
+search|job offer|предложение о работе|a formal proposal of a job to a chosen candidate|She accepted the {job offer} the same day.|«Получить оффер» — HR-сленг прямо из английского.
+search|probation period|испытательный срок|the first months of a job when the employer checks whether you are suitable|New employees have a three-month {probation period} before a permanent contract.|probe — проба, проверка.
+search|onboarding|адаптация новичка|the process of helping a new employee start work and fit in|Good {onboarding} helps new staff feel welcome in the first weeks.|on board — «на борту»: новичка берут на корабль.
+contract|employer|работодатель|a person or company that pays people to work for them|My {employer} is a big IT company that pays well.|-er = тот, КТО нанимает (как teacher — тот, кто учит).
+contract|employee|работник, сотрудник|a person who is paid to work for a company|The company has 300 {employees} in three offices.|-ee = тот, КОГО наняли. -er даёт работу, -ee получает.
+contract|employment contract|трудовой договор|a legal agreement between employer and employee about the job|Read the {employment contract} carefully before you sign it.|contract — контракт. Подписать — sign.
+contract|full-time|полная занятость|working the whole normal working week, about 40 hours|She works 40 hours a week — it's a {full-time} job.|full — полный.
+contract|part-time|неполная занятость|working fewer hours than a normal working week|Many students have {part-time} jobs — about 15 hours a week.|part — часть: работаешь часть недели.
+contract|permanent|постоянный (о работе)|(of a job) with no end date|After probation she was given a {permanent} contract with no end date.|Перманентный маркер не стирается: постоянный.
+contract|temporary|временный (о работе)|(of a job) lasting only for a limited time|He took a {temporary} job in a café just for the summer.|tempo — время. Temp — временный сотрудник.
+contract|freelancer|фрилансер|a person who works for different clients, not for one employer|As a {freelancer}, I work for several clients and choose my own projects.|free lance — «свободное копьё»: наёмный рыцарь без сеньора.
+contract|self-employed|самозанятый|working for yourself and running your own business|My uncle is {self-employed} — he runs his own small café.|self — сам: сам себе работодатель.
+contract|shift work|сменная работа|a system in which people work at different times of the day or night|Nurses and factory workers often do {shift work}, including nights.|shift — сдвиг, смена (night shift — ночная смена).
+contract|flexitime|гибкий график|a system in which workers choose when they start and finish work|Thanks to {flexitime}, I can start at 11 and finish at 8.|flexible + time = гибкое время.
+contract|remote work|удалённая работа|working from home or another place, not from the office|{Remote work} lets me work from home three days a week.|remote — удалённый (remote control — пульт).
+contract|overtime|сверхурочная работа|extra hours you work after your normal working hours|He stayed until 10 pm and got paid for {overtime}.|over + time — «сверх времени».
+contract|salary|оклад (месячный/годовой)|fixed money paid every month, usually to office workers|Her monthly {salary} is 90,000 rubles.|Лат. salarium — «соляные деньги» римских солдат. Платят за месяц/год.
+contract|wage|зарплата (почасовая/понедельная)|money paid per hour or per week, usually for manual work|Builders here earn a {wage} of 500 rubles an hour.|wage — за часы/неделю; salary — за месяц/год.
+contract|benefits|льготы, соцпакет|extra advantages besides pay, e.g. health insurance or free meals|The job offers great {benefits}, including health insurance and a gym.|Разговорно — perks («плюшки»).
+contract|bonus|премия|extra money paid as a reward for good work|Everyone got a {bonus} at the end of the year for great results.|Бонус — то же слово!
+contract|pension|пенсия|money paid regularly to a person who has stopped working because of age|After retiring, he lives on his state {pension}.|Звучит почти как «пенсия» — «пеншн».
+contract|sick leave|больничный|time off work because you are ill|She is on {sick leave} because she has the flu.|sick — больной + leave — отпуск.
+contract|annual leave|ежегодный отпуск|paid holiday days you get every year|In Russia, workers get 28 days of paid {annual leave} a year.|annual — ежегодный (как anniversary — годовщина).
+contract|maternity leave|декретный отпуск|time off work for a mother before and after her baby is born|She is going on {maternity leave} — her baby is due in May.|maternal — материнский; для отцов — paternity leave.
+contract|commission|комиссионные|money paid as a percentage of the sales you make|Car dealers earn 2% {commission} on every car they sell.|Комиссия — процент с продажи.
+contract|working hours|рабочие часы|the time of day when you are at work|My {working hours} are from 9 am to 6 pm, Monday to Friday.|
+career|promotion|повышение (в должности)|a move to a higher, more important position|After two years of hard work she got a {promotion} to team leader.|pro — вперёд + motion — движение.
+career|be promoted|получить повышение|to be moved to a more important job|He {was promoted} to senior manager last month.|Пассив: be promoted — «его повысили».
+career|career ladder|карьерная лестница|the series of jobs from junior to senior level in an organisation|She climbed the {career ladder} from intern to director in ten years.|ladder — лестница-стремянка: ступенька за ступенькой.
+career|training|обучение, тренинг|teaching employees the skills they need for their job|The company provides free {training} in Excel and negotiation.|train — тренировать.
+career|trainee|стажёр|a person who is being taught to do a job|I started as a {trainee} in the marketing department.|-ee — тот, кого обучают.
+career|performance appraisal|оценка эффективности|a regular meeting where a manager discusses how well an employee works|At my {performance appraisal}, my boss praised my results.|appraise — оценивать (price — цена).
+career|job satisfaction|удовлетворённость работой|the feeling of enjoying your job|A friendly team increases {job satisfaction} more than money.|satisfaction — удовлетворение («сатисфакция»).
+career|workload|рабочая нагрузка|the amount of work a person has to do|My {workload} is too heavy — I have four projects at once.|work + load (груз): груз работы.
+career|deadline|крайний срок|the time or date by which work must be finished|The {deadline} for the report is Friday at noon.|dead line — «мёртвая линия»: дальше нельзя.
+career|colleague|коллега|a person you work with|I often have lunch with my {colleagues} from the sales team.|Коллега — почти то же слово.
+career|supervisor|руководитель, начальник|a person who is in charge of a group of workers|Ask your {supervisor} if you can leave early.|super (над) + vise (смотреть) — тот, кто «смотрит сверху».
+career|staff / personnel|персонал, штат|all the people who work for an organisation|The hotel has a {staff} of 80 people.|personnel → «персонал». Staff — собирательное.
+career|HR department|отдел кадров (HR)|the department that deals with hiring, training and the welfare of staff|Bring your documents to the {HR department} on the 2nd floor.|HR = Human Resources — «человеческие ресурсы». Твоя будущая профессия!
+career|trade union|профсоюз|an organisation that protects workers' rights and pay|The {trade union} demanded higher wages for all workers.|trade — ремесло + union — союз.
+career|incentive|стимул|something that encourages people to work harder|A bonus is a strong {incentive} to work harder.|«Инсентив» — то, что «зажигает» (лат. incendo — поджигать).
+career|job description|должностная инструкция|a document listing the duties of a job|Read the {job description} to see what tasks the job includes.|describe — описывать.
+career|responsibilities|обязанности|the tasks that are part of your job|My {responsibilities} include hiring and training new staff.|responsible — ответственный.
+leaving|resign|уволиться по собственному желанию|to officially leave your job because you decide to|She {resigned} because she found a better job.|re-sign — «подписать» заявление об уходе. Не путай с retire!
+leaving|resignation letter|заявление об увольнении|a letter in which you say that you are leaving your job|He handed in his {resignation letter} on Monday morning.|resign → resignation.
+leaving|quit|уйти с работы, бросить|(informal) to leave your job|I'm going to {quit} my boring job and travel the world.|quit — неформально, как «свалить».
+leaving|give notice|предупредить об уходе|to tell your employer in advance that you will leave|In Russia, you must {give notice} two weeks before you leave.|notice — уведомление (notify — уведомлять).
+leaving|retire|выйти на пенсию|to stop working because of your age|My grandfather {retired} at 65 and now gets a pension.|re-tire — «устал» 😄 Пенсия = retire, своё желание = resign.
+leaving|retirement|выход на пенсию (период)|the period of your life after you stop working because of age|In his {retirement}, he spends all his time in the garden.|retire → retirement.
+leaving|dismiss|увольнять (официально)|to officially remove someone from their job|He was {dismissed} for breaking company rules.|dis — прочь + miss (отправлять): «отправить прочь».
+leaving|fire|уволить (разг.)|(informal) to dismiss someone, usually for bad work or behaviour|If you steal from the company, you'll get {fired}.|fire — «выстрелить» с работы.
+leaving|get the sack|вылететь с работы (брит. разг.)|(informal, BrE) to be dismissed|He {got the sack} for being late every day.|sack — мешок: уволенный забирал мешок с инструментами.
+leaving|make redundant|сократить (по сокращению штата)|to dismiss someone because their job is no longer needed|When the factory closed, 100 workers were {made redundant}.|redundant — лишний. Работник не виноват!
+leaving|redundancy|сокращение штата|losing your job because the company no longer needs it|The bank announced 500 {redundancies} because of the crisis.|make redundant → redundancy.
+leaving|lay off|сократить (массово, из-за нехватки работы)|(phrasal verb) to stop employing workers because there is not enough work|The company had to {lay off} 200 workers when orders fell.|lay off — «отложить в сторону».
+leaving|severance pay|выходное пособие|money paid to an employee who loses their job|Redundant workers received three months' {severance pay}.|sever — разрывать (отношения).
+leaving|unemployed|безработный|without a paid job|He has been {unemployed} for six months and is looking for work.|un- (не) + employed (нанятый).
+leaving|unemployment|безработица|the situation of people having no jobs; the number of people without work|{Unemployment} in the country fell to 2.5%.|-ment → существительное: явление.
+leaving|unemployment benefit|пособие по безработице|money the state pays to people who have no job|She gets {unemployment benefit} while she looks for work.|benefit — выплата, пособие.`;
+const W=RAW.trim().split('\n').map((l,i)=>{const[cat,en,ru,def,ex,tip]=l.split('|');return{id:i,cat,en,ru,def,ex,tip}});
+const SYNG=[['fire','dismiss','get the sack','lay off','make redundant'],['hire','take on','recruit'],['resign','quit'],['applicant','candidate','interviewee'],['salary','wage'],['staff / personnel','employee'],['vacancy','job advertisement'],['redundancy','unemployment','unemployed'],['promotion','be promoted'],['training','onboarding'],['benefits','bonus','incentive','commission'],['resignation letter','give notice'],['retirement','pension'],['job description','responsibilities'],['qualifications','skills','work experience']];
+const CONF=[
+["Office workers usually receive a monthly ___.",["salary","wage"],"salary","Salary — фиксированный оклад за месяц/год; wage — оплата за час или неделю."],
+["Builders are often paid an hourly ___.",["wage","salary"],"wage","Wage — почасовая/понедельная оплата, чаще за физический труд."],
+["At the age of 65 he decided to ___.",["retire","resign"],"retire","Retire — уйти на пенсию по возрасту; resign — уволиться по собственному желанию."],
+["She ___ because her boss was rude to her.",["resigned","retired"],"resigned","Resign — уйти по своему желанию, в любом возрасте."],
+["The factory closed, so 200 workers were ___.",["made redundant","fired"],"made redundant","Made redundant — сокращение, работник не виноват; fired — уволен за проступок."],
+["He was ___ for stealing money from the till.",["fired","made redundant"],"fired","Fire — увольнение за плохую работу или поведение."],
+["The ___ pays salaries to all workers.",["employer","employee"],"employer","Employer (-er) — тот, кто нанимает; employee (-ee) — тот, кого наняли."],
+["Every ___ must follow the safety rules at the factory.",["employee","employer"],"employee","Employee — работник."],
+["I'm looking for a new ___ in marketing.",["job","work"],"job","Job — исчисляемое (a job, two jobs); work — неисчисляемое (some work, at work)."],
+["I have a lot of ___ to do today.",["work","job"],"work","Work неисчисляемое: a lot of work, without “a”."],
+["She has had a long and successful ___ in banking.",["career","job"],"career","Career — весь профессиональный путь; job — конкретная должность."],
+["I'd like to apply ___ the position of HR manager.",["for","to"],"for","Apply for — на должность; apply to — в компанию/кому."],
+["Please send your application ___ the HR department.",["to","for"],"to","Send/apply TO — куда/кому отправляешь."],
+["Do you have much ___ in sales?",["experience","experiences"],"experience","Опыт работы — неисчисляемое: much experience, без -s."],
+["New staff have a three-month ___ period.",["probation","promotion"],"probation","Probation — испытательный срок; promotion — повышение."],
+["After five years she finally got a ___ to head of department.",["promotion","probation"],"promotion","Promotion — повышение по службе."],
+["The shop is ___ extra staff for Christmas.",["taking on","taking off"],"taking on","Take on — брать на работу; take off — снимать (одежду) / взлетать."],
+["He isn't unemployed — he's ___ and runs his own business.",["self-employed","employed by others"],"self-employed","Self-employed — работает на себя; unemployed — без работы."],
+["She works 20 hours a week, so she's a ___ worker.",["part-time","full-time"],"part-time","Part-time — неполная занятость; full-time — около 40 часов."],
+["I hope to ___ the career ladder quickly.",["climb","go"],"climb","Устойчивое сочетание: climb the career ladder."]];
+const PHR=[["Tell me about yourself.","Расскажите о себе."],["Why do you want to work for our company?","Почему вы хотите работать в нашей компании?"],["What are your strengths and weaknesses?","Каковы ваши сильные и слабые стороны?"],["Where do you see yourself in five years?","Кем вы видите себя через пять лет?"],["I'm a good team player.","Я хорошо работаю в команде."],["I work well under pressure.","Я хорошо работаю в условиях стресса."],["I'm looking for an opportunity to grow.","Я ищу возможность для профессионального роста."],["What does the benefits package include?","Что входит в соцпакет?"],["Do you have any questions for us?","У вас есть к нам вопросы?"],["When can you start?","Когда вы можете приступить к работе?"],["I'm a fast learner.","Я быстро учусь."],["I meet deadlines.","Я соблюдаю сроки."]];
+const STAGES=[["Write a job description","Составить должностную инструкцию"],["Place a job advertisement","Разместить объявление о вакансии"],["Receive CVs and application forms","Получить резюме и анкеты"],["Make a shortlist","Составить шорт-лист"],["Hold job interviews","Провести собеседования"],["Check references","Проверить рекомендации"],["Make a job offer","Сделать предложение о работе"],["Sign the employment contract","Подписать трудовой договор"],["Onboarding and probation period","Адаптация и испытательный срок"]];
+const PRAISE=['Верно! ✅','Отлично! 🔥','Так держать! 💪','Точно! 🎯','Супер! ⭐'];
+
+/* ---------- state ---------- */
+const KEY='employment-trainer-v1';
+const DEF=()=>({m:{},rec:{sprint:0,match:0},best:{},exams:[],streak:{d:'',n:0},answers:0,correct:0,les:{},seen:{},scope:'all'});
+let S=DEF();
+try{const s=JSON.parse(localStorage.getItem(KEY));if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{S.t=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}if(typeof syncSoon==='function')syncSoon()};
+const day=d=>new Date(d).toISOString().slice(0,10);
+function touchStreak(){const t=day(Date.now());if(S.streak.d===t)return;S.streak.n=S.streak.d===day(Date.now()-864e5)?S.streak.n+1:1;S.streak.d=t}
+function mark(en,ok){const v=S.m[en]||0;S.m[en]=ok?Math.min(5,v+1):Math.max(0,v-2);S.answers++;if(ok)S.correct++;touchStreak();save();updPill()}
+
+/* ---------- utils ---------- */
+const $=s=>document.querySelector(s);const main=$('#main');
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const strip=h=>{const d=document.createElement('div');d.innerHTML=h;return d.textContent};
+const lvl=w=>S.m[w.en]||0;
+const pctAll=(list=W)=>Math.round(list.reduce((s,w)=>s+lvl(w),0)/(list.length*5)*100);
+const showEx=w=>esc(w.ex).replace(/\{(.*?)\}/,'<b>$1</b>');
+const gapEx=w=>esc(w.ex).replace(/\{(.*?)\}/,'<span class="gap">&nbsp;?&nbsp;</span>');
+const gapAns=w=>(w.ex.match(/\{(.*?)\}/)||[])[1]||w.en;
+const isSyn=(a,b)=>SYNG.some(g=>g.includes(a.en)&&g.includes(b.en));
+const norm=s=>s.toLowerCase().replace(/[’`]/g,"'").replace(/[^a-z' -]/g,'').replace(/\s+/g,' ').trim();
+function variants(en){const o=new Set();en.replace(/\(.*?\)/g,'').split('/').forEach(p=>o.add(norm(p)));const par=(en.match(/\((.*?)\)/)||[])[1];if(par)o.add(norm(par));return[...o].filter(Boolean)}
+function lev(a,b){const d=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){let p=d[0];d[0]=i;for(let j=1;j<=b.length;j++){const t=d[j];d[j]=Math.min(d[j]+1,d[j-1]+1,p+(a[i-1]===b[j-1]?0:1));p=t}}return d[b.length]}
+function distract(w,f,n=3,same=true){const pool=W.filter(x=>x!==w&&!isSyn(x,w)&&x[f]!==w[f]);const a=same?shuffle(pool.filter(x=>x.cat===w.cat)).slice(0,2):[];const b=shuffle(pool.filter(x=>!a.includes(x)));return[...a,...b].slice(0,n).map(x=>x[f])}
+function pickWords(n,list=W){return shuffle(list).map(w=>[w,lvl(w)+Math.random()*2.5]).sort((a,b)=>a[1]-b[1]).slice(0,n).map(x=>x[0])}
+function grade(p){return p>=86?['Отлично','5','gr5']:p>=70?['Хорошо','4','']:p>=50?['Удовлетворительно','3','']:['Неудовлетворительно','2','gr2']}
+function ring(p,s=110){const r=s/2-9,c=2*Math.PI*r;const col=p>=86?'var(--ok)':p>=50?'var(--acc)':'var(--bad)';return`<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" style="flex-shrink:0"><circle cx="${s/2}" cy="${s/2}" r="${r}" fill="none" stroke="var(--line)" stroke-width="10"/><circle cx="${s/2}" cy="${s/2}" r="${r}" fill="none" stroke="${col}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-p/100)}" transform="rotate(-90 ${s/2} ${s/2})" style="transition:stroke-dashoffset .8s"/><text x="50%" y="53%" text-anchor="middle" dominant-baseline="middle" font-family="Manrope" font-weight="800" font-size="${s/4.4}" fill="var(--ink)">${p}%</text></svg>`}
+const dots=w=>`<span class="dots">${[1,2,3,4,5].map(k=>`<i class="${lvl(w)>=k?'on':''}"></i>`).join('')}</span>`;
+function speak(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/\(.*?\)/g,'').replace('/',','));u.lang='en-GB';u.rate=.9;speechSynthesis.speak(u)}catch(e){}}
+function updPill(){$('#pill').textContent=pctAll()+'%'}
+const topBar=(back,extra='')=>`<div class="qtop"><button class="ghostx" data-a="go" data-v="${back}">✕</button>${extra}</div>`;
+function sheet(html){const o=document.createElement('div');o.className='overlay';o.innerHTML=`<div class="sheet">${html}</div>`;o.onclick=e=>{if(e.target===o||e.target.closest('[data-close]'))o.remove()};document.body.appendChild(o);return o}
+
+/* ---------- actions ---------- */
+let VIEW='home',learnCat='all',learnQ='';
+const ACT={
+ go:v=>go(v),
+ say:v=>speak(v),
+ game:v=>setup(v),
+ exam:()=>startExam(),
+ cat:v=>{learnCat=v;go('learn')},
+ cards:v=>cards(v==='all'?W:W.filter(w=>w.cat===v),{back:'learn'}),
+ weak:()=>cards(W,{back:'home'}),
+ lesson:v=>lesson(v),
+ lcards:()=>cards(CUR.ws,{all:true,back:'lesson:'+CUR.id,title:'Карточки · Урок '+CUR.n,next:{label:'🎯 Перейти к заданиям →',fn:ltasks}}),
+ ltasks:()=>ltasks(),
+ ld:v=>{S.ld=v;save();lesson(CUR.id)},
+ lgame:v=>{LV=S.ld||'m';G={ws:CUR.ws,n:CUR.ws.length,back:'lesson:'+CUR.id};GAMES[v]()},
+ word:v=>wordSheet(W[+v]),
+ reset:()=>{const o=sheet(`<h2>Сбросить прогресс?</h2><p class="mut">Все уровни слов, рекорды и история тестов будут удалены.</p><div class="row"><button class="btn ghost" data-close>Отмена</button><button class="btn bad" id="rs">Сбросить</button></div>`);o.querySelector('#rs').onclick=()=>{S=DEF();save();updPill();o.remove();go('home')}}
+};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el&&ACT[el.dataset.a])ACT[el.dataset.a](el.dataset.v,el)});
+function go(v){if(v.startsWith('lesson:'))return lesson(v.slice(7));VIEW=v;const hv=v==='learn'?'path':v;document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===hv));(VIEWS[v]||VIEWS.home)();window.scrollTo(0,0)}
+
+/* ---------- lessons & spaced repetition ---------- */
+const LESSONS=[];Object.keys(CATS).forEach(c=>{const ws=W.filter(w=>w.cat===c);const n=Math.ceil(ws.length/8);for(let k=0;k<n;k++)LESSONS.push({id:c+'-'+(k+1),cat:c,n:k+1,ws:ws.slice(Math.round(k*ws.length/n),Math.round((k+1)*ws.length/n))})});
+const INT=[1,3,7,14,30];let CUR=null,G={ws:W,back:'games'};
+const fmtDays=d=>d<=1?'завтра':d%10>=2&&d%10<=4&&(d<10||d>20)?`через ${d} дня`:`через ${d} дней`;
+function lstat(L){const r=S.les&&S.les[L.id];if(!r)return{s:'new',t:'Новый',c:'b-new'};if(!r.stage)return{s:'learn',t:`Учу · ${r.best}%`,c:'b-learn'};const d=Math.ceil((r.due-Date.now())/864e5);if(d<=0)return{s:'due',t:'Пора повторить',c:'b-due'};return{s:'ok',t:`✓ ${r.best}% · повтор ${fmtDays(d)}`,c:'b-ok'}}
+function lessonDone(L,p){S.les=S.les||{};if(LV==='e')return{html:`<div class="card fb okb"><b>Разминка завершена 💪</b><div class="small">Лёгкий уровень не влияет на зачёт и расписание. Зачёт ставится на среднем или сложном уровне.</div></div>`,btn:{label:'🎯 Задания на среднем уровне',fn:()=>{S.ld='m';save();ltasks()}}};const r=S.les[L.id]||{best:0,stage:0,runs:0};if(p>=80&&LV==='h')r.hard=true;r.runs++;r.best=Math.max(r.best,p);let html,btn=null;
+ if(p>=80){r.stage=Math.min(r.stage+1,INT.length);const d=INT[r.stage-1];r.due=Date.now()+d*864e5-36e5;
+  html=`<div class="card fb okb"><b>✅ Урок зачтён!</b><div class="small">Следующее повторение — ${fmtDays(d)}. ${r.stage>=2?'Интервал растёт: 1 → 3 → 7 → 14 → 30 дней. Так слова уходят в долгую память.':'Вернись к уроку в срок — на главной он появится в блоке «Сегодня».'}</div></div>`;
+  const nx=LESSONS[LESSONS.indexOf(L)+1];if(nx&&lstat(nx).s==='new')btn={label:'▶ Следующий урок',fn:()=>lesson(nx.id)}}
+ else{r.stage=Math.max(0,r.stage-1);r.due=Date.now();html=`<div class="card fb badb"><b>Для зачёта нужно 80%+</b><div class="small">Пройди ещё раз — задания, их типы и порядок будут другими. Можно сначала повторить карточки.</div></div>`;btn={label:'🃏 Повторить карточки',fn:ACT.lcards}}
+ S.les[L.id]=r;save();return{html,btn}}
+const PROD=['type','gaptype','spell'];
+const decoys=()=>LV==='h'?shuffle('abcdeilmnoprstuy'.split('')).slice(0,3):[];
+const preN=s=>LV==='e'?Math.ceil(s.length/3):0;
+function mixTasks(ws,key,stage=0){
+ const last=(S.seen&&S.seen[key])||{},used={};let qs=[];
+ ws.forEach(w=>{const prev=last[w.en]||[];const pool=(LV==='e'?['enru','ruen','tf','gap','spell']:LV==='h'?['type','deftype','gaptype','spell']:['enru','ruen','def','gap','type','gaptype','tf','spell']).filter(t=>(t!=='spell'||/^[a-z]+$/.test(w.en)&&w.en.length<=12));
+  const ch=pool.map(t=>[t,(prev.includes(t)?10:0)+(LV==='m'&&stage>=2&&!PROD.includes(t)?1.5:0)+Math.random()*2]).sort((a,b)=>a[1]-b[1]).slice(0,2).map(x=>x[0]);
+  used[w.en]=ch;ch.forEach(t=>qs.push(Q[t](w)))});
+ const stem=s=>norm(s).slice(0,5);
+ shuffle(CONF.filter(c=>c[1].some(o=>ws.some(w=>stem(w.en)===stem(o))))).slice(0,2).forEach(c=>qs.push(Q.conf(c)));
+ qs=shuffle(qs);for(let i=1;i<qs.length;i++)if(qs[i].w&&qs[i].w===qs[i-1].w){const j=qs.findIndex((q,k)=>k>i&&q.w!==qs[i].w&&q.w!==qs[i-1].w);if(j>0)[qs[i],qs[j]]=[qs[j],qs[i]]}
+ S.seen=S.seen||{};S.seen[key]=used;save();return qs}
+function ltasks(){LV=S.ld||'m';const L=CUR,r=S.les&&S.les[L.id];runQuiz('Урок '+L.n,mixTasks(L.ws,L.id,r?r.stage:0),{back:'lesson:'+L.id,restart:ltasks,after:p=>lessonDone(L,p)})}
+function lesson(id){
+ const L=LESSONS.find(x=>x.id===id);if(!L)return go('path');CUR=L;VIEW='lesson';const st=lstat(L),r=S.les&&S.les[L.id];
+ document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v==='path'));
+ main.innerHTML=topBar('path',`<b style="flex:1">${CATS[L.cat]}</b>`)+`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2 style="margin:0">Урок ${L.n}</h2><span class="badge ${st.c}">${st.t}</span></div>${r?`<div class="small mut" style="margin-top:6px">Лучший результат: ${r.best}% · пройдено раз: ${r.runs}</div>`:''}
+ ${r&&r.hard?'<div class="small" style="margin-top:6px">🏆 Пройден на сложном уровне</div>':''}
+ <div style="margin-top:14px"><b class="small">Сложность заданий:</b><div class="chips" style="margin:7px 0 0">${['e','m','h'].map(k=>`<button class="chip ${(S.ld||'m')===k?'on':''}" data-a="ld" data-v="${k}">${LVN[k]}</button>`).join('')}</div><div class="lvd">${{e:'Разминка: выбор из 3 вариантов, подсказки, часть букв уже стоит. Зачёт не ставится.',m:'Смешанные задания: выбор, пропуски, ввод с подсказкой. Зачёт — от 80%.',h:'Только ввод: вспомнить слово без подсказок, угадать по определению и по контексту, лишние буквы. Зачёт от 80% + 🏆.'}[S.ld||'m']}</div></div>
+ <div class="steps"><button class="btn ${st.s==='new'?'':'ghost'}" data-a="lcards">1. 🃏 Карточки — познакомиться со словами</button><button class="btn ${st.s==='new'?'ghost':''}" data-a="ltasks">2. 🎯 Задания — ${L.ws.length*2}+ вопросов, каждый раз в новом порядке</button></div>
+ <p class="small mut" style="margin-bottom:0">Зачёт — от 80%. После зачёта урок вернётся на повторение через 1, 3, 7, 14 и 30 дней.</p></div>
+ <h3>Закрепить играми (только слова урока)</h3><div class="ggrid"><button class="gc" data-a="lgame" data-v="match"><div class="e">🧩</div><b>Найди пару</b></button><button class="gc" data-a="lgame" data-v="spell"><div class="e">🔤</div><b>Собери слово</b></button><button class="gc" data-a="lgame" data-v="sprint"><div class="e">⚡</div><b>Спринт</b></button><button class="gc" data-a="lgame" data-v="write"><div class="e">⌨️</div><b>Диктант</b></button></div>
+ <h3>Слова урока</h3><div class="wl">${L.ws.map(w=>`<div class="wi" data-a="word" data-v="${w.id}"><div><b>${esc(w.en)}</b><span>${esc(w.ru)}</span></div>${dots(w)}</div>`).join('')}</div>`;
+ window.scrollTo(0,0)}
+function scopeList(k){if(!k||k==='all')return W;if(CATS[k])return W.filter(w=>w.cat===k);const L=LESSONS.find(x=>x.id===k);return L?L.ws:W}
+
+/* ---------- views ---------- */
+const VIEWS={
+home(){
+ const learned=W.filter(w=>lvl(w)>=4).length,prog=W.filter(w=>lvl(w)>0&&lvl(w)<4).length;
+ const acc=S.answers?Math.round(S.correct/S.answers*100):0;const p=pctAll();
+ const last=S.exams[0];
+ main.innerHTML=`<div class="card hero">${ring(p,118)}<div><h2 style="margin:0 0 4px">${p<5?'Начнём! 🚀':p<50?'Хороший старт 💪':p<86?'Уже уверенно 🔥':'Почти мастер 🏆'}</h2><div class="mut small">Общий прогресс по теме Employment: ${W.length} слов и выражений. Слово выучено, когда набирает 4–5 баллов.</div></div></div>
+ <div class="stats"><div class="stat"><b>${learned}</b><span>выучено</span></div><div class="stat"><b>${prog}</b><span>в процессе</span></div><div class="stat"><b>${W.length-learned-prog}</b><span>новых</span></div><div class="stat"><b>🔥 ${S.streak.d===day(Date.now())||S.streak.d===day(Date.now()-864e5)?S.streak.n:0}</b><span>дней подряд</span></div><div class="stat"><b>${acc}%</b><span>точность</span></div><div class="stat"><b>${last?last.p+'%':'—'}</b><span>последний тест</span></div></div>
+ ${today()}
+ <div class="row"><button class="btn ghost" data-a="weak">🃏 Слабые слова</button><button class="btn ghost" data-a="exam">📝 Итоговый тест</button></div>
+ <h3>Разделы</h3>${Object.entries(CATS).map(([k,n])=>{const l=W.filter(w=>w.cat===k);const cp=pctAll(l);return`<div class="card catbar" data-a="cat" data-v="${k}"><div class="top"><span>${n}</span><span>${cp}%</span></div><div class="bar"><i style="width:${cp}%"></i></div><span class="mut small">${l.length} слов · ${l.filter(w=>lvl(w)>=4).length} выучено</span></div>`}).join('')}
+ <h3>Как учить</h3><div class="card small"><b>1.</b> Каждая тема разбита на уроки по 5–8 слов (вкладка «Уроки»). Иди по порядку, 1–2 новых урока в день.<br><b>2.</b> В уроке: карточки → задания только по словам этого урока. Типы заданий и порядок каждый раз новые: что было переводом, станет диктантом или пропуском.<br><b>3.</b> Зачёт — 80%+. Потом урок сам вернётся на повторение через 1, 3, 7, 14 и 30 дней — смотри блок «Сегодня».<br><b>4.</b> В «Играх» можно выбрать урок или тему и закрепить только эти слова.<br><b>5.</b> Когда пройдёшь все уроки — итоговый тест, цель 86%+.</div>
+ <button class="link" data-a="reset">Сбросить прогресс</button>`;
+},
+path(){
+ main.innerHTML=`<h2>Уроки</h2>${today()}${Object.entries(CATS).map(([c,n])=>{const ls=LESSONS.filter(L=>L.cat===c);return`<h3>${n} <span class="mut small">· ${ls.filter(L=>lstat(L).s!=='new'&&lstat(L).s!=='learn').length}/${ls.length} зачтено</span></h3><div class="wl">${ls.map(L=>{const st=lstat(L);return`<div class="wi" data-a="lesson" data-v="${L.id}"><div><b>Урок ${L.n} · ${L.ws.length} слов</b><span>${L.ws.slice(0,3).map(w=>esc(w.en)).join(', ')}…</span></div><span class="badge ${st.c}">${st.t}</span></div>`}).join('')}</div>`}).join('')}
+ <button class="btn ghost wide" style="margin-top:18px" data-a="go" data-v="learn">📚 Весь словарь</button>`;
+},
+learn(){
+ main.innerHTML=topBar('path','<b>Словарь</b>')+`<div class="chips">${[['all','Все'],...Object.entries(CATS)].map(([k,n])=>`<button class="chip ${learnCat===k?'on':''}" data-a="cat" data-v="${k}">${n}</button>`).join('')}</div>
+ <input id="sq" placeholder="Поиск: английский или русский" value="${esc(learnQ)}"><div class="row"><button class="btn" data-a="cards" data-v="${learnCat}">🃏 Карточки по разделу</button></div><h3 id="cnt"></h3><div class="wl" id="wl"></div>`;
+ const draw=()=>{const q=learnQ.toLowerCase();const l=W.filter(w=>(learnCat==='all'||w.cat===learnCat)&&(!q||w.en.toLowerCase().includes(q)||w.ru.toLowerCase().includes(q)));$('#cnt').textContent=`${l.length} слов · нажми на слово, чтобы открыть`;$('#wl').innerHTML=l.map(w=>`<div class="wi" data-a="word" data-v="${w.id}"><div><b>${esc(w.en)}</b><span>${esc(w.ru)}</span></div>${dots(w)}</div>`).join('')};
+ $('#sq').oninput=e=>{learnQ=e.target.value;draw()};draw();
+},
+games(){
+ const g=[['quiz','🧠','Викторина','перевод и определения',S.best.quiz],['gap','✍️','Пропуски','вставь слово в предложение',S.best.gap],['spell','🔤','Собери слово','из перемешанных букв',S.best.spell],['match','🧩','Найди пару','на время',S.rec.match?S.rec.match+' с':''],['sprint','⚡','Спринт','60 секунд: верно/неверно',S.rec.sprint?S.rec.sprint+' очк.':''],['write','⌨️','Диктант','пишешь слово сам',S.best.write],['conf','🪤','Ловушки','salary vs wage, resign vs retire…',S.best.conf],['order','🪜','Этапы найма','расставь по порядку',S.best.order],['phr','🎤','Фразы собеседования','как говорить на интервью',S.best.phr]];
+ main.innerHTML=`<h2>Игры</h2><p class="mut small" style="margin-top:-4px">Нажми на игру — выберешь темы, уроки и сколько слов тренировать. Слабые слова попадаются чаще.</p><div class="ggrid">${g.map(x=>`<button class="gc" data-a="game" data-v="${x[0]}"><div class="e">${x[1]}</div><b>${x[2]}</b><span>${x[3]}</span>${x[4]!==undefined&&x[4]!==''?`<em>Рекорд: ${typeof x[4]==='number'?x[4]+'%':x[4]}</em>`:''}</button>`).join('')}</div>`;
+
+},
+exam(){
+ main.innerHTML=`<h2>Итоговый тест</h2><div class="card"><p style="margin-top:0">25 вопросов из всех разделов: перевод в обе стороны, определения, пропуски, письменные ответы и «ловушки». Подсказок и проверки по ходу нет — как на настоящей контрольной. В конце — процент, оценка и работа над ошибками.</p>
+ <table class="scale"><tr><td class="gr5">86–100%</td><td>Отлично (5)</td></tr><tr><td>70–85%</td><td>Хорошо (4)</td></tr><tr><td>50–69%</td><td>Удовлетворительно (3)</td></tr><tr><td class="gr2">0–49%</td><td>Неудовлетворительно (2)</td></tr></table>
+ <button class="btn wide" data-a="exam">Начать тест</button></div>
+ ${S.exams.length?`<h3>История</h3>`+S.exams.slice(0,10).map(e=>{const g=grade(e.p);return`<div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px"><span class="mut small">${new Date(e.d).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span><b class="${g[2]}">${e.p}% · ${g[1]}</b></div>`}).join(''):''}`;
+},
+theory(){
+ main.innerHTML=`<h2>Теория</h2>
+ <details open><summary>🪜 Процесс найма (recruitment process)</summary><div class="in"><div class="ordlist">${STAGES.map(s=>`<div>${s[0]}<br><span class="mut small">${s[1]}</span></div>`).join('')}</div></div></details>
+ <details><summary>📋 Виды занятости</summary><div class="in"><table>
+ <tr><td>full-time</td><td>полный день, ~40 ч/нед</td></tr><tr><td>part-time</td><td>неполный день</td></tr><tr><td>permanent</td><td>бессрочно</td></tr><tr><td>temporary</td><td>временно, на срок</td></tr><tr><td>freelance</td><td>на разных клиентов</td></tr><tr><td>self-employed</td><td>на себя, свой бизнес</td></tr><tr><td>shift work</td><td>посменно</td></tr><tr><td>flexitime</td><td>гибкий график</td></tr><tr><td>remote work</td><td>удалённо</td></tr></table></div></details>
+ <details><summary>📄 Структура CV</summary><div class="in"><table><tr><td>Personal details</td><td>имя, телефон, email</td></tr><tr><td>Profile / Summary</td><td>2–3 строки о себе и цели</td></tr><tr><td>Work experience</td><td>опыт, с последнего места</td></tr><tr><td>Education</td><td>образование</td></tr><tr><td>Skills</td><td>языки, компьютер, soft skills</td></tr><tr><td>Interests</td><td>увлечения</td></tr><tr><td>References</td><td>рекомендации (available on request)</td></tr></table><p class="small mut">К CV прилагают <b>cover letter</b> — зачем вам эта работа и чем вы полезны.</p></div></details>
+ <details><summary>🚪 Как уходят с работы</summary><div class="in"><table><tr><td>resign / quit</td><td>сам, по собственному желанию (сначала give notice)</td></tr><tr><td>retire</td><td>по возрасту, на пенсию</td></tr><tr><td>be fired / dismissed / get the sack</td><td>уволили за проступок</td></tr><tr><td>be made redundant / laid off</td><td>сокращение, не по вине работника (+ severance pay)</td></tr></table></div></details>
+ <details><summary>🎤 Фразы для собеседования</summary><div class="in"><table>${PHR.map(p=>`<tr><td><span data-a="say" data-v="${esc(p[0])}" style="cursor:pointer">🔊 ${esc(p[0])}</span></td><td>${esc(p[1])}</td></tr>`).join('')}</table></div></details>
+ <details><summary>🪤 Ловушки</summary><div class="in"><table><tr><td>employer / employee</td><td>-er нанимает, -ee нанят</td></tr><tr><td>salary / wage</td><td>оклад в месяц / оплата за час</td></tr><tr><td>resign / retire</td><td>по желанию / на пенсию</td></tr><tr><td>fire / make redundant</td><td>за вину / сокращение</td></tr><tr><td>job / work / career</td><td>a job (исчисл.) / work (неисчисл.) / весь путь</td></tr><tr><td>apply for / apply to</td><td>на должность / в компанию</td></tr><tr><td>probation / promotion</td><td>испытательный срок / повышение</td></tr><tr><td>experience</td><td>опыт работы — без -s</td></tr></table></div></details>
+ <details><summary>🧠 Как запоминать слова</summary><div class="in"><b>Интервальное повторение.</b> Повторяй через 1, 3, 7 дней — «Учить слабые слова» делает это за тебя.<br><br><b>Ассоциации.</b> На каждой карточке есть 💡: corny, но работает (dead line — «мёртвая линия»).<br><br><b>Семьи слов.</b> employ → employer / employee / employment / unemployed / unemployment.<br><br><b>Предложения о себе.</b> «I'm going to apply for a part-time job as a trainee in an HR department».<br><br><b>Вслух.</b> Жми 🔊 и повторяй — так слово запоминается и на слух.<br><br><b>Активное вспоминание.</b> Диктант и «Собери слово» полезнее, чем просто читать список.</div></details>`;
+}};
+
+const GMETA={quiz:['🧠','Викторина',1,1,0,1],gap:['✍️','Пропуски',1,1,0,1],spell:['🔤','Собери слово',1,1,0,1],match:['🧩','Найди пару',1,1,0,1],sprint:['⚡','Спринт',1,0,0,1],write:['⌨️','Диктант',1,1,0,1],conf:['🪤','Ловушки',0,1,CONF.length],phr:['🎤','Фразы собеседования',0,1,PHR.length],order:['🪜','Этапы найма',0,0]};
+const GDESC={quiz:{e:'Перевод: выбор из 3 вариантов и «верно/неверно».',m:'4 похожих варианта, перевод в обе стороны и определения.',h:'Без вариантов: пишешь слово сам — по переводу или по английскому определению.'},
+ gap:{e:'Выбор из 3 вариантов, есть перевод-подсказка.',m:'Выбор из 4 + ввод слова с подсказкой.',h:'Вводишь сам: только контекст и количество букв.'},
+ spell:{e:'Первая треть слова уже собрана.',m:'Обычный режим.',h:'Среди букв есть 3 лишние.'},
+ match:{e:'Раунды по 4 пары: слово ↔ перевод.',m:'Раунды по 6 пар.',h:'Слово ↔ английское определение.'},
+ sprint:{e:'90 секунд, неверные переводы из других тем.',m:'60 секунд, неверные переводы похожие.',h:'45 секунд, ошибка −5 очков.'},
+ write:{e:'Перевод + первая буква и число букв.',m:'Перевод + определение.',h:'Только русский перевод — никаких подсказок.'}};
+function setup(g){
+ const [e,t,scope,count,max,diff]=GMETA[g];if(!scope&&!count){G={ws:W,back:'games'};return GAMES[g]()}
+ const gs=S.gsel||{ls:LESSONS.map(L=>L.id),n:10};let sel=new Set(gs.ls.filter(id=>LESSONS.some(L=>L.id===id))),n=gs.n,d=gs.d||'m';
+ const o=sheet('<div id="su"></div>'),su=o.querySelector('#su');
+ const avail=()=>scope?LESSONS.filter(L=>sel.has(L.id)).reduce((s,L)=>s+L.ws.length,0):max;
+ function draw(){const a=avail();const all=sel.size===LESSONS.length;
+  su.innerHTML=`<h2>${e} ${t}</h2>${scope?`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b>Что учим</b><button class="chip ${all?'on':''}" data-s="all">${all?'✓ ':''}Все разделы</button></div>
+  ${Object.entries(CATS).map(([c,nm])=>{const ls=LESSONS.filter(L=>L.cat===c),on=ls.every(L=>sel.has(L.id));return`<div style="margin-top:14px"><button class="chip ${on?'on':''}" data-s="cat:${c}" style="font-weight:800">${on?'✓ ':''}${nm}</button><div class="chips" style="flex-wrap:wrap;margin:7px 0 0 10px">${ls.map(L=>`<button class="chip ${sel.has(L.id)?'on':''}" data-s="l:${L.id}">Урок ${L.n} · ${L.ws.length} сл.</button>`).join('')}</div></div>`}).join('')}`:''}
+  ${count?`<b style="display:block;margin-top:16px">Сколько ${scope?'слов':'вопросов'}</b><div class="chips" style="flex-wrap:wrap;margin-top:7px">${[5,10,15,20,25,30,40,50].filter(x=>x<a).map(x=>`<button class="chip ${n===x?'on':''}" data-n="${x}">${x}</button>`).join('')}<button class="chip ${!n||n>=a?'on':''}" data-n="0">Все (${a})</button></div>`:''}
+  ${diff?`<b style="display:block;margin-top:16px">Сложность</b><div class="chips" style="margin-top:7px">${['e','m','h'].map(k=>`<button class="chip ${d===k?'on':''}" data-d="${k}">${LVN[k]}</button>`).join('')}</div><div class="lvd">${GDESC[g][d]}</div>`:''}
+  ${scope&&!count?'<p class="small mut">Время спринта зависит от сложности — слова берутся из выбранных разделов.</p>':''}
+  <p class="small mut" style="margin:14px 0 0">${scope?(a?`Выбрано слов: <b>${a}</b>${count?` · в игре будет: <b>${n&&n<a?n:a}</b>`:''}`:'Выбери хотя бы один урок'):''}</p>
+  <button class="btn wide" id="gogo" ${a?'':'disabled'}>▶ Начать</button><button class="btn ghost wide" data-close>Отмена</button>`}
+ su.onclick=ev=>{const s=ev.target.closest('[data-s]'),nb=ev.target.closest('[data-n]'),db=ev.target.closest('[data-d]');if(db){d=db.dataset.d;draw()}
+  if(s){const v=s.dataset.s;if(v==='all')sel=sel.size===LESSONS.length?new Set():new Set(LESSONS.map(L=>L.id));else if(v.startsWith('cat:')){const ls=LESSONS.filter(L=>L.cat===v.slice(4)),on=ls.every(L=>sel.has(L.id));ls.forEach(L=>on?sel.delete(L.id):sel.add(L.id))}else{const id=v.slice(2);sel.has(id)?sel.delete(id):sel.add(id)}draw()}
+  if(nb){n=+nb.dataset.n;draw()}
+  if(ev.target.closest('#gogo')){const a=avail();S.gsel={ls:[...sel],n,d};LV=diff?d:'m';save();G={ws:scope?W.filter(w=>LESSONS.some(L=>sel.has(L.id)&&L.ws.includes(w))):W,n:n&&n<a?n:a,back:'games'};o.remove();GAMES[g]()}};
+ draw()}
+function today(){
+ const due=LESSONS.filter(L=>lstat(L).s==='due'),nx=LESSONS.find(L=>['new','learn'].includes(lstat(L).s));
+ return`<div class="card"><b>📅 Сегодня</b><div class="small mut" style="margin:4px 0 4px">${due.length?`Пора повторить уроков: <b style="color:var(--bad)">${due.length}</b> — начни с них. `:'Повторений на сегодня нет. '}${nx?`Следующий новый: ${CATS[nx.cat]}, урок ${nx.n}.`:'Все уроки зачтены — время для итогового теста!'}</div>
+ ${due.slice(0,3).map(L=>`<button class="btn wide" data-a="lesson" data-v="${L.id}">🔁 Повторить: ${CATS[L.cat]} · урок ${L.n}</button>`).join('')}${nx?`<button class="btn ${due.length?'ghost':''} wide" data-a="lesson" data-v="${nx.id}">▶ ${lstat(nx).s==='learn'?'Продолжить':'Начать'}: ${CATS[nx.cat]} · урок ${nx.n}</button>`:''}</div>`}
+function wordSheet(w){sheet(`<div class="mut small">${CATS[w.cat]}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div class="big">${esc(w.en)}</div><button class="say" style="position:static" data-a="say" data-v="${esc(w.en)}">🔊</button></div><div style="font-size:19px;font-weight:700;color:var(--acc);margin:4px 0 12px">${esc(w.ru)}</div><div class="mut">${esc(w.def)}</div><p><i>${showEx(w)}</i></p>${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px"><span class="small mut">Уровень: ${lvl(w)}/5</span>${dots(w)}</div><button class="btn wide ghost" data-close>Закрыть</button>`)}
+
+/* ---------- questions ---------- */
+const expW=w=>`<b>${esc(w.en)}</b> — ${esc(w.ru)}<br><i>${showEx(w)}</i>${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}`;
+let LV='m';const LVN={e:'Лёгкий',m:'Средний',h:'Сложный'};
+const pat=(s,first)=>'<span class="pat">'+s.split('').map((c,i)=>c===' '?'&nbsp;&nbsp;':(first&&(i===0||s[i-1]===' ')?esc(c):'_')).join('')+'</span>';
+const nOpt=()=>LV==='e'?2:3;
+const synAlt=w=>W.filter(x=>x!==w&&isSyn(x,w)).flatMap(x=>variants(x.en));
+const Q={
+ enru:w=>({kind:'mc',hint:'Выбери перевод',q:`<span class="big">${esc(w.en)}</span>`,say:w.en,opts:shuffle([w.ru,...distract(w,'ru',nOpt(),LV!=='e')]),ans:w.ru,w,exp:expW(w)}),
+ ruen:w=>({kind:'mc',hint:'Выбери английское слово',q:`<span class="big">${esc(w.ru)}</span>`,opts:shuffle([w.en,...distract(w,'en',nOpt(),LV!=='e')]),ans:w.en,w,exp:expW(w)}),
+ def:w=>({kind:'mc',hint:'Какое слово подходит под определение?',q:esc(w.def),opts:shuffle([w.en,...distract(w,'en',nOpt(),LV!=='e')]),ans:w.en,w,exp:expW(w)}),
+ gap:w=>({kind:'mc',hint:'Вставь пропущенное слово',q:gapEx(w)+(LV==='e'?`<div class="sub">подсказка: ${esc(w.ru)}</div>`:''),opts:shuffle([w.en,...distract(w,'en',nOpt(),false)]),ans:w.en,w,exp:expW(w)}),
+ type:w=>{const v=variants(w.en);return{kind:'type',hint:LV==='h'?'Вспомни и напиши — без подсказок':'Напиши по-английски',q:`<span class="big">${esc(w.ru)}</span>${LV!=='h'?`<div class="sub">${esc(w.def)}</div>`:''}${LV==='e'?`<div class="sub">${pat(v[0],true)}</div>`:''}`,acc:v,show:w.en,w,exp:expW(w)}},
+ deftype:w=>{const v=variants(w.en);return{kind:'type',hint:'Угадай слово по определению и напиши',q:`<div class="qtext">${esc(w.def)}</div><div class="sub">${pat(v[0],LV!=='h')}</div>`,acc:v,alt:synAlt(w),altNote:'Засчитано — это синоним. Ожидалось: ',show:w.en,w,exp:expW(w)}},
+ gaptype:w=>{const a=gapAns(w);return{kind:'type',hint:LV==='h'?'Догадайся по контексту и впиши слово':'Впиши слово в нужной форме',q:gapEx(w)+(LV==='h'?`<div class="sub">${pat(a,false)}</div>`:`<div class="sub">подсказка: ${esc(w.ru)}</div>`+(LV==='e'?`<div class="sub">${pat(a,true)}</div>`:'')),acc:[norm(a)],alt:variants(w.en),show:a,w,exp:expW(w)}},
+ tf:w=>{const t=Math.random()<.5;const sh=t?w.ru:distract(w,'ru',1)[0];return{kind:'mc',hint:'Верно ли переведено?',q:`<span class="big">${esc(w.en)}</span><div style="font-size:19px;color:var(--acc);font-weight:700;margin-top:8px">= ${esc(sh)}</div>`,say:w.en,opts:['✓ Верно','✗ Неверно'],ans:t?'✓ Верно':'✗ Неверно',w,exp:expW(w)}},
+ spell:w=>({kind:'spell',hint:'Собери слово из букв',q:`<span class="big">${esc(w.ru)}</span><div class="sub">${esc(w.def)}</div>`,show:w.en,w,exp:expW(w)}),
+ phrase:p=>({kind:'mc',hint:'Фраза с собеседования — перевод?',q:esc(p[0]),say:p[0],opts:shuffle([p[1],...shuffle(PHR.filter(x=>x!==p)).slice(0,3).map(x=>x[1])]),ans:p[1],exp:''})
+};
+function checkType(q,val){const v=norm(val);if(!v)return null;if(q.acc.includes(v))return{ok:true};if(q.alt&&q.alt.includes(v))return{ok:true,note:(q.altNote||'Засчитано, но в этом предложении нужна форма: ')+q.show};if(q.acc.some(a=>a.length>4&&lev(a,v)<=1))return{ok:true,note:'Почти! Опечатка — правильно пишется: '+q.show};return{ok:false}}
+
+/* ---------- quiz engine ---------- */
+function runQuiz(title,qs,opt={}){
+ const back=opt.back||'games';let i=0,score=0,wrong=[];
+ function step(){
+  if(i>=qs.length)return end();const q=qs[i];
+  main.innerHTML=topBar(back,`<div class="bar"><i style="width:${i/qs.length*100}%"></i></div><b class="small">${i+1}/${qs.length}</b>`)+`<div class="card qcard"><div class="hint">${q.hint}</div><div class="qtext">${q.q}</div>${q.say?`<button class="say" data-a="say" data-v="${esc(q.say)}">🔊</button>`:''}</div><div id="ans"></div><div id="fb"></div>`;
+  const ans=$('#ans');
+  if(q.kind==='mc'){
+   ans.innerHTML=q.opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join('');
+   ans.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(ans.dataset.done)return;ans.dataset.done=1;const o=q.opts[+b.dataset.k],ok=o===q.ans;
+    if(opt.exam)b.classList.add('sel');else{b.classList.add(ok?'ok':'bad');if(!ok)ans.querySelectorAll('.opt').forEach(x=>{if(q.opts[+x.dataset.k]===q.ans)x.classList.add('ok')})}done(ok,o)});
+  }else if(q.kind==='spell'){
+   const L=shuffle([...q.show.split(''),...decoys()]).map(c=>({c,used:false}));let built=[];const pre=preN(q.show);for(let k=0;k<pre;k++){const t=L.find(t=>!t.used&&t.c===q.show[k]);t.used=true;built.push(t)}
+   const draw=(cls='')=>{const fin=!!ans.dataset.done;ans.innerHTML=`<div class="slots ${cls}">${q.show.split('').map((_,k)=>`<span class="slot ${built[k]?'f':''}">${built[k]?built[k].c:''}</span>`).join('')}</div><div class="tiles">${L.map((t,k)=>`<button class="tile" data-k="${k}" ${t.used||fin?'disabled':''}>${t.c}</button>`).join('')}</div>${fin?'':'<div class="row"><button class="btn ghost" id="bs">⌫ Стереть</button><button class="btn ghost" id="gu">Не знаю</button></div>'}`;
+    ans.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{if(ans.dataset.done)return;const t=L[+b.dataset.k];t.used=true;built.push(t);if(built.length===q.show.length){const s=built.map(t=>t.c).join(''),ok=s===q.show;ans.dataset.done=1;if(!ok)built=q.show.split('').map(c=>({c}));draw(ok?'win':'lose');if(ok)speak(q.show);done(ok,s)}else draw()});
+    if(!ans.dataset.done){$('#bs').onclick=()=>{if(built.length<=pre)return;const t=built.pop();if(t)t.used=false;draw()};$('#gu').onclick=()=>{ans.dataset.done=1;built=q.show.split('').map(c=>({c}));draw('lose');done(false,'—')}}};
+   draw();
+  }else{
+   ans.innerHTML=`<form id="tf" class="tform"><input id="ti" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Ответ по-английски"><button class="btn">OK</button></form><button class="link" id="idk">Не знаю</button>`;
+   const ti=$('#ti');setTimeout(()=>ti.focus(),60);
+   $('#tf').onsubmit=e=>{e.preventDefault();if(ans.dataset.done)return;const r=checkType(q,ti.value);if(!r)return;ans.dataset.done=1;ti.disabled=true;if(!opt.exam)ti.classList.add(r.ok?'ok':'bad');done(r.ok,ti.value,r.note)};
+   $('#idk').onclick=()=>{if(ans.dataset.done)return;ans.dataset.done=1;done(false,'—')};
+  }
+ }
+ function done(ok,given,note){
+  const q=qs[i];if(ok)score++;else wrong.push({q,given});if(q.w)mark(q.w.en,ok);
+  if(opt.exam){setTimeout(()=>{i++;step()},300);return}
+  $('#fb').innerHTML=`<div class="fb ${ok?'okb':'badb'}"><b>${ok?pick(PRAISE):'Неверно. Правильно: '+esc(q.kind==='mc'?q.ans:q.show)}</b>${note?`<div>${esc(note)}</div>`:''}${q.exp?`<div class="exp">${q.exp}</div>`:''}</div><button class="btn wide" id="nx">Дальше →</button>`;
+  $('#nx').onclick=()=>{i++;step()};$('#nx').scrollIntoView({behavior:'smooth',block:'nearest'});
+ }
+ function end(){
+  const p=Math.round(score/qs.length*100);
+  if(opt.exam){S.exams.unshift({d:Date.now(),p});S.exams=S.exams.slice(0,30)}
+  if(opt.key)S.best[opt.key]=Math.max(S.best[opt.key]||0,p);save();
+  const ex=opt.after?opt.after(p):null;
+  result(title,p,`${score} из ${qs.length} верно`,wrong.map(x=>`<div class="card mist"><div class="mut small">${esc(strip(x.q.q))}</div><div>Твой ответ: <s>${esc(x.given)}</s></div><div>Правильно: <b>${esc(x.q.kind==='mc'?x.q.ans:x.q.show)}</b></div>${x.q.w&&x.q.w.tip?`<div class="tip">💡 ${esc(x.q.w.tip)}</div>`:''}</div>`).join(''),opt.restart,back,opt.exam,ex);
+ }
+ step();
+}
+function result(title,p,line,mist,restart,back='games',showGrade=true,ex=null){
+ const g=grade(p);
+ main.innerHTML=`<div class="card center" style="padding:24px">${ring(p,130)}<h2 class="${g[2]}" style="margin-top:12px">${g[0]}${showGrade?' · '+g[1]:''}</h2><div class="mut">${title} · ${line}</div></div>${ex&&ex.html?ex.html:''}${ex&&ex.btn?'<button class="btn wide" id="exb" style="margin-bottom:8px">'+ex.btn.label+'</button>':''}${mist?`<h3>Работа над ошибками</h3>${mist}<p class="small mut">Эти слова потеряли баллы и будут чаще попадаться в карточках и играх.</p>`:'<p class="center">Без единой ошибки! 🎉</p>'}<div class="row"><button class="btn" id="again">Ещё раз</button><button class="btn ghost" data-a="go" data-v="${back}">В меню</button></div>`;
+ $('#again').onclick=restart;if(ex&&ex.btn)$('#exb').onclick=ex.btn.fn;window.scrollTo(0,0);
+}
+function startExam(){LV='m';const ws=shuffle(W).slice(0,21);const t=['enru','enru','enru','enru','enru','ruen','ruen','ruen','ruen','ruen','def','def','def','def','gap','gap','gap','gap','type','type','type'];const qs=ws.map((w,k)=>Q[t[k]](w));shuffle(CONF).slice(0,4).forEach(c=>qs.push(Q.conf(c)));runQuiz('Итоговый тест',shuffle(qs),{exam:true,restart:startExam,back:'exam'})}
+
+/* ---------- flashcards ---------- */
+function cards(list,co={}){
+ const back=co.back||'learn';const ws=co.all?shuffle(list):pickWords(Math.min(15,list.length),list);let i=0,know=0,miss=[];
+ function show(){
+  if(i>=ws.length){const p=Math.round(know/ws.length*100);return result(co.title||'Карточки',p,`знал ${know} из ${ws.length}`,miss.map(w=>`<div class="card mist"><b>${esc(w.en)}</b> — ${esc(w.ru)}${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}</div>`).join(''),()=>cards(list,co),back,false,co.next?{btn:co.next}:null)}
+  const w=ws[i],ruFirst=i%3===2;
+  main.innerHTML=topBar(back,`<div class="bar"><i style="width:${i/ws.length*100}%"></i></div><b class="small">${i+1}/${ws.length}</b>`)+`<div class="flip" id="fc"><button class="say" data-a="say" data-v="${esc(w.en)}">🔊</button><div class="front"><div class="mut small">${CATS[w.cat]} · ${ruFirst?'вспомни по-английски':'вспомни перевод'}</div><div class="big" style="margin:18px 0">${esc(ruFirst?w.ru:w.en)}</div><div class="mut small">нажми, чтобы перевернуть</div></div><div class="back"><div class="big">${esc(w.en)}</div><div class="ru">${esc(w.ru)}</div><div class="def">${esc(w.def)}</div><div class="ex">${showEx(w)}</div>${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}</div></div><div class="row" id="cb" style="visibility:hidden"><button class="btn bad" id="no">😕 Не знал</button><button class="btn good" id="yes">😎 Знал</button></div>`;
+  $('#fc').onclick=e=>{if(e.target.closest('.say'))return;$('#fc').classList.add('on');$('#cb').style.visibility='visible'};
+  $('#yes').onclick=()=>{know++;mark(w.en,true);i++;show()};$('#no').onclick=()=>{miss.push(w);mark(w.en,false);i++;show()};
+ }
+ show();
+}
+
+/* ---------- games ---------- */
+const GAMES={
+ quiz:()=>runQuiz('Викторина',shuffle(pickWords(G.n||10,G.ws).map((w,k)=>(T=>T[Math.random()*T.length|0])(LV==='e'?[Q.enru,Q.tf,Q.ruen]:LV==='h'?[Q.deftype,Q.type]:[Q.enru,Q.ruen,Q.def,Q.tf])(w))),{restart:GAMES.quiz,key:'quiz',back:G.back}),
+ gap:()=>runQuiz('Пропуски',pickWords(G.n||10,G.ws).map((w,k)=>LV==='e'?Q.gap(w):LV==='h'?Q.gaptype(w):Math.random()<.6?Q.gap(w):Q.gaptype(w)),{restart:GAMES.gap,key:'gap',back:G.back}),
+ write:()=>runQuiz('Диктант',pickWords(G.n||10,G.ws).map(Q.type),{restart:GAMES.write,key:'write',back:G.back}),
+ conf:()=>runQuiz('Ловушки',shuffle(CONF).slice(0,G.n||10).map(Q.conf),{restart:GAMES.conf,key:'conf'}),
+ phr:()=>runQuiz('Фразы собеседования',shuffle(PHR).slice(0,G.n||10).map(Q.phrase),{restart:GAMES.phr,key:'phr'}),
+ spell(){
+  const ok1=w=>/^[a-z]+$/.test(w.en)&&w.en.length<=12;let pool=G.ws.filter(ok1);if(pool.length<4){const cs=new Set(G.ws.map(w=>w.cat));pool=W.filter(w=>ok1(w)&&cs.has(w.cat))}const ws=pickWords(G.n||8,pool);let i=0,perfect=0,miss=[];
+  function round(){
+   if(i>=ws.length){const p=Math.round(perfect/ws.length*100);S.best.spell=Math.max(S.best.spell||0,p);save();return result('Собери слово',p,`${perfect} из ${ws.length} без подсказок`,miss.map(w=>`<div class="card mist"><b>${esc(w.en)}</b> — ${esc(w.ru)}${w.tip?`<div class="tip">💡 ${esc(w.tip)}</div>`:''}</div>`).join(''),GAMES.spell,G.back)}
+   const w=ws[i];const L=shuffle([...w.en.split(''),...decoys()]).map(c=>({c,used:false}));let built=[],flawed=false,hints=0,lock=false;const pre=preN(w.en);const prefill=()=>{L.forEach(t=>t.used=false);built=[];for(let k=0;k<pre;k++){const t=L.find(t=>!t.used&&t.c===w.en[k]);t.used=true;built.push(t)}};prefill();
+   function draw(cls=''){
+    main.innerHTML=topBar(G.back,`<div class="bar"><i style="width:${i/ws.length*100}%"></i></div><b class="small">${i+1}/${ws.length}</b>`)+`<div class="card qcard"><div class="hint">Собери слово из букв</div><div class="big">${esc(w.ru)}</div><div class="sub">${esc(w.def)}</div></div><div class="slots ${cls}" id="sl">${w.en.split('').map((_,k)=>`<span class="slot ${built[k]?'f':''}">${built[k]?built[k].c:''}</span>`).join('')}</div><div class="tiles">${L.map((t,k)=>`<button class="tile" data-k="${k}" ${t.used?'disabled':''}>${t.c}</button>`).join('')}</div><div class="row"><button class="btn ghost" id="bs">⌫</button><button class="btn ghost" id="hn">💡</button><button class="btn ghost" id="sk">Сдаюсь</button></div>`;
+    main.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{if(lock)return;const t=L[+b.dataset.k];t.used=true;built.push(t);built.length===w.en.length?check():draw()});
+    $('#bs').onclick=()=>{if(lock||built.length<=pre)return;const t=built.pop();if(t)t.used=false;draw()};
+    $('#hn').onclick=()=>{if(lock)return;flawed=true;hints++;L.forEach(t=>t.used=false);built=[];for(let k=0;k<Math.min(pre+hints,w.en.length);k++){const t=L.find(t=>!t.used&&t.c===w.en[k]);t.used=true;built.push(t)}built.length===w.en.length?check():draw()};
+    $('#sk').onclick=()=>{if(lock)return;lock=true;flawed=true;built=w.en.split('').map(c=>({c}));draw('lose');mark(w.en,false);miss.push(w);setTimeout(()=>{i++;round()},1600)};
+   }
+   function check(){const ok=built.map(t=>t.c).join('')===w.en;if(ok){lock=true;draw('win');speak(w.en);if(!flawed)perfect++;else miss.push(w);mark(w.en,!flawed);setTimeout(()=>{i++;round()},1000)}else{flawed=true;draw('lose');$('#sl').classList.add('shake');lock=true;setTimeout(()=>{lock=false;prefill();draw()},700)}}
+   draw();
+  }
+  round();
+ },
+ match(){
+  const all=pickWords(G.n||6,G.ws.length>=3?G.ws:W);const per=LV==='e'?4:LV==='h'?5:6;const R=Math.ceil(all.length/per);const rounds=[...Array(R)].map((_,k)=>all.slice(Math.round(k*all.length/R),Math.round((k+1)*all.length/R)));
+  let r=0,err=0;const errs=new Set();const t0=performance.now();let iv=null;
+  function round(){
+   const ws=rounds[r];const T=shuffle([...ws.map(w=>({w,t:w.en,s:'en'})),...ws.map(w=>({w,t:LV==='h'?w.def:w.ru,s:'ru'}))]);let sel=null,done=0;
+   main.innerHTML=topBar(G.back,`<b style="flex:1">🧩 Найди пару${R>1?` · раунд ${r+1}/${R}`:''}</b><b id="tm">${((performance.now()-t0)/1000).toFixed(1)} с</b>`)+`<p class="mut small" style="margin-top:0">Нажми слово, затем его ${LV==='h'?'определение':'перевод'}.</p><div class="mgrid">${T.map((x,k)=>`<button class="mt ${x.s}${LV==='h'&&x.s==='ru'?' df':''}" data-k="${k}">${esc(x.t)}</button>`).join('')}</div>`;
+   if(!iv)iv=setInterval(()=>{const e=$('#tm');if(!e){clearInterval(iv);iv=null;return}e.textContent=((performance.now()-t0)/1000).toFixed(1)+' с'},100);
+   main.querySelectorAll('.mt').forEach(b=>b.onclick=()=>{const x=T[+b.dataset.k];
+    if(!sel){sel={b,x};b.classList.add('sel');return}
+    if(sel.b===b){b.classList.remove('sel');sel=null;return}
+    if(sel.x.s===x.s){sel.b.classList.remove('sel');sel={b,x};b.classList.add('sel');return}
+    if(sel.x.w===x.w){sel.b.classList.add('gone');b.classList.add('gone');mark(x.w.en,!errs.has(x.w.en));speak(x.w.en);done++;
+     if(done===ws.length){r++;if(r<R)setTimeout(round,350);else{clearInterval(iv);iv=null;const sec=+((performance.now()-t0)/1000).toFixed(1);if(all.length>=6&&(!S.rec.match||sec<S.rec.match))S.rec.match=sec;save();const p=Math.max(0,Math.round(100-err/all.length*100));setTimeout(()=>result('Найди пару',p,`${all.length} слов · ${sec} с · ошибок: ${err}`,[...errs].map(en=>{const w=W.find(z=>z.en===en);return`<div class="card mist"><b>${esc(w.en)}</b> — ${esc(w.ru)}</div>`}).join(''),GAMES.match,G.back,false),400)}}}
+    else{err++;errs.add(sel.x.w.en);errs.add(x.w.en);const a=sel.b;a.classList.add('bad');b.classList.add('bad');setTimeout(()=>{a.classList.remove('bad','sel');b.classList.remove('bad')},450)}
+    sel=null});
+  }
+  round();
+ },
+ sprint(){
+  const DUR=LV==='e'?90:LV==='h'?45:60;let t=DUR,score=0,combo=0,right=0,total=0,cur,over=false;const errs=[];
+  main.innerHTML=topBar(G.back,`<div class="bar"><i id="tb" style="width:100%"></i></div><b id="tt">${DUR}</b>`)+`<div class="card center sp" id="spc"><div class="mut small">Перевод верный?</div><div class="big" id="se"></div><div class="ru2" id="sr"></div><div class="combo" id="cm"></div><div class="mut small" id="sc">Очки: 0</div></div><div class="row"><button class="btn bad" id="sn" style="padding:18px">✗ Неверно</button><button class="btn good" id="sy" style="padding:18px">✓ Верно</button></div><p class="center small mut">Каждые 5 верных подряд — множитель очков ×2, ×3…</p>`;
+  let prevW=null;const next=()=>{let w=pick(G.ws);if(G.ws.length>1)while(w===prevW)w=pick(G.ws);prevW=w;const truth=Math.random()<.5;cur={w,truth};$('#se').textContent=w.en;$('#sr').textContent=truth?w.ru:distract(w,'ru',1,LV!=='e')[0]};
+  const ans=v=>{if(over)return;total++;const ok=v===cur.truth;if(ok){right++;combo++;score+=10*(1+Math.floor(combo/5))}else{combo=0;errs.push(cur.w);if(LV==='h')score=Math.max(0,score-5)}mark(cur.w.en,ok);const c=$('#spc');c.classList.remove('ok','bad');void c.offsetWidth;c.classList.add(ok?'ok':'bad');setTimeout(()=>c&&c.classList.remove('ok','bad'),250);$('#sc').textContent='Очки: '+score;$('#cm').textContent=combo>=5?`×${1+Math.floor(combo/5)} комбо ${combo} 🔥`:'';next()};
+  $('#sy').onclick=()=>ans(true);$('#sn').onclick=()=>ans(false);
+  const kd=e=>{if(e.key==='ArrowRight')ans(true);if(e.key==='ArrowLeft')ans(false)};document.addEventListener('keydown',kd);
+  next();
+  const iv=setInterval(()=>{if(!$('#tt')){clearInterval(iv);document.removeEventListener('keydown',kd);return}t--;$('#tt').textContent=t;$('#tb').style.width=t/DUR*100+'%';if(t<=0){clearInterval(iv);over=true;document.removeEventListener('keydown',kd);const rec=score>S.rec.sprint;if(rec)S.rec.sprint=score;save();const p=total?Math.round(right/total*100):0;result('Спринт',p,`${score} очков${rec?' — новый рекорд! 🏆':' · рекорд '+S.rec.sprint}<br>${right} из ${total} верно`,[...new Set(errs)].map(w=>`<div class="card mist"><b>${esc(w.en)}</b> — ${esc(w.ru)}</div>`).join(''),GAMES.sprint,G.back,false)}},1000);
+ },
+ order(){
+  const items=shuffle(STAGES.map((s,k)=>({s,k})));let nextK=0,first=0,erred=false;
+  main.innerHTML=topBar('games',`<b>🪜 Этапы найма</b>`)+`<p class="mut small" style="margin-top:0">Нажимай этапы по порядку — от первого к последнему.</p><div class="ordlist" id="ol"></div><div id="op">${items.map((x,i)=>`<button class="ord" data-i="${i}">${esc(x.s[0])}<small>${esc(x.s[1])}</small></button>`).join('')}</div>`;
+  main.querySelectorAll('.ord').forEach(b=>b.onclick=()=>{const x=items[+b.dataset.i];
+   if(x.k===nextK){if(!erred)first++;erred=false;nextK++;b.remove();$('#ol').insertAdjacentHTML('beforeend',`<div>${esc(x.s[0])}</div>`);
+    if(nextK===STAGES.length){const p=Math.round(first/STAGES.length*100);S.best.order=Math.max(S.best.order||0,p);save();setTimeout(()=>result('Этапы найма',p,`${first} из ${STAGES.length} с первой попытки`,'',GAMES.order,'games',false),500)}}
+   else{erred=true;b.classList.add('bad','shake');setTimeout(()=>b.classList.remove('bad','shake'),400)}});
+ }
+};
+
+updPill();go('home');
+
+/* ---------- аккаунт Google + облако (Firebase) ---------- */
+let REF=null,USER=null,writing=false,again=false,timer=null,UNSUB=null,AUTH=null,PROV=null;
+const cloud=(t,tip)=>{const e=$('#cloud');if(e){e.textContent=t;e.title=tip}};
+function toast(m){const t=document.createElement('div');t.textContent=m;t.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;font:600 14px Manrope;z-index:30;max-width:90%;text-align:center';document.body.appendChild(t);setTimeout(()=>t.remove(),3500)}
+function syncSoon(){if(!REF)return;clearTimeout(timer);timer=setTimeout(push,1200)}
+async function push(){if(!REF)return;if(writing){again=true;return}writing=true;cloud('🔄','Сохраняю…');
+ try{await REF.set({state:JSON.stringify(S),t:S.t||Date.now()});cloud('☁️','Прогресс сохранён в аккаунте')}
+ catch(e){cloud('⚠️','Не удалось сохранить в облако — прогресс пока на этом устройстве')}
+ writing=false;if(again){again=false;push()}}
+function applyRemote(d){try{const r=JSON.parse(d.state);if(!r||typeof r!=='object')return;S=Object.assign(DEF(),r);try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}updPill();if(['home','path','learn','games','exam'].includes(VIEW)&&!document.querySelector('.overlay'))go(VIEW)}catch(e){}}
+const isGuest=()=>{try{return localStorage.getItem('emp-guest')==='1'}catch(e){return false}};
+VIEWS.login=()=>{$('#nav').style.display='none';main.innerHTML=`<div class="card center" style="padding:30px 20px;margin-top:30px"><div style="font-size:54px">💼</div><h2>Employment</h2><p class="mut">Тренажёр лексики по теме Employment.<br>Уроки, игры, тесты и повторение по расписанию.</p><button class="btn wide" data-a="login" style="display:flex;align-items:center;justify-content:center;gap:10px"><svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Войти через Google</button><p class="small mut">Прогресс будет сохраняться в аккаунте — на телефоне и на ПК одинаковый.</p><button class="link" data-a="guest">Продолжить без входа</button></div>`};
+ACT.login=()=>{if(!AUTH)return toast('Вход пока не настроен');AUTH.signInWithPopup(PROV).catch(e=>{const c=e&&e.code||'';if(/popup-blocked|operation-not-supported|web-storage-unsupported/.test(c))AUTH.signInWithRedirect(PROV);else if(!/popup-closed|cancelled-popup/.test(c))toast('Не получилось войти: '+(e.message||c))})};
+ACT.guest=()=>{try{localStorage.setItem('emp-guest','1')}catch(e){}$('#nav').style.display='';go('home')};
+ACT.logout=()=>{if(AUTH)AUTH.signOut()};
+const _home=VIEWS.home;VIEWS.home=()=>{$('#nav').style.display='';_home();main.insertAdjacentHTML('beforeend',USER?`<div class="card small" style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;gap:10px"><span>👤 ${esc(USER.displayName||USER.email||'Аккаунт')}<br><span class="mut">${esc(USER.email||'')}</span></span><button class="btn ghost" data-a="logout">Выйти</button></div>`:AUTH?`<div class="card small" style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;gap:10px"><span>Ты не вошёл — прогресс только на этом устройстве.</span><button class="btn" data-a="login">Войти</button></div>`:'')};
+(function initFirebase(){
+ const ready=typeof firebase!=='undefined'&&!String(firebaseConfig.apiKey).startsWith('ВСТАВЬ');
+ if(!ready){cloud('📱','Firebase не настроен — прогресс сохраняется только на этом устройстве');return}
+ firebase.initializeApp(firebaseConfig);AUTH=firebase.auth();PROV=new firebase.auth.GoogleAuthProvider();PROV.setCustomParameters({prompt:'select_account'});
+ const fs=firebase.firestore();AUTH.getRedirectResult().catch(e=>toast('Не получилось войти: '+(e.message||e.code)));
+ let first=true;
+ AUTH.onAuthStateChanged(async u=>{
+  if(UNSUB){UNSUB();UNSUB=null}REF=null;
+  if(!u){const was=!!USER;USER=null;cloud('👤','Вход не выполнен');
+   if(was){S=DEF();try{localStorage.removeItem(KEY);localStorage.removeItem('emp-guest')}catch(e){}updPill()}
+   if(was||(first&&!isGuest()))go('login');else if(first)go(VIEW);first=false;return}
+  USER=u;try{localStorage.removeItem('emp-guest')}catch(e){}
+  const ref=fs.collection('users').doc(u.uid);
+  try{cloud('🔄','Загружаю прогресс…');const snap=await ref.get();REF=ref;const d=snap.exists?snap.data():null;
+   if(d&&d.t>(S.t||0))applyRemote(d);else if(!d||(S.t||0)>d.t)push();else cloud('☁️','Прогресс сохранён в аккаунте');
+   UNSUB=ref.onSnapshot(s=>{const x=s.data();if(x&&!s.metadata.hasPendingWrites&&x.t>(S.t||0))applyRemote(x)},()=>{});
+  }catch(e){cloud('⚠️','Не удалось подключиться к облаку: '+(e.code||''))}
+  if(VIEW==='login'||first)go(VIEW==='login'?'home':VIEW);first=false;
+ });
+})();
+</script>
+</body>
+</html>
