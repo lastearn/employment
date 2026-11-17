@@ -1,9 +1,13 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // каждый пользователь читает и пишет только свой прогресс
     match /users/{userId} {
+      // каждый пользователь читает и пишет только свой прогресс
       allow read, write: if request.auth != null && request.auth.uid == userId;
+      // владелец сайта может только читать статистику всех пользователей
+      allow read: if request.auth != null
+                  && request.auth.token.email == 'lastearn3@gmail.com'
+                  && request.auth.token.email_verified == true;
     }
   }
 }

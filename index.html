@@ -759,18 +759,40 @@ function bookUnit(n){
 
 updPill();go('home');
 
+/* ---------- админка (только владелец) ---------- */
+function adminNav(){const nav=$('#nav');let b=nav.querySelector('[data-v="admin"]');if(isAdmin()&&!b)nav.insertAdjacentHTML('beforeend','<button data-a="go" data-v="admin"><span>🛡️</span>Админ</button>');if(!isAdmin()&&b)b.remove()}
+const ago=ts=>{if(!ts)return'—';const m=Math.round((Date.now()-ts)/6e4);if(m<2)return'только что';if(m<60)return m+' мин назад';const h=Math.round(m/60);if(h<24)return h+' ч назад';const d=Math.round(h/24);if(d===1)return'вчера';if(d<30)return d+' дн. назад';return new Date(ts).toLocaleDateString('ru-RU')};
+function userStats(d){let st={};try{st=JSON.parse(d.state||'{}')||{}}catch(e){}const m=st.m||{};const les=st.les||{},ex=st.exams||[];
+ return{pct:Math.round(W.reduce((s,w)=>s+(m[w.en]||0),0)/(W.length*5)*100),learned:W.filter(w=>(m[w.en]||0)>=4).length,passed:Object.values(les).filter(r=>r.stage>0).length,started:Object.keys(les).length,answers:st.answers||0,acc:st.answers?Math.round((st.correct||0)/st.answers*100):null,streak:(st.streak&&st.streak.n)||0,exams:ex.length,best:ex.length?Math.max(...ex.map(e=>e.p)):null,last:Math.max(d.seen||0,d.t||0),created:d.created||null,pharm:!!d.pharm,lessons:les}}
+VIEWS.admin=async()=>{
+ if(!isAdmin())return go('home');main.innerHTML='<h2>🛡️ Админка</h2><p class="mut">Загружаю пользователей…</p>';
+ try{const qs=await FSDB.collection('users').get();if(VIEW!=='admin')return;
+  const rows=qs.docs.map(x=>{const d=x.data();return{id:x.id,d,s:userStats(d)}}).sort((a,b)=>b.s.last-a.s.last);
+  const now=Date.now(),day=rows.filter(r=>now-r.s.last<864e5).length,week=rows.filter(r=>now-r.s.last<7*864e5).length,ans=rows.reduce((a,r)=>a+r.s.answers,0);
+  main.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><h2>🛡️ Админка</h2><button class="chip" data-a="go" data-v="admin">↻ Обновить</button></div><div class="stats"><div class="stat"><b>${rows.length}</b><span>всего</span></div><div class="stat"><b>${day}</b><span>за сутки</span></div><div class="stat"><b>${week}</b><span>за неделю</span></div></div><div class="small mut" style="margin:8px 0 14px">Ответов всего: ${ans}. Эта вкладка видна только тебе.</div>
+  ${rows.map(r=>{const p=r.d.profile||{},s=r.s,on=now-s.last<10*6e4;return`<div class="card" data-a="auser" data-v="${r.id}" style="cursor:pointer"><div style="display:flex;align-items:center;gap:10px"><div style="width:38px;height:38px;border-radius:50%;background:var(--acc2);color:var(--acc);display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">${esc((p.name||p.email||'?')[0].toUpperCase())}</div><div style="flex:1;min-width:0"><b>${esc(p.name||'Без имени')}</b>${r.id===USER.uid?' <span class="badge b-ok">это ты</span>':''}<div class="small mut" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.email||r.id.slice(0,10)+'…')}</div></div><div class="small" style="text-align:right;white-space:nowrap;color:${on?'var(--ok)':'var(--mut)'}">${on?'● онлайн':ago(s.last)}</div></div>
+   <div class="catbar" style="margin-top:10px"><div class="top"><span class="small">Прогресс Employment</span><span class="small">${s.pct}%</span></div><div class="bar"><i style="width:${s.pct}%"></i></div></div>
+   <div class="small mut" style="margin-top:8px">📚 выучено ${s.learned}/${W.length} · 🗺️ уроков ${s.passed}/${LESSONS.length} сдано${s.started>s.passed?` (+${s.started-s.passed} начато)`:''} · ✍️ ответов ${s.answers}${s.acc!=null?` (${s.acc}%)`:''} · 🔥 ${s.streak} · 📝 тест ${s.best!=null?s.best+'%':'—'}${s.pharm?' · 💊 фармакология':''}</div></div>`}).join('')||'<p class="mut">Пока никого.</p>'}`;
+  window.__ADM=rows;
+ }catch(e){main.innerHTML=`<h2>🛡️ Админка</h2><div class="card fb badb"><b>Нет доступа к списку пользователей</b><div class="small">${esc(e.code||e.message||e)}. Нужно обновить правила базы Firestore.</div></div>`}};
+ACT.auser=v=>{const r=(window.__ADM||[]).find(x=>x.id===v);if(!r)return;const p=r.d.profile||{},s=r.s;
+ sheet(`<h2 style="margin-top:0">${esc(p.name||'Без имени')}</h2><div class="small mut">${esc(p.email||r.id)}</div><table style="margin-top:12px"><tr><td>Последняя активность</td><td>${ago(s.last)}</td></tr><tr><td>Первый вход</td><td>${s.created?new Date(s.created).toLocaleString('ru-RU'):'—'}</td></tr><tr><td>Прогресс</td><td>${s.pct}%</td></tr><tr><td>Выучено слов</td><td>${s.learned} из ${W.length}</td></tr><tr><td>Ответов</td><td>${s.answers}${s.acc!=null?' · точность '+s.acc+'%':''}</td></tr><tr><td>Серия дней</td><td>${s.streak}</td></tr><tr><td>Итоговых тестов</td><td>${s.exams}${s.best!=null?' · лучший '+s.best+'%':''}</td></tr><tr><td>Фармакология</td><td>${s.pharm?'есть прогресс':'нет'}</td></tr></table>
+ <h3>Уроки</h3>${LESSONS.filter(L=>s.lessons[L.id]).map(L=>{const x=s.lessons[L.id];return`<div class="small" style="margin:4px 0">${CATS[L.cat]} · урок ${L.n}: <b>${x.best}%</b>, пройден ${x.runs} раз${x.stage>0?' ✓':''}</div>`}).join('')||'<div class="small mut">Ещё не начинал(а)</div>'}<button class="btn ghost wide" data-close>Закрыть</button>`)};
 /* ---------- аккаунт Google + облако (Firebase) ---------- */
+const ADMIN='lastearn3@gmail.com';let FSDB=null;
+const isAdmin=()=>!!(USER&&USER.email===ADMIN);
+const prof=()=>USER?{name:USER.displayName||'',email:USER.email||'',photo:USER.photoURL||''}:{};
 let REF=null,USER=null,writing=false,again=false,timer=null,UNSUB=null,AUTH=null,PROV=null;
 const cloud=(t,tip)=>{const e=$('#cloud');if(e){e.textContent=t;e.title=tip}};
 function toast(m){const t=document.createElement('div');t.textContent=m;t.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;font:600 14px Manrope;z-index:30;max-width:90%;text-align:center';document.body.appendChild(t);setTimeout(()=>t.remove(),3500)}
 function syncSoon(){if(!REF)return;clearTimeout(timer);timer=setTimeout(push,1200)}
 async function push(){if(!REF)return;if(writing){again=true;return}writing=true;cloud('🔄','Сохраняю…');
- try{await REF.set({state:JSON.stringify(S),t:S.t||Date.now()},{merge:true});cloud('☁️','Прогресс сохранён в аккаунте')}
+ try{await REF.set({state:JSON.stringify(S),t:S.t||Date.now(),profile:prof(),seen:Date.now()},{merge:true});cloud('☁️','Прогресс сохранён в аккаунте')}
  catch(e){cloud('⚠️','Не удалось сохранить в облако — прогресс пока на этом устройстве')}
  writing=false;if(again){again=false;push()}}
 function applyRemote(d){try{const r=JSON.parse(d.state);if(!r||typeof r!=='object')return;S=Object.assign(DEF(),r);try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}updPill();if(['home','path','learn','games','exam'].includes(VIEW)&&!document.querySelector('.overlay'))go(VIEW)}catch(e){}}
 const isGuest=()=>{try{return localStorage.getItem('emp-guest')==='1'}catch(e){return false}};
-VIEWS.login=()=>{$('#nav').style.display='none';main.innerHTML=`<div class="card center" style="padding:30px 20px;margin-top:30px"><div style="font-size:54px">💼</div><h2>Employment</h2><p class="mut">Тренажёр лексики по теме Employment.<br>Уроки, игры, тесты и повторение по расписанию.</p><button class="btn wide" data-a="login" style="display:flex;align-items:center;justify-content:center;gap:10px"><svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Войти через Google</button><p class="small mut">Прогресс будет сохраняться в аккаунте — на телефоне и на ПК одинаковый.</p><button class="link" data-a="guest">Продолжить без входа</button></div>`};
+VIEWS.login=()=>{$('#nav').style.display='none';main.innerHTML=`<div class="card center" style="padding:30px 20px;margin-top:30px"><div style="font-size:54px">💼</div><h2>Employment</h2><p class="mut">Тренажёр лексики по теме Employment.<br>Уроки, игры, тесты и повторение по расписанию.</p><button class="btn wide" data-a="login" style="display:flex;align-items:center;justify-content:center;gap:10px"><svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Войти через Google</button><p class="small mut">Прогресс будет сохраняться в аккаунте — на телефоне и на ПК одинаковый. Владелец сайта видит общую статистику занятий (имя, почту и прогресс).</p><button class="link" data-a="guest">Продолжить без входа</button></div>`};
 ACT.login=()=>{if(!AUTH)return toast('Вход пока не настроен');AUTH.signInWithPopup(PROV).catch(e=>{const c=e&&e.code||'';if(/popup-blocked|operation-not-supported|web-storage-unsupported/.test(c))AUTH.signInWithRedirect(PROV);else if(!/popup-closed|cancelled-popup/.test(c))toast('Не получилось войти: '+(e.message||c))})};
 ACT.guest=()=>{try{localStorage.setItem('emp-guest','1')}catch(e){}$('#nav').style.display='';go('home')};
 ACT.logout=()=>{if(AUTH)AUTH.signOut()};
@@ -779,16 +801,16 @@ const _home=VIEWS.home;VIEWS.home=()=>{$('#nav').style.display='';_home();main.i
  const ready=typeof firebase!=='undefined'&&!String(firebaseConfig.apiKey).startsWith('ВСТАВЬ');
  if(!ready){cloud('📱','Firebase не настроен — прогресс сохраняется только на этом устройстве');return}
  firebase.initializeApp(firebaseConfig);AUTH=firebase.auth();PROV=new firebase.auth.GoogleAuthProvider();PROV.setCustomParameters({prompt:'select_account'});
- const fs=firebase.firestore();AUTH.getRedirectResult().catch(e=>toast('Не получилось войти: '+(e.message||e.code)));
+ const fs=firebase.firestore();FSDB=fs;AUTH.getRedirectResult().catch(e=>toast('Не получилось войти: '+(e.message||e.code)));
  let first=true;
  AUTH.onAuthStateChanged(async u=>{
   if(UNSUB){UNSUB();UNSUB=null}REF=null;
-  if(!u){const was=!!USER;USER=null;cloud('👤','Вход не выполнен');
+  if(!u){const was=!!USER;USER=null;adminNav();cloud('👤','Вход не выполнен');
    if(was){S=DEF();try{localStorage.removeItem(KEY);localStorage.removeItem('emp-guest')}catch(e){}updPill()}
    if(was||(first&&!isGuest()))go('login');else if(first)go(VIEW);first=false;return}
   USER=u;try{localStorage.removeItem('emp-guest')}catch(e){}
   const ref=fs.collection('users').doc(u.uid);
-  try{cloud('🔄','Загружаю прогресс…');const snap=await ref.get();REF=ref;const d=snap.exists?snap.data():null;
+  try{cloud('🔄','Загружаю прогресс…');const snap=await ref.get();REF=ref;const d=snap.exists?snap.data():null;ref.set(Object.assign({profile:prof(),seen:Date.now()},d&&d.created?{}:{created:Date.now()}),{merge:true}).catch(()=>{});adminNav();
    if(d&&d.t>(S.t||0))applyRemote(d);else if(!d||(S.t||0)>d.t)push();else cloud('☁️','Прогресс сохранён в аккаунте');
    UNSUB=ref.onSnapshot(s=>{const x=s.data();if(x&&!s.metadata.hasPendingWrites&&x.t>(S.t||0))applyRemote(x)},()=>{});
   }catch(e){cloud('⚠️','Не удалось подключиться к облаку: '+(e.code||''))}
