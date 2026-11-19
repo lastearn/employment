@@ -5,60 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Вишлист Степана</title>
 <meta property="og:title" content="Вишлист Степана">
-<meta name="theme-color" content="#f4efe6">
+<meta name="theme-color" content="#121113">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎁</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Manrope:wght@400;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root{--paper:#f4efe6;--ink:#1d1b18;--soft:#6f685d;--tape:#f3d98bcc;--pink:#ff8fa3;--blue:#8ec5ff;--green:#a6e3a1}
+  :root{--bg:#121113;--surf:#1a191c;--surf2:#222125;--text:#ece6dc;--muted:#8b857d;--acc:#d9b38c;--line:#ffffff0f}
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.5 Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   body{min-height:100vh;overflow-x:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
-    background-image:radial-gradient(#00000010 1px,transparent 1px);background-size:22px 22px}
-  .wrap{max-width:880px;margin:0 auto;padding:44px 20px 90px}
+    background:radial-gradient(700px 420px at 15% -5%,#d9b38c14,transparent 70%),
+               radial-gradient(600px 400px at 100% 30%,#7f8cff0d,transparent 70%),var(--bg)}
+  .wrap{max-width:900px;margin:0 auto;padding:56px 20px 100px}
 
-  h1{font-family:Unbounded,sans-serif;font-weight:800;font-size:clamp(40px,12vw,92px);line-height:.95;
-    margin:0;letter-spacing:-.03em}
-  h1 .name{display:inline-block;background:var(--pink);padding:0 .12em;border-radius:.12em;transform:rotate(-2deg);margin-top:.08em}
+  h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:clamp(44px,13vw,96px);line-height:.92;
+    margin:0;letter-spacing:-.01em}
+  h1 .name{font-style:italic;color:var(--acc)}
 
-  /* фото-коллаж */
-  .photos{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin:40px 0 10px;padding:0 6px}
-  .ph{background:#fff;padding:9px 9px 34px;box-shadow:0 10px 25px #0000001f,0 2px 4px #00000014;width:min(42vw,210px);
-    position:relative;transition:transform .2s}
-  .ph:nth-child(3n+1){transform:rotate(-5deg)} .ph:nth-child(3n+2){transform:rotate(3deg) translateY(12px)}
-  .ph:nth-child(3n){transform:rotate(-1.5deg)}
-  .ph:hover{transform:rotate(0) scale(1.04);z-index:2}
-  .ph img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#eee}
-  .ph span{position:absolute;left:0;right:0;bottom:6px;text-align:center;font:600 21px Caveat,cursive;color:var(--soft)}
-  .ph::before{content:"";position:absolute;top:-11px;left:50%;width:70px;height:22px;background:var(--tape);
-    transform:translateX(-50%) rotate(-3deg)}
+  .photos{display:flex;gap:12px;margin:40px 0 0;padding:0 0 6px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .photos::-webkit-scrollbar{display:none}
+  .ph{flex:0 0 auto;width:min(58vw,260px);scroll-snap-align:start;position:relative;border-radius:22px;overflow:hidden;background:var(--surf)}
+  .ph img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
+  .ph span{position:absolute;left:14px;bottom:12px;font:italic 500 22px "Cormorant Garamond",serif;color:#fff;text-shadow:0 2px 12px #000a}
+  .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 60%,#0009);pointer-events:none}
 
-  /* подарки */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:22px 16px;margin-top:52px}
-  .card{background:#fff;border-radius:6px;padding:10px 10px 16px;box-shadow:0 8px 22px #00000014,0 1px 3px #00000014;
-    text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s;position:relative}
-  .card:nth-child(4n+1){transform:rotate(-1.2deg)} .card:nth-child(4n+2){transform:rotate(1deg)}
-  .card:nth-child(4n+3){transform:rotate(-.4deg)} .card:nth-child(4n){transform:rotate(1.6deg)}
-  a.card:hover{transform:rotate(0) translateY(-4px);box-shadow:0 16px 30px #0000001f}
-  .pic{aspect-ratio:1;border-radius:3px;overflow:hidden;display:grid;place-items:center;font-size:46px;background:#f1ece2}
-  .pic img{width:100%;height:100%;object-fit:cover;display:block}
-  .t{font-weight:700;font-size:16px;line-height:1.25;margin:12px 4px 0;word-break:break-word}
-  .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 4px 0}
-  .price{font-family:Unbounded,sans-serif;font-weight:500;font-size:15px}
-  .hot{font:600 22px Caveat,cursive;color:#d6336c;transform:rotate(-3deg);display:inline-block}
-  .note{color:var(--soft);font-size:15px;margin:6px 4px 0;white-space:pre-line;word-break:break-word}
-  .sticker{position:absolute;top:-12px;right:-10px;font-size:34px;transform:rotate(12deg);filter:drop-shadow(0 3px 4px #0003)}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px 14px;margin-top:52px}
+  .card{text-decoration:none;color:inherit;display:flex;flex-direction:column;position:relative}
+  .pic{aspect-ratio:1;border-radius:20px;overflow:hidden;display:grid;place-items:center;font-size:40px;
+    background:linear-gradient(145deg,var(--surf2),var(--surf));transition:transform .3s ease}
+  .pic img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+  a.card:hover .pic img{transform:scale(1.04)}
+  .t{font-weight:500;font-size:15px;line-height:1.3;margin:12px 2px 0;word-break:break-word}
+  .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:5px 2px 0}
+  .price{color:var(--muted);font-size:14px}
+  .hot{font-size:12px;color:var(--acc);border:1px solid #d9b38c40;border-radius:999px;padding:2px 9px}
+  .note{color:var(--muted);font-size:13px;margin:4px 2px 0;white-space:pre-line;word-break:break-word}
+  .sticker{position:absolute;top:8px;right:8px;font-size:22px;background:#0006;backdrop-filter:blur(6px);
+    width:38px;height:38px;border-radius:50%;display:grid;place-items:center}
 
-  .empty{text-align:center;font:600 30px Caveat,cursive;color:var(--soft);margin-top:70px}
-  .share{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));border:0;cursor:pointer;
-    width:54px;height:54px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:22px;
-    box-shadow:0 8px 20px #0000003a}
+  .empty{text-align:center;font:italic 500 26px "Cormorant Garamond",serif;color:var(--muted);margin-top:80px}
+  .share{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));border:1px solid var(--line);cursor:pointer;
+    width:52px;height:52px;border-radius:50%;background:#1f1e22cc;backdrop-filter:blur(10px);color:var(--text);font-size:20px;
+    box-shadow:0 10px 30px #0008}
   .share:active{transform:scale(.94)}
-  .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);
-    background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;opacity:0;transition:.2s;font-size:15px;pointer-events:none}
+  .toast{position:fixed;left:50%;bottom:calc(82px + env(safe-area-inset-bottom));transform:translateX(-50%);
+    background:var(--surf2);color:var(--text);padding:10px 16px;border-radius:12px;opacity:0;transition:.2s;font-size:14px;pointer-events:none}
   .toast.on{opacity:1}
-  @media(min-width:640px){.grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:30px 24px}.t{font-size:18px}}
+  @media(min-width:640px){.grid{grid-template-columns:repeat(3,1fr);gap:36px 22px}.t{font-size:16px}}
 </style>
 </head>
 <body>
@@ -104,7 +98,7 @@
       h("div", {class:"t"}, it.title),
       (price || it.priority) ? h("div", {class:"row"},
         price ? h("span", {class:"price"}, price) : null,
-        it.priority ? h("span", {class:"hot"}, "очень хочу!") : null) : null,
+        it.priority ? h("span", {class:"hot"}, "очень хочу") : null) : null,
       it.note ? h("div", {class:"note"}, it.note) : null
     ];
     return url ? h.apply(null, ["a", {class:"card", href:url, target:"_blank", rel:"noopener noreferrer"}].concat(kids))
